@@ -45,7 +45,7 @@ const postRegister = async (req, res) => {
     // Set the token as a cookie
     res.cookie('token', token, {
       httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-      secure: process.env.NODE_ENV === 'production', // Ensures the cookie is sent over HTTPS
+      secure: false, // Ensures the cookie is sent over HTTPS
       maxAge: 24 * 60 * 60 * 1000, // Cookie expiration time (24 hours)
     });
 
