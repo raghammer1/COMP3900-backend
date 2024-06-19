@@ -40,9 +40,9 @@ const postLogin = async (req, res) => {
         _id: user._id,
       });
     }
-    res.status(400).send('Invalid Credential');
+    return res.status(400).send('Invalid Credential');
   } catch (err) {
-    res.status(500).send('Server error: ' + err.message);
+    return res.status(500).send('Server error: ' + err.message);
   }
 };
 

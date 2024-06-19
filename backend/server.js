@@ -10,9 +10,29 @@ const PORT = process.env.BACKEND_SERVER_PORT || process.env.API_PORT;
 
 const app = express();
 
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+  );
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-Requested-With,content-type'
+  );
+  next();
+});
+
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
 
 app.get('/test', (req, res) => {
   res.json({ message: 'Hello World!' });

@@ -7,6 +7,8 @@ const postRegister = async (req, res) => {
   try {
     const { username, password, email } = req.body;
 
+    console.log('REQUEST CAME', username);
+
     // check if user exists
     const userExists = await User.exists({ email: email.toLowerCase() });
 
