@@ -1,33 +1,48 @@
-const { gridFSBucket } = require('../gridfs');
+// const { gridFSBucket } = require('../gridfs');
 const crypto = require('crypto');
 const path = require('path');
 const user = require('../models/user');
+const { getGridFSBucket } = require('../db');
+const { Readable } = require('stream');
 
 const postConvertToPdf = async (req, res) => {
-  console.log('PDF REQUEST CAME');
+  console.log('PDF upload endpoint hit');
+
   if (!req.file) {
+    console.error('No file uploaded.');
     return res.status(400).send('No file uploaded.');
   }
 
-  const userId = req.body.userId; // Assuming user ID is passed in the request body
+  const userId = req.body.userId;
 
   const filename =
     crypto.randomBytes(16).toString('hex') +
     path.extname(req.file.originalname);
 
-  const fileStream = require('stream').Readable.from(req.file.buffer);
+  console.log(`Filename: ${filename}`);
+
+  const fileStream = new Readable();
+  fileStream.push(req.file.buffer);
+  fileStream.push(null);
+
+  console.log('File stream created');
+
+  const gridFSBucket = getGridFSBucket();
   const uploadStream = gridFSBucket.openUploadStream(filename);
+
+  console.log('Starting PDF upload process');
 
   fileStream
     .pipe(uploadStream)
     .on('error', (error) => {
+      console.error('Error uploading file:', error);
       return res.status(500).send('Error uploading file');
     })
     .on('finish', async () => {
       const fileId = uploadStream.id;
+      console.log('PDF uploaded with ID:', fileId);
 
       try {
-        // Update user schema with the file reference
         const User = await user.findByIdAndUpdate(
           userId,
           { $push: { pdfFiles: fileId } },
@@ -35,9 +50,11 @@ const postConvertToPdf = async (req, res) => {
         );
 
         if (!User) {
+          console.error('User not found with ID:', userId);
           return res.status(404).send('User not found');
         }
 
+        console.log('User updated with file ID:', fileId);
         res.send({
           message: 'File uploaded and user updated successfully!',
           User,
@@ -47,5 +64,23 @@ const postConvertToPdf = async (req, res) => {
         res.status(500).send('Server error');
       }
     });
+
+  uploadStream.on('close', () => {
+    console.log('Upload stream closed');
+  });
+
+  // Add timeout handling
+  uploadStream.on('timeout', () => {
+    console.error('Upload stream timeout');
+    return res.status(500).send('File upload timeout');
+  });
+
+  // Add handling for finish event not being triggered
+  setTimeout(() => {
+    if (!uploadStream.writableEnded) {
+      console.error('Upload stream did not finish as expected');
+      return res.status(500).send('File upload did not finish as expected');
+    }
+  }, 30000); // Adjust the timeout value as needed
 };
 module.exports = postConvertToPdf;
