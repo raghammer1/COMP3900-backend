@@ -1,10 +1,10 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
 const http = require('http');
-const connectDB = require('./db');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
+const converterRoutes = require('./routes/converterRoutes');
+const { connectDB } = require('./db');
 
 const PORT = process.env.BACKEND_SERVER_PORT || process.env.API_PORT;
 
@@ -39,6 +39,7 @@ app.get('/test', (req, res) => {
 });
 
 app.use('/auth', authRoutes);
+app.use('/convert', converterRoutes);
 
 const server = http.createServer(app);
 
