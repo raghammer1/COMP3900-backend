@@ -1,93 +1,9 @@
-// const crypto = require('crypto');
-// const path = require('path');
-// const user = require('../models/user');
-// const { getGridFSBucket } = require('../db');
-// const { Readable } = require('stream');
-
-// const postConvertToPdf = async (req, res) => {
-//   console.log('PDF upload endpoint hit');
-
-//   if (!req.file) {
-//     console.error('No file uploaded.');
-//     return res.status(400).send('No file uploaded.');
-//   }
-
-//   const userId = req.body.userId;
-
-//   const filename =
-//     crypto.randomBytes(16).toString('hex') +
-//     path.extname(req.file.originalname);
-
-//   console.log(`Filename: ${filename}`);
-
-//   const fileStream = new Readable();
-//   fileStream.push(req.file.buffer);
-//   fileStream.push(null);
-
-//   console.log('File stream created');
-
-//   const gridFSBucket = getGridFSBucket();
-//   const uploadStream = gridFSBucket.openUploadStream(filename);
-
-//   console.log('Starting PDF upload process');
-
-//   fileStream
-//     .pipe(uploadStream)
-//     .on('error', (error) => {
-//       console.error('Error uploading file:', error);
-//       return res.status(500).send('Error uploading file');
-//     })
-//     .on('finish', async () => {
-//       const fileId = uploadStream.id;
-//       console.log('PDF uploaded with ID:', fileId);
-
-//       try {
-//         const User = await user.findByIdAndUpdate(
-//           userId,
-//           { $push: { pdfFiles: fileId } },
-//           { new: true, useFindAndModify: false }
-//         );
-
-//         if (!User) {
-//           console.error('User not found with ID:', userId);
-//           return res.status(404).send('User not found');
-//         }
-
-//         console.log('User updated with file ID:', fileId);
-//         res.send({
-//           message: 'File uploaded and user updated successfully!',
-//           User,
-//         });
-//       } catch (err) {
-//         console.error('Error updating user with file ID:', err);
-//         res.status(500).send('Server error');
-//       }
-//     });
-
-//   uploadStream.on('close', () => {
-//     console.log('Upload stream closed');
-//   });
-
-//   // Add timeout handling
-//   uploadStream.on('timeout', () => {
-//     console.error('Upload stream timeout');
-//     return res.status(500).send('File upload timeout');
-//   });
-
-//   // Add handling for finish event not being triggered
-//   setTimeout(() => {
-//     if (!uploadStream.writableEnded) {
-//       console.error('Upload stream did not finish as expected');
-//       return res.status(500).send('File upload did not finish as expected');
-//     }
-//   }, 30000); // Adjust the timeout value as needed
-// };
-// module.exports = postConvertToPdf;
 const crypto = require('crypto');
 const path = require('path');
 const user = require('../models/user');
 const { getGridFSBucket } = require('../db');
 const { Readable } = require('stream');
+const mongoose = require('mongoose');
 
 const postConvertToPdf = async (req, res) => {
   try {
@@ -117,9 +33,21 @@ const postConvertToPdf = async (req, res) => {
       .on('finish', async () => {
         try {
           const fileId = uploadStream.id;
+
+          // Dummy UBL and Validator IDs for illustration; replace with actual logic to get these IDs
+          const ublId = new mongoose.Types.ObjectId(); // Replace with actual ID
+          const validatorId = new mongoose.Types.ObjectId(); // Replace with actual ID
+
+          const pdfUblValidationObject = {
+            pdfId: fileId,
+            ublId,
+            validatorId,
+            // name: 'NEW',
+          };
+
           const updatedUser = await user.findByIdAndUpdate(
             userId,
-            { $push: { pdfFiles: fileId } },
+            { $push: { pdfUblValidation: pdfUblValidationObject } },
             { new: true, useFindAndModify: false }
           );
 
@@ -131,7 +59,7 @@ const postConvertToPdf = async (req, res) => {
 
           res.json({
             message: 'File uploaded and user updated successfully!',
-            updatedUser,
+            fileId,
           });
         } catch (updateError) {
           res.status(500).json({
