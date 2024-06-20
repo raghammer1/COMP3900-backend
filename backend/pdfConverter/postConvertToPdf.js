@@ -1,4 +1,3 @@
-// const { gridFSBucket } = require('../gridfs');
 const crypto = require('crypto');
 const path = require('path');
 const user = require('../models/user');
