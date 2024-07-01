@@ -11,27 +11,20 @@ const pdfUblValidationSchema = new mongoose.Schema({
 const ublValidationSchema = new mongoose.Schema({
   ublId: { type: ObjectId, ref: 'GridFS' },
   validatorId: { type: ObjectId, ref: 'GridFS' },
+  // name: { type: String },
 });
 
 const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   username: { type: String },
   password: { type: String },
-  // Will be an object where keys are ObjectId strings and values are objects containing ids of pdf, related ubl id, and related validation id
   pdfUblValidation: {
-    type: Map,
-    of: {
-      type: pdfUblValidationSchema,
-      default: {},
-    },
+    type: [pdfUblValidationSchema],
+    default: [],
   },
-  // Will be an object where keys are ObjectId strings and values are objects containing ubl id and related validation id
   ublValidation: {
-    type: Map,
-    of: {
-      type: ublValidationSchema,
-      default: {},
-    },
+    type: [ublValidationSchema],
+    default: [],
   },
 });
 

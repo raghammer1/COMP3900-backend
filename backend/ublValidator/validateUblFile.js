@@ -14,7 +14,6 @@ const generateErrorReportPDF = async (errors) => {
       throw new TypeError('Expected an array of errors');
     }
 
-    console.log(errors);
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([600, 800]);
 
@@ -126,7 +125,6 @@ const validateUblFile = async (req, res) => {
 
         const validationErrors =
           response.data.report.reports.AUNZ_PEPPOL_1_0_10.firedAssertionErrors;
-        console.log(validationErrors);
 
         // Generate PDF
         const pdfBytes = await generateErrorReportPDF(validationErrors);
@@ -152,11 +150,11 @@ const validateUblFile = async (req, res) => {
 
         pdfUploadStream.on('finish', async () => {
           try {
-            const pdfId = pdfUploadStream.id;
+            const validatorId = pdfUploadStream.id;
 
             const ublValidationObject = {
               ublId: ublId,
-              pdfId: pdfId,
+              validatorId: validatorId,
             };
 
             const updatedUser = await user.findByIdAndUpdate(
@@ -169,12 +167,21 @@ const validateUblFile = async (req, res) => {
               return res.status(404).json({ error: 'User not found' });
             }
 
+            // Find the newly added ublValidationObject with its _id
+            const newlyAddedObject = updatedUser.ublValidation.find(
+              (obj) =>
+                obj.ublId.toString() === ublId.toString() &&
+                obj.validatorId.toString() === validatorId.toString()
+            );
+
+            console.log(validatorId, ublId, newlyAddedObject);
             res.status(200).json({
               message:
                 'UBL file uploaded, validated, and user updated successfully!',
               ublId,
-              pdfId,
+              validatorId,
               validationReport: validationErrors,
+              newObjectId: newlyAddedObject._id,
             });
           } catch (updateError) {
             res.status(500).json({
