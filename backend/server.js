@@ -4,7 +4,9 @@ const http = require('http');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
 const converterRoutes = require('./routes/converterRoutes');
+const validateRouter = require('./routes/validateRouter');
 const { connectDB } = require('./db');
+const getAnyFileFunction = require('./getAnyFile/getAnyFileFunction');
 
 const PORT = process.env.BACKEND_SERVER_PORT || process.env.API_PORT;
 
@@ -40,6 +42,8 @@ app.get('/test', (req, res) => {
 
 app.use('/auth', authRoutes);
 app.use('/convert', converterRoutes);
+app.use('/validate', validateRouter);
+app.use('/getFile', getAnyFileFunction);
 
 const server = http.createServer(app);
 

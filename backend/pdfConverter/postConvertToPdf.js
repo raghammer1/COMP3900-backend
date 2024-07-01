@@ -45,6 +45,8 @@ const postConvertToPdf = async (req, res) => {
             // name: 'NEW',
           };
 
+          console.log(fileId._id, pdfUblValidationObject, 'FIRLDWDWEW');
+
           const updatedUser = await user.findByIdAndUpdate(
             userId,
             { $push: { pdfUblValidation: pdfUblValidationObject } },

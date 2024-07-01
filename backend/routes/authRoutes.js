@@ -28,11 +28,14 @@ router
 //   res.send('register me');
 // });
 
-router.post(
-  '/login',
-  validator.body(loginSchema),
-  authController.controllers.postLogin
-);
+router
+  .post(
+    '/login',
+    validator.body(loginSchema),
+    authController.controllers.postLogin
+  )
+  .post('/forgot-password', authController.controllers.forgotPassword)
+  .post('/reset-password', authController.controllers.resetPassword);
 
 // TEST ROUTE to test our middlewares
 const auth = require('../middleware/auth');
