@@ -11,7 +11,7 @@ const pdfUblValidationSchema = new mongoose.Schema({
 const ublValidationSchema = new mongoose.Schema({
   ublId: { type: ObjectId, ref: 'GridFS' },
   validatorId: { type: ObjectId, ref: 'GridFS' },
-  // name: { type: String },
+  name: { type: String },
 });
 
 const userSchema = new mongoose.Schema({

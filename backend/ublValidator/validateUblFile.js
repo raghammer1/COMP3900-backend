@@ -80,6 +80,8 @@ const validateUblFile = async (req, res) => {
     }
 
     const userId = req.body.userId;
+    const name = req.body.name;
+    console.log('name', name);
 
     const existingUser = await user.findById(userId);
     if (!existingUser) {
@@ -161,6 +163,7 @@ const validateUblFile = async (req, res) => {
             const ublValidationObject = {
               ublId: ublId,
               validatorId: validatorId,
+              name,
             };
 
             const updatedUser = await user.findByIdAndUpdate(
@@ -188,6 +191,7 @@ const validateUblFile = async (req, res) => {
               validatorId,
               validationReport: validationErrors,
               newObjectId: newlyAddedObject._id,
+              name,
             });
           } catch (updateError) {
             res.status(500).json({

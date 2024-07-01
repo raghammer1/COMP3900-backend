@@ -24,6 +24,10 @@ router
     // validator.body(fileUploadSchema),
     validateControllers.controllers.validateUblFile
   )
-  .get('/getUbl/:userId', validateControllers.controllers.getUblPdf);
+  .get('/getUbl/:userId', validateControllers.controllers.getUblPdf)
+  .get(
+    '/get-all-validation-data',
+    validateControllers.controllers.getAllValidationData
+  );
 
 module.exports = router;
