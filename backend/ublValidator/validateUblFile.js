@@ -80,6 +80,12 @@ const validateUblFile = async (req, res) => {
     }
 
     const userId = req.body.userId;
+
+    const existingUser = await user.findById(userId);
+    if (!existingUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
     const filename =
       crypto.randomBytes(16).toString('hex') +
       path.extname(req.file.originalname);
