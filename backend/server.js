@@ -7,6 +7,7 @@ const converterRoutes = require('./routes/converterRoutes');
 const validateRouter = require('./routes/validateRouter');
 const { connectDB } = require('./db');
 const getAnyFileFunction = require('./getAnyFile/getAnyFileFunction');
+const FileSender = require('./shared/FileSender');
 
 const PORT = process.env.BACKEND_SERVER_PORT || process.env.API_PORT;
 
@@ -44,6 +45,7 @@ app.use('/auth', authRoutes);
 app.use('/convert', converterRoutes);
 app.use('/validate', validateRouter);
 app.use('/getFile', getAnyFileFunction);
+app.post('/sendFile', FileSender);
 
 const server = http.createServer(app);
 
