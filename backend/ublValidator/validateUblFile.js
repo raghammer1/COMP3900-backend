@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const path = require('path');
 const user = require('../models/user');
 const { getGridFSBucket } = require('../db');
-const { PDFDocument, rgb } = require('pdf-lib');
+const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
 const generateErrorReportPDF = async (errors) => {
   try {
@@ -15,52 +15,111 @@ const generateErrorReportPDF = async (errors) => {
     }
 
     const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage([600, 800]);
+    let page = pdfDoc.addPage([600, 800]);
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const fontSize = 12;
 
-    page.drawText('UBL Validation Error Report', {
-      x: 50,
-      y: 750,
-      size: 20,
-      color: rgb(0, 0, 0),
-    });
-
-    let y = 720;
-    const textSize = 12;
+    const marginTop = 50;
+    const marginLeft = 50;
+    const marginBottom = 50;
+    const maxLineWidth = 450; // Maximum width for text lines
     const lineSpacing = 16;
+    let y = page.getHeight() - marginTop;
 
-    errors.forEach((error, index) => {
+    const wrapText = (text, maxWidth, font, fontSize) => {
+      let lines = [];
+      let currentLine = '';
+
+      for (let i = 0; i < text.length; i++) {
+        const testLine = currentLine + text[i];
+        const testWidth = font.widthOfTextAtSize(testLine, fontSize);
+
+        if (testWidth > maxWidth) {
+          lines.push(currentLine);
+          currentLine = text[i];
+        } else {
+          currentLine = testLine;
+        }
+      }
+
+      lines.push(currentLine);
+      return lines;
+    };
+
+    const drawText = (text, x, y, size, color, font, page) => {
+      const wrappedLines = wrapText(text, maxLineWidth, font, size);
+      wrappedLines.forEach((line) => {
+        if (y - size < marginBottom) {
+          page = pdfDoc.addPage([600, 800]);
+          y = page.getHeight() - marginTop;
+        }
+        page.drawText(line, { x, y, size, color, font });
+        y -= lineSpacing;
+      });
+      return { y, page };
+    };
+
+    const drawHeader = (text, x, y, size, color, font, page) => {
+      if (y - size < marginBottom) {
+        page = pdfDoc.addPage([600, 800]);
+        y = page.getHeight() - marginTop;
+      }
+      page.drawText(text, { x, y, size, color, font });
+      y -= lineSpacing;
+      return { y, page };
+    };
+
+    let drawResult = drawHeader(
+      'UBL Validation Error Report',
+      marginLeft,
+      y,
+      20,
+      rgb(0, 0, 0),
+      font,
+      page
+    );
+    y = drawResult.y - 30; // Adjust spacing after the title
+    page = drawResult.page;
+
+    for (const [index, error] of errors.entries()) {
       const errorHeader = `Error ${index + 1}:`;
       const errorDetails = `
-      ID: ${error.id}
-      Description: ${error.text}
-      Test: ${error.test}
-      Location: ${error.location}
-      Flag: ${error.flag}
-      Status: ${error.flag === 'fatal' ? 'Failed' : 'Passed'}
+ID: ${error.id}
+Description: ${error.text}
+Test: ${error.test}
+Location: ${error.location}
+Flag: ${error.flag}
+Status: ${error.flag === 'fatal' ? 'Failed' : 'Passed'}
       `;
-      const textHeight = textSize * 1.2; // Adjust this factor to suit your needs
 
-      page.drawText(errorHeader, {
-        x: 50,
-        y: y,
-        size: textSize,
-        color: rgb(0, 0, 0),
-      });
+      drawResult = drawHeader(
+        errorHeader,
+        marginLeft,
+        y,
+        fontSize,
+        rgb(0, 0, 0),
+        font,
+        page
+      );
+      y = drawResult.y;
+      page = drawResult.page;
 
-      y -= textHeight;
-
-      errorDetails.split('\n').forEach((line) => {
-        page.drawText(line.trim(), {
-          x: 50,
-          y: y,
-          size: textSize,
-          color: rgb(0, 0, 0),
-        });
-        y -= textHeight;
-      });
+      for (const line of errorDetails.split('\n')) {
+        drawResult = drawText(
+          line.trim(),
+          marginLeft,
+          y,
+          fontSize,
+          rgb(0, 0, 0),
+          font,
+          page
+        );
+        y = drawResult.y;
+        page = drawResult.page;
+      }
 
       y -= lineSpacing; // Additional space between errors
-    });
+    }
 
     const pdfBytes = await pdfDoc.save();
     return pdfBytes;
