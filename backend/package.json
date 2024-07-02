@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest",
+    "start": "nodemon server.js",
     "coverage": "jest --coverage"
   },
   "author": "HexaHunks",
