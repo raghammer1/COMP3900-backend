@@ -35,7 +35,8 @@ router
     authController.controllers.postLogin
   )
   .post('/forgot-password', authController.controllers.forgotPassword)
-  .post('/reset-password', authController.controllers.resetPassword);
+  .post('/reset-password', authController.controllers.resetPassword)
+  .delete('/delete-user/:email', authController.controllers.deleteUser);
 
 // TEST ROUTE to test our middlewares
 const auth = require('../middleware/auth');
