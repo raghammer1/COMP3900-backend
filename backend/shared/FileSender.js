@@ -35,7 +35,8 @@ const getFileById = async (fileId) => {
 };
 
 const FileSender = async (req, res) => {
-  const { email, xmlId, pdfId, validatorPdfId, message } = req.body;
+  const { email, xmlId, pdfId, validatorPdfId, message, emailSubject } =
+    req.body;
 
   const attachments = [];
 
@@ -44,6 +45,13 @@ const FileSender = async (req, res) => {
     htmlBody = '<div>By HexaHunks</div>';
   } else {
     htmlBody = `<div>${message}</div>`;
+  }
+
+  let sub;
+  if (!emailSubject) {
+    sub = 'Your Requested Files';
+  } else {
+    sub = emailSubject;
   }
 
   try {
@@ -81,7 +89,7 @@ const FileSender = async (req, res) => {
     const mailOptions = {
       from: process.env.MY_EMAIL,
       to: email,
-      subject: 'Your Requested Files',
+      subject: sub,
       text: 'Please find your attached files @HexaHunks',
       html: htmlBody,
       attachments: attachments,
