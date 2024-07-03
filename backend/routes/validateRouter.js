@@ -28,6 +28,10 @@ router
   .get(
     '/get-all-validation-data',
     validateControllers.controllers.getAllValidationData
+  )
+  .delete(
+    '/delete-one-validation-data',
+    validateControllers.controllers.deleteOneValidationData
   );
 
 module.exports = router;
