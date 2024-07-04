@@ -19,7 +19,11 @@ const userSchema = new mongoose.Schema({
   username: { type: String },
   password: { type: String },
   googleId: { type: String },
-  googlePicture: { type: String },
+  // googlePicture: { type: String },
+  googlePicture: {
+    type: Schema.Types.Mixed, // Allow either String or ObjectId
+    ref: 'GridFS', // Reference to GridFS
+  },
   pdfUblValidation: {
     type: [pdfUblValidationSchema],
     default: [],
