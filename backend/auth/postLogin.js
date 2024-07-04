@@ -11,6 +11,7 @@ const postLogin = async (req, res) => {
 
     // keeping given password first and password from db second is extremely important
     if (user && (await bcrypt.compare(password, user.password))) {
+      console.log(user, 'USEER');
       // send token
       const token = jwt.sign(
         {
@@ -38,7 +39,7 @@ const postLogin = async (req, res) => {
         username: user.username,
         email: user.email,
         _id: user._id,
-        googlePicture,
+        googlePicture: user.googlePicture,
       });
     }
     return res.status(400).send('Invalid Credential');
