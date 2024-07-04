@@ -3,6 +3,7 @@ const postRegister = require('./postRegister');
 const forgotPassword = require('./forgotPassword.js');
 const resetPassword = require('./resetPassword.js');
 const deleteUser = require('./deleteUser.js');
+const googleLogin = require('./googleLogin.js');
 
 exports.controllers = {
   postLogin,
@@ -10,4 +11,5 @@ exports.controllers = {
   forgotPassword,
   resetPassword,
   deleteUser,
+  googleLogin,
 };

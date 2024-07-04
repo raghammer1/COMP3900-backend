@@ -18,6 +18,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   username: { type: String },
   password: { type: String },
+  googleId: { type: String },
+  googlePicture: { type: String },
   pdfUblValidation: {
     type: [pdfUblValidationSchema],
     default: [],
