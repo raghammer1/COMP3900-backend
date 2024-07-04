@@ -36,6 +36,7 @@ router
   )
   .post('/forgot-password', authController.controllers.forgotPassword)
   .post('/reset-password', authController.controllers.resetPassword)
+  .post('/google-login', authController.controllers.googleLogin)
   .delete('/delete-user/:email', authController.controllers.deleteUser);
 
 // TEST ROUTE to test our middlewares
