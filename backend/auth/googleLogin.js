@@ -46,6 +46,7 @@ const googleLogin = async (req, res) => {
       username: user.username,
       email: user.email,
       _id: user._id,
+      googlePicture: user.googlePicture,
     });
   } catch (err) {
     console.error('Error during Google OAuth login:', err);

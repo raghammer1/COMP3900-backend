@@ -12,6 +12,7 @@ const postConvertToPdf = async (req, res) => {
     }
 
     const userId = req.body.userId;
+    const name = req.body.name;
     const filename =
       crypto.randomBytes(16).toString('hex') +
       path.extname(req.file.originalname);
@@ -35,17 +36,20 @@ const postConvertToPdf = async (req, res) => {
           const fileId = uploadStream.id;
 
           // Dummy UBL and Validator IDs for illustration; replace with actual logic to get these IDs
-          const ublId = new mongoose.Types.ObjectId(); // Replace with actual ID
-          const validatorId = new mongoose.Types.ObjectId(); // Replace with actual ID
+          // const ublId = new mongoose.Types.ObjectId(
+          //   'aa6d47f29abc3c9a48e887f7dde1213e'
+          // ); // Replace with actual ID
+          const ublId = undefined;
+          // const validatorId = new mongoose.Types.ObjectId(); // Replace with actual ID
 
           const pdfUblValidationObject = {
             pdfId: fileId,
-            ublId,
-            validatorId,
-            // name: 'NEW',
+            ublId: ublId,
+            validatorId: undefined, //! THIS WILL ONLY BE GENERATED WHEN USER WANTS TO
+            name: name,
           };
 
-          console.log(fileId._id, pdfUblValidationObject, 'FIRLDWDWEW');
+          console.log(fileId._id, pdfUblValidationObject, 'FIRLDWDWEW', userId);
 
           const updatedUser = await user.findByIdAndUpdate(
             userId,
@@ -53,15 +57,20 @@ const postConvertToPdf = async (req, res) => {
             { new: true, useFindAndModify: false }
           );
 
+          console.log(updatedUser);
           if (!updatedUser) {
             return res.status(404).json({ error: 'User not found' });
           }
 
           console.log(fileId);
 
+          // ! THIS IS JUST A SAMPLE RETURN TO MOCK THE ACTUAL RETURN STATEMENT FOR WHEN WE ACTUALLY GET THE API KEY
           res.json({
-            message: 'File uploaded and user updated successfully!',
-            fileId,
+            message: 'File converted and user updated successfully!',
+            pdfId: fileId,
+            ublId,
+            name,
+            validatorId: undefined,
           });
         } catch (updateError) {
           res.status(500).json({

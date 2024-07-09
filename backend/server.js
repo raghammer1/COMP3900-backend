@@ -5,13 +5,19 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
 const converterRoutes = require('./routes/converterRoutes');
 const validateRouter = require('./routes/validateRouter');
+const editProfileRouter = require('./routes/editProfileRouter');
 const { connectDB } = require('./db');
 const getAnyFileFunction = require('./getAnyFile/getAnyFileFunction');
 const FileSender = require('./shared/FileSender');
+const getImage = require('./editProfile/getImage');
+const bodyParser = require('body-parser');
 
 const PORT = process.env.BACKEND_SERVER_PORT || process.env.API_PORT;
 
 const app = express();
+
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 
 app.use(
   cors({
@@ -44,8 +50,10 @@ app.get('/test', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/convert', converterRoutes);
 app.use('/validate', validateRouter);
+app.use('/edit', editProfileRouter);
 app.use('/getFile', getAnyFileFunction);
 app.post('/sendFile', FileSender);
+app.get('/api/images/:filename', getImage);
 
 const server = http.createServer(app);
 

@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
-
+//
 const pdfUblValidationSchema = new mongoose.Schema({
   pdfId: { type: ObjectId, ref: 'GridFS' },
   ublId: { type: ObjectId, ref: 'GridFS' },
   validatorId: { type: ObjectId, ref: 'GridFS' },
+  name: { type: String },
 });
 
 const ublValidationSchema = new mongoose.Schema({
@@ -19,7 +20,11 @@ const userSchema = new mongoose.Schema({
   username: { type: String },
   password: { type: String },
   googleId: { type: String },
-  googlePicture: { type: String },
+  // googlePicture: { type: String },
+  googlePicture: {
+    type: Schema.Types.Mixed, // Allow either String or ObjectId
+    ref: 'GridFS', // Reference to GridFS
+  },
   pdfUblValidation: {
     type: [pdfUblValidationSchema],
     default: [],
