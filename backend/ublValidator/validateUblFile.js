@@ -79,6 +79,7 @@ const validateUblFile = async (req, res) => {
           validatorId,
           newObjectId: newlyAddedObject._id,
           name,
+          date: newlyAddedObject.date,
         });
       } catch (updateError) {
         res.status(500).json({

@@ -7,12 +7,14 @@ const pdfUblValidationSchema = new mongoose.Schema({
   ublId: { type: ObjectId, ref: 'GridFS' },
   validatorId: { type: ObjectId, ref: 'GridFS' },
   name: { type: String },
+  date: { type: Date, default: Date.now },
 });
 
 const ublValidationSchema = new mongoose.Schema({
   ublId: { type: ObjectId, ref: 'GridFS' },
   validatorId: { type: ObjectId, ref: 'GridFS' },
   name: { type: String },
+  date: { type: Date, default: Date.now },
 });
 
 const historyEmailSchema = new mongoose.Schema({
