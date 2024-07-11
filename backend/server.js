@@ -11,6 +11,7 @@ const getAnyFileFunction = require('./getAnyFile/getAnyFileFunction');
 const FileSender = require('./shared/FileSender');
 const getImage = require('./editProfile/getImage');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 
 const PORT = process.env.BACKEND_SERVER_PORT || process.env.API_PORT;
 

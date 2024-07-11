@@ -1,6 +1,10 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 const { getGridFSBucket } = require('../db');
 const MailSender = require('./MailSender');
+const user = require('../models/user');
+
+const MY_EMAIL = process.env.MY_EMAIL;
 
 // Helper function to retrieve a file by its ID
 const getFileById = async (fileId) => {
@@ -35,8 +39,18 @@ const getFileById = async (fileId) => {
 };
 
 const FileSender = async (req, res) => {
-  const { email, xmlId, pdfId, validatorPdfId, message, emailSubject } =
-    req.body;
+  const {
+    email,
+    xmlId,
+    pdfId,
+    validatorPdfId,
+    message,
+    emailSubject,
+    sharedObjId,
+    process,
+    fileTypes,
+    userId,
+  } = req.body;
 
   const attachments = [];
 
@@ -86,8 +100,12 @@ const FileSender = async (req, res) => {
       res.status(400).send({ message: 'No valid file IDs provided' });
     }
 
+    if (!MY_EMAIL) {
+      res.status(500).send({ message: `Server Error` });
+    }
+
     const mailOptions = {
-      from: process.env.MY_EMAIL,
+      from: MY_EMAIL,
       to: email,
       subject: sub,
       text: 'Please find your attached files @HexaHunks',
@@ -96,6 +114,22 @@ const FileSender = async (req, res) => {
     };
 
     await MailSender(mailOptions);
+
+    console.log(sharedObjId);
+    const newHistoryObj = {
+      email: email,
+      subject: sub,
+      fileTypes: fileTypes,
+      process: process,
+      sharedObjId,
+    };
+
+    const updatedUser = await user.findByIdAndUpdate(
+      userId,
+      { $push: { historyEmail: newHistoryObj } },
+      { new: true, useFindAndModify: false }
+    );
+
     res
       .status(200)
       .send({ message: 'Email sent with attachments successfully' });

@@ -15,6 +15,15 @@ const ublValidationSchema = new mongoose.Schema({
   name: { type: String },
 });
 
+const historyEmailSchema = new mongoose.Schema({
+  email: { type: String, required: true },
+  subject: { type: String, required: true },
+  fileTypes: { type: [String], required: true },
+  date: { type: Date, default: Date.now },
+  process: { type: String, required: true },
+  sharedObjId: { type: String, required: true },
+});
+
 const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   username: { type: String },
@@ -31,6 +40,10 @@ const userSchema = new mongoose.Schema({
   },
   ublValidation: {
     type: [ublValidationSchema],
+    default: [],
+  },
+  historyEmail: {
+    type: [historyEmailSchema],
     default: [],
   },
 });
