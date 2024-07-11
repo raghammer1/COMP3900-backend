@@ -11,7 +11,9 @@ const getAnyFileFunction = require('./getAnyFile/getAnyFileFunction');
 const FileSender = require('./shared/FileSender');
 const getImage = require('./editProfile/getImage');
 const bodyParser = require('body-parser');
+const getUserEmailHistory = require('./emailHistoryManager/getUserEmailHistory');
 require('dotenv').config();
+const auth = require('./middleware/auth');
 
 const PORT = process.env.BACKEND_SERVER_PORT || process.env.API_PORT;
 
@@ -55,6 +57,7 @@ app.use('/edit', editProfileRouter);
 app.use('/getFile', getAnyFileFunction);
 app.post('/sendFile', FileSender);
 app.get('/api/images/:filename', getImage);
+app.get('/history-email', auth, getUserEmailHistory);
 
 const server = http.createServer(app);
 
