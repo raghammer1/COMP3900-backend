@@ -14,6 +14,9 @@ const bodyParser = require('body-parser');
 const getUserEmailHistory = require('./emailHistoryManager/getUserEmailHistory');
 require('dotenv').config();
 const auth = require('./middleware/auth');
+const giveAccessValidationUbl = require('./shared/giveAccessValidationUbl');
+const joi = require('joi');
+const validator = require('express-joi-validation').createValidator({});
 
 const PORT = process.env.BACKEND_SERVER_PORT || process.env.API_PORT;
 
@@ -50,14 +53,27 @@ app.get('/test', (req, res) => {
   res.json({ message: 'Hello World!' });
 });
 
+const accessGiverSchema = joi.object({
+  email: joi.string().email().required(),
+  ublId: joi.string().required(),
+  validatorId: joi.string().required(),
+  name: joi.string().required(),
+});
+
 app.use('/auth', authRoutes);
 app.use('/convert', converterRoutes);
 app.use('/validate', validateRouter);
 app.use('/edit', editProfileRouter);
 app.use('/getFile', getAnyFileFunction);
-app.post('/sendFile', FileSender);
+app.post('/sendFile', auth, FileSender);
 app.get('/api/images/:filename', getImage);
 app.get('/history-email', auth, getUserEmailHistory);
+app.post(
+  '/give-access-validation-ubl',
+  auth,
+  validator.body(accessGiverSchema),
+  giveAccessValidationUbl
+);
 
 const server = http.createServer(app);
 
