@@ -15,6 +15,18 @@ const validateUblFile = async (req, res) => {
     const name = req.body.name;
     console.log('name', name);
 
+    const User = await user.findOne({ _id: userId });
+    // Check if the ublValidationObject already exists
+    const isExistingValidation = User.ublValidation.some(
+      (validation) => validation.name === name
+    );
+
+    if (isExistingValidation) {
+      return res
+        .status(409)
+        .json({ error: 'Validation object with name already exists' });
+    }
+
     const existingUser = await user.findById(userId);
     if (!existingUser) {
       return res.status(404).json({ error: 'User not found' });
