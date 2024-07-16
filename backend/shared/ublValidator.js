@@ -12,6 +12,7 @@ const validateUBL = async (ublBuffer, originalFilename, mimeType) => {
 
   try {
     // Validate the UBL file
+
     const apiKey = await getToken();
 
     const form = new FormData();
@@ -61,6 +62,7 @@ const validateUBL = async (ublBuffer, originalFilename, mimeType) => {
       });
     });
   } catch (error) {
+    console.log(`Error validating UBL file: ${error.message}, error`, error);
     throw new Error(`Error validating UBL file: ${error.message}`);
   }
 };

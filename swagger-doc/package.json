@@ -1,0 +1,17 @@
+{
+  "name": "swagger-doc",
+  "version": "1.0.0",
+  "description": "This is the swagger for out webpage",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon start"
+  },
+  "author": "Raghav Agarwal",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
