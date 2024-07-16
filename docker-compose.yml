@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  swagger:
+    build:
+      context: ./swagger-doc
+      dockerfile: Dockerfile
+    ports:
+      - '3005:3005'
+    volumes:
+      - ./swagger:/app
+    command: ['node', 'index.js']
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
