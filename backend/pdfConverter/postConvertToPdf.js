@@ -90,7 +90,7 @@ const postConvertToPdf = async (req, res) => {
             name: name,
           };
 
-          console.log(fileId._id, pdfUblValidationObject, 'FIRLDWDWEW', userId);
+          // console.log(fileId._id, pdfUblValidationObject, 'FIRLDWDWEW', userId);
 
           const updatedUser = await user.findByIdAndUpdate(
             userId,
@@ -105,12 +105,21 @@ const postConvertToPdf = async (req, res) => {
 
           console.log(fileId);
 
+          // Find the newly added ublValidationObject with its _id
+          const newlyAddedObject = updatedUser.pdfUblValidation.find(
+            (obj) =>
+              obj.ublId.toString() === ublId.toString() &&
+              obj.pdfId.toString() === fileId.toString()
+          );
+
           // ! THIS IS JUST A SAMPLE RETURN TO MOCK THE ACTUAL RETURN STATEMENT FOR WHEN WE ACTUALLY GET THE API KEY
           res.json({
             message: 'File converted and user updated successfully!',
             pdfId: fileId,
             ublId,
             name,
+            newObjectId: newlyAddedObject._id,
+            date: newlyAddedObject.date,
             validatorId: undefined,
           });
         } catch (updateError) {
