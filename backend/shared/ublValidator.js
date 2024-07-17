@@ -25,6 +25,8 @@ const validateUBL = async (ublBuffer, originalFilename, mimeType) => {
       contentType: mimeType,
     });
 
+    console.log('validationErrors');
+
     const response = await axios.post(validationUrl, form, {
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -33,9 +35,10 @@ const validateUBL = async (ublBuffer, originalFilename, mimeType) => {
       },
     });
 
+    console.log('validationErrors');
     const validationErrors =
       response.data.report.reports.AUNZ_PEPPOL_1_0_10.firedAssertionErrors;
-
+    console.log(validationErrors);
     // Generate PDF
     const pdfBytes = await generateErrorReportPDF(validationErrors);
 
