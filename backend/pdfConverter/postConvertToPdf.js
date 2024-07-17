@@ -4,6 +4,9 @@ const user = require('../models/user');
 const { getGridFSBucket } = require('../db');
 const { Readable } = require('stream');
 const mongoose = require('mongoose');
+const uploadInvoice = require('./actualConvertionFunction');
+const jsonToUbl = require('./JsonToUBL');
+const saveXmlToMongo = require('./saveXmlToMongo');
 
 const postConvertToPdf = async (req, res) => {
   try {
@@ -16,6 +19,10 @@ const postConvertToPdf = async (req, res) => {
     const filename =
       crypto.randomBytes(16).toString('hex') +
       path.extname(req.file.originalname);
+
+    const ublFilename =
+      crypto.randomBytes(16).toString('hex') +
+      path.extname(Date.now() + req.file.originalname);
 
     const fileStream = new Readable();
     fileStream.push(req.file.buffer);
@@ -35,11 +42,45 @@ const postConvertToPdf = async (req, res) => {
         try {
           const fileId = uploadStream.id;
 
+          const invoiceData = await uploadInvoice(
+            req.file.buffer,
+            req.file.originalname
+          );
+
+          if (!invoiceData) {
+            return res
+              .status(500)
+              .json({ error: 'Failed to convert PDF to JSON' });
+          }
+
+          const xmlFile = jsonToUbl(invoiceData);
+          // console.log(xmlFile);
+
+          // const ublFileId = saveXmlToMongo(xmlFile, ublFilename);
+          let ublId = undefined;
+          try {
+            ublId = await saveXmlToMongo(xmlFile, ublFilename);
+            console.log(ublId, fileId);
+          } catch (error) {
+            console.error('Error saving XML to MongoDB:', error);
+            return res.status(500).json({
+              error: 'Error saving XML to MongoDB',
+              details: error.message,
+            });
+          }
+
+          if (ublId === undefined) {
+            return res
+              .status(402)
+              .json({ error: 'Failed to convert PDF to UBL' });
+          }
+
+          // return res.status(200).json({ success: 'success' });
           // Dummy UBL and Validator IDs for illustration; replace with actual logic to get these IDs
           // const ublId = new mongoose.Types.ObjectId(
           //   'aa6d47f29abc3c9a48e887f7dde1213e'
           // ); // Replace with actual ID
-          const ublId = undefined;
+          // const ublId = undefined;
           // const validatorId = new mongoose.Types.ObjectId(); // Replace with actual ID
 
           const pdfUblValidationObject = {
