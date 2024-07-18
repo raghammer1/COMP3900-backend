@@ -40,6 +40,7 @@ const postLogin = async (req, res) => {
         email: user.email,
         _id: user._id,
         googlePicture: user.googlePicture,
+        gln: user.gln,
       });
     }
     return res.status(400).send('Invalid Credential');

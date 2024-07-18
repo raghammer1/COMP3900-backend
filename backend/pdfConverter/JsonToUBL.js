@@ -1,75 +1,36 @@
-//! BOILER PLATE CODE FOR JSON TO UBL
-
-// const { create } = require('xmlbuilder2');
-
-// const jsonToUbl = (json) => {
-//   const doc = create({ version: '1.0', encoding: 'UTF-8' })
-//     .ele('Invoice', { xmlns: 'urn:oasis:names:specification:ubl:schema:xsd:Invoice-2' })
-//     .ele('cbc:UBLVersionID').txt('2.1').up()
-//     .ele('cbc:CustomizationID').txt('urn:cen.eu:en16931:2017').up()
-//     .ele('cbc:ProfileID').txt('urn:fdc:peppol.eu:2017:poacc:billing:01:1.0').up()
-//     .ele('cbc:ID').txt(json.invoiceNumber).up()
-//     .ele('cbc:IssueDate').txt(json.issueDate).up()
-//     .ele('cac:AccountingSupplierParty')
-//       .ele('cac:Party')
-//         .ele('cac:PartyName')
-//           .ele('cbc:Name').txt(json.supplier.name).up()
-//         .up()
-//         .ele('cac:PostalAddress')
-//           .ele('cbc:StreetName').txt(json.supplier.address.street).up()
-//           .ele('cbc:CityName').txt(json.supplier.address.city).up()
-//           .ele('cbc:PostalZone').txt(json.supplier.address.postalCode).up()
-//         .up()
-//       .up()
-//     .up()
-//     .ele('cac:AccountingCustomerParty')
-//       .ele('cac:Party')
-//         .ele('cac:PartyName')
-//           .ele('cbc:Name').txt(json.customer.name).up()
-//         .up()
-//         .ele('cac:PostalAddress')
-//           .ele('cbc:StreetName').txt(json.customer.address.street).up()
-//           .ele('cbc:CityName').txt(json.customer.address.city).up()
-//           .ele('cbc:PostalZone').txt(json.customer.address.postalCode).up()
-//         .up()
-//       .up()
-//     .up();
-
-//   return doc.end({ prettyPrint: true });
-// };
-
-// const sampleJson = {
-//   invoiceNumber: 'INV-001',
-//   issueDate: '2024-06-20',
-//   supplier: {
-//     name: 'Supplier Name',
-//     address: {
-//       street: '123 Supplier St.',
-//       city: 'Supplier City',
-//       postalCode: '12345'
-//     }
-//   },
-//   customer: {
-//     name: 'Customer Name',
-//     address: {
-//       street: '456 Customer St.',
-//       city: 'Customer City',
-//       postalCode: '67890'
-//     }
-//   }
-// };
-
-// console.log(jsonToUbl(sampleJson));
 // Function to convert JSON to UBL XML
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const { create } = require('xmlbuilder2');
-function jsonToUbl(json) {
+function jsonToUbl(json, vendorGln, customerGln) {
   if (!json) {
     console.error('No JSON data provided');
     return;
   }
+
+  const missingFields = [];
+
+  // Validate required fields
+  if (!json.invoice_number) missingFields.push('invoice_number');
+  if (!json.date) missingFields.push('date');
+  if (!json.due_date) missingFields.push('due_date');
+  if (!json.vendor || !json.vendor.name) missingFields.push('vendor.name');
+  if (!json.vendor || !json.vendor.address)
+    missingFields.push('vendor.address');
+  if (!json.vendor || !json.vendor.vat_number)
+    missingFields.push('vendor.vat_number');
+  if (!json.bill_to_name) missingFields.push('bill_to_name');
+  if (!json.bill_to_address) missingFields.push('bill_to_address');
+  if (!json.bill_to_vat_number) missingFields.push('bill_to_vat_number');
+  if (!json.purchase_order_number) missingFields.push('purchase_order_number');
+  if (!json.subtotal) missingFields.push('subtotal');
+  if (!json.tax) missingFields.push('tax');
+  if (!json.total) missingFields.push('total');
+  // if (!json.vendor.gln) missingFields.push('vendor.gln');
+  // if (!json.customer || !json.customer.gln) missingFields.push('customer.gln');
+
+  console.log(json);
 
   const doc = create({ version: '1.0', encoding: 'UTF-8' })
     .ele('Invoice', {
@@ -107,7 +68,7 @@ function jsonToUbl(json) {
     .ele('cac:AccountingSupplierParty')
     .ele('cac:Party')
     .ele('cbc:EndpointID', { schemeID: '0088' })
-    .txt('1234567890128')
+    .txt(vendorGln)
     .up() // Valid GLN for supplier
     .ele('cac:PartyIdentification')
     .ele('cbc:ID')
@@ -157,7 +118,7 @@ function jsonToUbl(json) {
     .ele('cac:AccountingCustomerParty')
     .ele('cac:Party')
     .ele('cbc:EndpointID', { schemeID: '0088' })
-    .txt('9876543210128')
+    .txt(customerGln)
     .up() // Valid GLN for customer
     .ele('cac:PartyIdentification')
     .ele('cbc:ID')

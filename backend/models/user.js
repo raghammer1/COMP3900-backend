@@ -31,6 +31,7 @@ const userSchema = new mongoose.Schema({
   username: { type: String },
   password: { type: String },
   googleId: { type: String },
+  gln: { type: String },
   // googlePicture: { type: String },
   googlePicture: {
     type: Schema.Types.Mixed, // Allow either String or ObjectId

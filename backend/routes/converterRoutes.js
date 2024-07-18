@@ -27,6 +27,11 @@ router
     '/get-all-convertion-data',
     auth,
     converterControllers.controllers.getConvertionData
+  )
+  .delete(
+    '/delete-one-convertion-data',
+    auth,
+    converterControllers.controllers.deleteConvertionData
   );
 
 module.exports = router;

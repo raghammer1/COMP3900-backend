@@ -14,8 +14,36 @@ const postConvertToPdf = async (req, res) => {
       return res.status(400).json({ error: 'No file uploaded.' });
     }
 
+    // const { vendorGln, customerGln, saveGln } = req.body;
     const userId = req.body.userId;
+    const vendorGln = req.body.vendorGln;
+    const customerGln = req.body.customerGln;
+    const saveGln = req.body.saveGln;
     const name = req.body.name;
+
+    // Fetch the user
+    const userData = await user.findById(userId);
+
+    if (!userData) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update user's GLN if saveGln is true
+    console.log(
+      '\n\n\n\n\n\n\n',
+      userId,
+      vendorGln,
+      customerGln,
+      saveGln,
+      name,
+      '\n\n\n\n\n\n\n'
+    );
+    if (saveGln !== 'false') {
+      console.log('I STILL FUCKING CAME HERE LOL');
+      userData.gln = vendorGln;
+      await userData.save();
+    }
+
     const filename =
       crypto.randomBytes(16).toString('hex') +
       path.extname(req.file.originalname);
@@ -53,7 +81,7 @@ const postConvertToPdf = async (req, res) => {
               .json({ error: 'Failed to convert PDF to JSON' });
           }
 
-          const xmlFile = jsonToUbl(invoiceData);
+          const xmlFile = jsonToUbl(invoiceData, vendorGln, customerGln);
           // console.log(xmlFile);
 
           // const ublFileId = saveXmlToMongo(xmlFile, ublFilename);

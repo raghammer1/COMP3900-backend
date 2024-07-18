@@ -1,41 +1,41 @@
 const mongoose = require('mongoose');
 const { getGridFSBucket } = require('../db');
 
-const deleteOneValidationData = async (req, res) => {
+const deleteConvertionData = async (req, res) => {
   const { userId, dataId } = req.query;
   console.log(userId, dataId);
   try {
     const user = await mongoose.model('User').findById(userId);
     if (!user) res.status(409).json({ error: 'User not found' });
 
-    const validationEntry = user.ublValidation.id(dataId);
-    if (!validationEntry)
+    const convertionEntry = user.pdfUblValidation.id(dataId);
+    if (!convertionEntry)
       res.status(409).json({ error: 'Validation entry not found' });
 
     const gfs = getGridFSBucket();
 
     // Delete ublId file
-    if (validationEntry.ublId) {
-      await deleteFileFromGridFS(gfs, validationEntry.ublId);
+    if (convertionEntry.ublId) {
+      await deleteFileFromGridFS(gfs, convertionEntry.ublId);
     }
 
     // Delete validatorId file
-    if (validationEntry.validatorId) {
-      await deleteFileFromGridFS(gfs, validationEntry.validatorId);
+    if (convertionEntry.validatorId) {
+      await deleteFileFromGridFS(gfs, convertionEntry.validatorId);
     }
 
     // Remove the validation entry by filtering out the entry with the specified dataId
-    user.ublValidation = user.ublValidation.filter(
+    user.pdfUblValidation = user.pdfUblValidation.filter(
       (entry) => entry.id !== dataId
     );
 
     // Save the updated user document
     await user.save();
 
-    console.log('Files and validation entry deleted successfully');
+    console.log('Files and convertion entry deleted successfully');
     res
       .status(200)
-      .send({ message: 'Files and validation entry deleted successfully' });
+      .send({ message: 'Files and convertion entry deleted successfully' });
   } catch (error) {
     console.error('Error during deletion process:', error);
     res
@@ -52,4 +52,4 @@ const deleteFileFromGridFS = async (gfs, fileId) => {
   return fileDeletionResult;
 };
 
-module.exports = deleteOneValidationData;
+module.exports = deleteConvertionData;
