@@ -12,7 +12,7 @@ const validateUBL = require('../shared/ublValidator');
 const postConvertToPdf = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded.' });
+      return res.status(400).json({ message: 'No file uploaded.' });
     }
 
     // const { vendorGln, customerGln, saveGln } = req.body;
@@ -25,8 +25,19 @@ const postConvertToPdf = async (req, res) => {
     // Fetch the user
     const userData = await user.findById(userId);
 
+    // Check if the ublValidationObject already exists
+    const isExistingValidation = userData.pdfUblValidation.some(
+      (validation) => validation.name === name
+    );
+
+    if (isExistingValidation) {
+      return res
+        .status(409)
+        .send({ message: 'Validation object with name already exists' });
+    }
+
     if (!userData) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ message: 'User not found' });
     }
 
     // Update user's GLN if saveGln is true
@@ -66,7 +77,7 @@ const postConvertToPdf = async (req, res) => {
       .on('error', (error) => {
         return res
           .status(500)
-          .json({ error: 'Error uploading file', details: error.message });
+          .json({ message: 'Error uploading file', details: error.message });
       })
       .on('finish', async () => {
         try {
@@ -119,7 +130,7 @@ const postConvertToPdf = async (req, res) => {
           } catch (error) {
             console.error('Error saving XML to MongoDB:', error);
             return res.status(500).json({
-              error: 'Error saving XML to MongoDB',
+              message: 'Error saving XML to MongoDB',
               details: error.message,
             });
           }
@@ -127,7 +138,7 @@ const postConvertToPdf = async (req, res) => {
           if (ublId === undefined) {
             return res
               .status(402)
-              .json({ error: 'Failed to convert PDF to UBL' });
+              .json({ message: 'Failed to convert PDF to UBL' });
           }
 
           // return res.status(200).json({ success: 'success' });
@@ -179,7 +190,7 @@ const postConvertToPdf = async (req, res) => {
           });
         } catch (updateError) {
           res.status(500).json({
-            error: 'Error updating user with file ID',
+            message: 'Error updating user with file ID',
             details: updateError.message,
           });
         }
@@ -195,11 +206,11 @@ const postConvertToPdf = async (req, res) => {
       if (!uploadStream.writableEnded) {
         return res
           .status(500)
-          .json({ error: 'File upload did not finish as expected' });
+          .json({ message: 'File upload did not finish as expected' });
       }
     }, 30000); // Adjust the timeout value as needed
   } catch (err) {
-    res.status(500).json({ error: 'Server error', details: err.message });
+    res.status(500).json({ message: 'Server error', details: err.message });
   }
 };
 
