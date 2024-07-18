@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const uploadInvoice = require('./actualConvertionFunction');
 const jsonToUbl = require('./JsonToUBL');
 const saveXmlToMongo = require('./saveXmlToMongo');
+const validateUBL = require('../shared/ublValidator');
 
 const postConvertToPdf = async (req, res) => {
   try {
@@ -81,8 +82,33 @@ const postConvertToPdf = async (req, res) => {
               .json({ error: 'Failed to convert PDF to JSON' });
           }
 
-          const xmlFile = jsonToUbl(invoiceData, vendorGln, customerGln);
-          // console.log(xmlFile);
+          const { missingFields, xml } = jsonToUbl(
+            invoiceData,
+            vendorGln,
+            customerGln
+          );
+          const xmlFile = xml;
+          console.log(xmlFile, 'LOLOLOLOLOLOLOLOL');
+          let validationReportId = undefined;
+          try {
+            validationReportId = await validateUBL(
+              Buffer.from(xmlFile, 'utf-8'),
+              ublFilename,
+              'text/xml',
+              missingFields
+            );
+            console.log('Validation report ID:', validationReportId);
+          } catch (error) {
+            console.error('Error validating UBL:', error);
+            return res.status(500).json({
+              error: 'Error validating UBL',
+              details: error.message,
+            });
+          }
+
+          if (validationReportId === undefined) {
+            return res.status(402).json({ error: 'Failed to validate UBL' });
+          }
 
           // const ublFileId = saveXmlToMongo(xmlFile, ublFilename);
           let ublId = undefined;
@@ -114,7 +140,7 @@ const postConvertToPdf = async (req, res) => {
           const pdfUblValidationObject = {
             pdfId: fileId,
             ublId: ublId,
-            validatorId: undefined, //! THIS WILL ONLY BE GENERATED WHEN USER WANTS TO
+            validatorId: validationReportId, //! THIS WILL ONLY BE GENERATED WHEN USER WANTS TO
             name: name,
           };
 
@@ -148,7 +174,7 @@ const postConvertToPdf = async (req, res) => {
             name,
             newObjectId: newlyAddedObject._id,
             date: newlyAddedObject.date,
-            validatorId: undefined,
+            validatorId: validationReportId,
           });
         } catch (updateError) {
           res.status(500).json({

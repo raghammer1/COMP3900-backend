@@ -238,7 +238,7 @@ function jsonToUbl(json, vendorGln, customerGln) {
   });
 
   const xml = doc.end({ prettyPrint: true });
-  return xml;
+  return { missingFields, xml };
 }
 
 module.exports = jsonToUbl;

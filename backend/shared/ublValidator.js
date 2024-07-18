@@ -6,7 +6,12 @@ const { getGridFSBucket } = require('../db');
 const generateErrorReportPDF = require('./generatePdfErrorReport');
 const { getToken } = require('../ublValidator/tokenService');
 
-const validateUBL = async (ublBuffer, originalFilename, mimeType) => {
+const validateUBL = async (
+  ublBuffer,
+  originalFilename,
+  mimeType,
+  selfFilledIssue = null
+) => {
   const validationUrl =
     'https://services.ebusiness-cloud.com/ess-schematron/v1/web/validate/single?rules=Au-Nz%20peppol-1.0.10';
 
@@ -39,8 +44,23 @@ const validateUBL = async (ublBuffer, originalFilename, mimeType) => {
     const validationErrors =
       response.data.report.reports.AUNZ_PEPPOL_1_0_10.firedAssertionErrors;
     console.log(validationErrors);
+
+    let pdfBytes = null;
     // Generate PDF
-    const pdfBytes = await generateErrorReportPDF(validationErrors);
+    if (selfFilledIssue === null) {
+      pdfBytes = await generateErrorReportPDF(validationErrors);
+    } else {
+      pdfBytes = await generateErrorReportPDF(
+        validationErrors,
+        selfFilledIssue
+      );
+    }
+
+    if (pdfBytes === null) {
+      return res.status(400).json({
+        error: 'Error validating UBL, failed to generate PDF report',
+      });
+    }
 
     // Save PDF to GridFS
     const gridFSBucket = getGridFSBucket();

@@ -1,6 +1,6 @@
 const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
-const generateErrorReportPDF = async (errors) => {
+const generateErrorReportPDF = async (errors, selfFilledIssue = null) => {
   try {
     if (!Array.isArray(errors)) {
       throw new TypeError('Expected an array of errors');
@@ -130,6 +130,35 @@ Status: ${error.flag === 'fatal' ? 'Failed' : 'Passed'}
         }
 
         y -= lineSpacing; // Additional space between errors
+      }
+    }
+
+    // Add self-filled issues at the end of the PDF
+    if (selfFilledIssue) {
+      let drawResult = drawHeader(
+        'IMP: THESE WERE AUTO FILLED TO DEFAULT TO GENERATE A VALID UBL',
+        marginLeft,
+        y,
+        14,
+        rgb(1, 0, 0),
+        font,
+        page
+      );
+      y = drawResult.y - 20; // Adjust spacing after the title
+      page = drawResult.page;
+
+      for (const field of selfFilledIssue) {
+        drawResult = drawText(
+          field,
+          marginLeft,
+          y,
+          fontSize,
+          rgb(0, 0, 0),
+          font,
+          page
+        );
+        y = drawResult.y;
+        page = drawResult.page;
       }
     }
 
