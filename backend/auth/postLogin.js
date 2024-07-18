@@ -35,11 +35,14 @@ const postLogin = async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000, // Cookie expiration time (24 hours)
       });
 
+      console.log(user, 'THIS IS USER');
+
       return res.status(201).json({
         username: user.username,
         email: user.email,
         _id: user._id,
         googlePicture: user.googlePicture,
+        gln: user.gln,
       });
     }
     return res.status(400).send('Invalid Credential');

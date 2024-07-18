@@ -15,12 +15,23 @@ const fileUploadSchema = joi.object({
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-router.post(
-  '/upload-pdf',
-  auth,
-  upload.single('file'),
-  // validator.body(fileUploadSchema),
-  converterControllers.controllers.postConvertToPdf
-);
+router
+  .post(
+    '/upload-pdf',
+    auth,
+    upload.single('file'),
+    // validator.body(fileUploadSchema),
+    converterControllers.controllers.postConvertToPdf
+  )
+  .get(
+    '/get-all-convertion-data',
+    auth,
+    converterControllers.controllers.getConvertionData
+  )
+  .delete(
+    '/delete-one-convertion-data',
+    auth,
+    converterControllers.controllers.deleteConvertionData
+  );
 
 module.exports = router;

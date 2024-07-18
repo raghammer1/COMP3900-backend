@@ -1,6 +1,6 @@
 const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
-const generateErrorReportPDF = async (errors) => {
+const generateErrorReportPDF = async (errors, selfFilledIssue = null) => {
   try {
     if (!Array.isArray(errors)) {
       throw new TypeError('Expected an array of errors');
@@ -60,22 +60,41 @@ const generateErrorReportPDF = async (errors) => {
       y -= lineSpacing;
       return { y, page };
     };
+    if (errors.length === 0) {
+      // page.drawText('No Errors were found, your UBL is valid', {
+      //   x: 50,
+      //   y: height / 2 + fontSize,
+      //   size: fontSize,
+      //   font: timesRomanFont,
+      //   color: rgb(0, 0, 0),
+      // });
+      let drawResult = drawHeader(
+        'No Errors were found, your UBL is valid',
+        marginLeft,
+        y,
+        20,
+        rgb(0, 0, 0),
+        font,
+        page
+      );
+      y = drawResult.y - 30; // Adjust spacing after the title
+      page = drawResult.page;
+    } else {
+      let drawResult = drawHeader(
+        'UBL Validation Error Report',
+        marginLeft,
+        y,
+        20,
+        rgb(0, 0, 0),
+        font,
+        page
+      );
+      y = drawResult.y - 30; // Adjust spacing after the title
+      page = drawResult.page;
 
-    let drawResult = drawHeader(
-      'UBL Validation Error Report',
-      marginLeft,
-      y,
-      20,
-      rgb(0, 0, 0),
-      font,
-      page
-    );
-    y = drawResult.y - 30; // Adjust spacing after the title
-    page = drawResult.page;
-
-    for (const [index, error] of errors.entries()) {
-      const errorHeader = `Error ${index + 1}:`;
-      const errorDetails = `
+      for (const [index, error] of errors.entries()) {
+        const errorHeader = `Error ${index + 1}:`;
+        const errorDetails = `
 ID: ${error.id}
 Description: ${error.text}
 Test: ${error.test}
@@ -84,21 +103,53 @@ Flag: ${error.flag}
 Status: ${error.flag === 'fatal' ? 'Failed' : 'Passed'}
       `;
 
-      drawResult = drawHeader(
-        errorHeader,
+        drawResult = drawHeader(
+          errorHeader,
+          marginLeft,
+          y,
+          fontSize,
+          rgb(0, 0, 0),
+          font,
+          page
+        );
+        y = drawResult.y;
+        page = drawResult.page;
+
+        for (const line of errorDetails.split('\n')) {
+          drawResult = drawText(
+            line.trim(),
+            marginLeft,
+            y,
+            fontSize,
+            rgb(0, 0, 0),
+            font,
+            page
+          );
+          y = drawResult.y;
+          page = drawResult.page;
+        }
+
+        y -= lineSpacing; // Additional space between errors
+      }
+    }
+
+    // Add self-filled issues at the end of the PDF
+    if (selfFilledIssue) {
+      let drawResult = drawHeader(
+        'IMP: THESE WERE AUTO FILLED TO DEFAULT TO GENERATE A VALID UBL',
         marginLeft,
         y,
-        fontSize,
-        rgb(0, 0, 0),
+        14,
+        rgb(1, 0, 0),
         font,
         page
       );
-      y = drawResult.y;
+      y = drawResult.y - 20; // Adjust spacing after the title
       page = drawResult.page;
 
-      for (const line of errorDetails.split('\n')) {
+      for (const field of selfFilledIssue) {
         drawResult = drawText(
-          line.trim(),
+          field,
           marginLeft,
           y,
           fontSize,
@@ -109,8 +160,6 @@ Status: ${error.flag === 'fatal' ? 'Failed' : 'Passed'}
         y = drawResult.y;
         page = drawResult.page;
       }
-
-      y -= lineSpacing; // Additional space between errors
     }
 
     const pdfBytes = await pdfDoc.save();

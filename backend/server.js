@@ -16,6 +16,7 @@ require('dotenv').config();
 const auth = require('./middleware/auth');
 const giveAccessValidationUbl = require('./shared/giveAccessValidationUbl');
 const joi = require('joi');
+const giveAccessPdfUbl = require('./shared/giveAccessPdfUbl');
 const validator = require('express-joi-validation').createValidator({});
 
 const PORT = process.env.BACKEND_SERVER_PORT || process.env.API_PORT;
@@ -60,6 +61,14 @@ const accessGiverSchema = joi.object({
   name: joi.string().required(),
 });
 
+const accessGiverSchemaPdf = joi.object({
+  email: joi.string().email().required(),
+  ublId: joi.string().required(),
+  validatorId: joi.string().required(),
+  pdfId: joi.string().required(),
+  name: joi.string().required(),
+});
+
 app.use('/auth', authRoutes);
 app.use('/convert', converterRoutes);
 app.use('/validate', validateRouter);
@@ -73,6 +82,12 @@ app.post(
   auth,
   validator.body(accessGiverSchema),
   giveAccessValidationUbl
+);
+app.post(
+  '/give-access-convertion-ubl',
+  auth,
+  validator.body(accessGiverSchemaPdf),
+  giveAccessPdfUbl
 );
 
 const server = http.createServer(app);

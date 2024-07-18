@@ -1,36 +1,61 @@
-// Function to convert JSON to UBL XML
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 const { create } = require('xmlbuilder2');
-function jsonToUbl(json, vendorGln, customerGln) {
+
+// Veryfi API credentials
+const client_id = 'vrfCmSwXe2kGXlHaG85J5eNk0jfIxo8i0MBHapY';
+const client_secret =
+  'KARbwyHiyt4IbHhUkr2njcctUxBbrJgB6Uuw64a11ReCi1TPLT1MrpGpYoaJK8XzHW1ihiaU2pPXv2XSKFn7oJGcsPUsW85Cm8j3GHSbULgH8Nv01aoe09w2kkbWsf7i';
+const username = 'z5394767';
+const api_key = '8ccdbf65bdf579e001b3529d71b429dc';
+
+// The endpoint URL for uploading documents
+const url = 'https://api.veryfi.com/api/v7/partner/documents/';
+
+// The PDF file to convert
+const pdfFilePath = path.resolve(__dirname, 'Invoice_BIG.pdf');
+
+// Read the PDF file
+const pdfFile = fs.createReadStream(pdfFilePath);
+
+// Headers
+const headers = {
+  Accept: 'application/json',
+  'CLIENT-ID': client_id,
+  AUTHORIZATION: `apikey ${username}:${api_key}`,
+  'X-Veryfi-Client-Id': client_id,
+  'X-Veryfi-Client-Secret': client_secret,
+};
+
+// Form data
+const FormData = require('form-data');
+const formData = new FormData();
+formData.append('file', pdfFile);
+
+// Include headers from formData in the request
+const formHeaders = formData.getHeaders();
+
+async function uploadInvoice() {
+  try {
+    const response = await axios.post(url, formData, {
+      headers: { ...headers, ...formHeaders },
+    });
+    console.log('Conversion successful!');
+    return response.data; // This will be the JSON representation of your invoice
+  } catch (error) {
+    console.error('Failed to convert PDF to JSON:', error.response.status);
+    console.error(error.response.data);
+    return null;
+  }
+}
+
+// Function to convert JSON to UBL XML
+function createUblInvoice(json) {
   if (!json) {
     console.error('No JSON data provided');
     return;
   }
-
-  const missingFields = [];
-
-  // Validate required fields
-  if (!json.invoice_number) missingFields.push('invoice_number');
-  if (!json.date) missingFields.push('date');
-  if (!json.due_date) missingFields.push('due_date');
-  if (!json.vendor || !json.vendor.name) missingFields.push('vendor.name');
-  if (!json.vendor || !json.vendor.address)
-    missingFields.push('vendor.address');
-  if (!json.vendor || !json.vendor.vat_number)
-    missingFields.push('vendor.vat_number');
-  if (!json.bill_to_name) missingFields.push('bill_to_name');
-  if (!json.bill_to_address) missingFields.push('bill_to_address');
-  if (!json.bill_to_vat_number) missingFields.push('bill_to_vat_number');
-  if (!json.purchase_order_number) missingFields.push('purchase_order_number');
-  if (!json.subtotal) missingFields.push('subtotal');
-  if (!json.tax) missingFields.push('tax');
-  if (!json.total) missingFields.push('total');
-  // if (!json.vendor.gln) missingFields.push('vendor.gln');
-  // if (!json.customer || !json.customer.gln) missingFields.push('customer.gln');
-
-  console.log(json);
 
   const doc = create({ version: '1.0', encoding: 'UTF-8' })
     .ele('Invoice', {
@@ -68,7 +93,7 @@ function jsonToUbl(json, vendorGln, customerGln) {
     .ele('cac:AccountingSupplierParty')
     .ele('cac:Party')
     .ele('cbc:EndpointID', { schemeID: '0088' })
-    .txt(vendorGln)
+    .txt('1234567890128')
     .up() // Valid GLN for supplier
     .ele('cac:PartyIdentification')
     .ele('cbc:ID')
@@ -118,7 +143,7 @@ function jsonToUbl(json, vendorGln, customerGln) {
     .ele('cac:AccountingCustomerParty')
     .ele('cac:Party')
     .ele('cbc:EndpointID', { schemeID: '0088' })
-    .txt(customerGln)
+    .txt('9876543210128')
     .up() // Valid GLN for customer
     .ele('cac:PartyIdentification')
     .ele('cbc:ID')
@@ -238,7 +263,16 @@ function jsonToUbl(json, vendorGln, customerGln) {
   });
 
   const xml = doc.end({ prettyPrint: true });
-  return { missingFields, xml };
+  return xml;
 }
 
-module.exports = jsonToUbl;
+(async () => {
+  const jsonData = await uploadInvoice();
+  const ublInvoice = createUblInvoice(jsonData);
+  console.log(ublInvoice);
+
+  // Save the XML to a file
+  if (ublInvoice) {
+    fs.writeFileSync('invoice.xml', ublInvoice);
+  }
+})();
