@@ -51,7 +51,8 @@ const postConvertToPdf = async (req, res) => {
 
     const ublFilename =
       crypto.randomBytes(16).toString('hex') +
-      path.extname(Date.now() + req.file.originalname);
+      path.extname(Date.now() + req.file.originalname) +
+      '.xml';
 
     const fileStream = new Readable();
     fileStream.push(req.file.buffer);
