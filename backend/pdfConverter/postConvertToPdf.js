@@ -30,14 +30,14 @@ const postConvertToPdf = async (req, res) => {
       (validation) => validation.name === name
     );
 
+    if (!userData) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
     if (isExistingValidation) {
       return res
         .status(409)
         .send({ message: 'Validation object with name already exists' });
-    }
-
-    if (!userData) {
-      return res.status(404).json({ message: 'User not found' });
     }
 
     // Update user's GLN if saveGln is true
@@ -179,7 +179,7 @@ const postConvertToPdf = async (req, res) => {
           );
 
           // ! THIS IS JUST A SAMPLE RETURN TO MOCK THE ACTUAL RETURN STATEMENT FOR WHEN WE ACTUALLY GET THE API KEY
-          res.json({
+          res.status(200).json({
             message: 'File converted and user updated successfully!',
             pdfId: fileId,
             ublId,

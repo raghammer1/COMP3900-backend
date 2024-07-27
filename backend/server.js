@@ -86,7 +86,7 @@ app.post(
 app.post(
   '/give-access-convertion-ubl',
   auth,
-  validator.body(accessGiverSchemaPdf),
+  // validator.body(accessGiverSchemaPdf),
   giveAccessPdfUbl
 );
 

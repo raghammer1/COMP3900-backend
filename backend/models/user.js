@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 //
 const pdfUblValidationSchema = new mongoose.Schema({
-  pdfId: { type: ObjectId, ref: 'GridFS' },
+  // pdfId: { type: ObjectId, ref: 'GridFS' },
+  pdfId: { type: Schema.Types.Mixed },
   ublId: { type: ObjectId, ref: 'GridFS' },
   validatorId: { type: ObjectId, ref: 'GridFS' },
   name: { type: String },
