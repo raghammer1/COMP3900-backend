@@ -8,6 +8,12 @@ const uploadInvoice = require('./actualConvertionFunction');
 const jsonToUbl = require('./JsonToUBL');
 const saveXmlToMongo = require('./saveXmlToMongo');
 const validateUBL = require('../shared/ublValidator');
+const {
+  apiCallingForValidation,
+} = require('../shared/apiCallingForValidation');
+const { generateHtml } = require('../shared/htmlGeneratorValidation');
+const { defaultHtml } = require('../shared/defaultValidationHTML');
+const { defaultJson } = require('../shared/defaultJson');
 
 const postConvertToPdf = async (req, res) => {
   try {
@@ -16,14 +22,22 @@ const postConvertToPdf = async (req, res) => {
     }
 
     // const { vendorGln, customerGln, saveGln } = req.body;
-    const userId = req.body.userId;
-    const vendorGln = req.body.vendorGln;
-    const customerGln = req.body.customerGln;
-    const saveGln = req.body.saveGln;
-    const name = req.body.name;
+    const userId = req.body?.userId;
+    const vendorGln = req.body?.vendorGln;
+    const customerGln = req.body?.customerGln;
+    const saveGln = req.body?.saveGln;
+    const name = req.body?.name;
+
+    if ((!userId, !vendorGln, !customerGln, !saveGln, !name)) {
+      return res.status(409).json({ message: 'All fields are required' });
+    }
 
     // Fetch the user
     const userData = await user.findById(userId);
+
+    if (!userData) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
     // Check if the ublValidationObject already exists
     const isExistingValidation = userData.pdfUblValidation.some(
@@ -34,10 +48,6 @@ const postConvertToPdf = async (req, res) => {
       return res
         .status(409)
         .send({ message: 'Validation object with name already exists' });
-    }
-
-    if (!userData) {
-      return res.status(404).json({ message: 'User not found' });
     }
 
     // Update user's GLN if saveGln is true
@@ -55,6 +65,9 @@ const postConvertToPdf = async (req, res) => {
       userData.gln = vendorGln;
       await userData.save();
     }
+
+    let html = defaultHtml;
+    let json = defaultJson;
 
     const filename =
       crypto.randomBytes(16).toString('hex') +
@@ -88,6 +101,8 @@ const postConvertToPdf = async (req, res) => {
             req.file.originalname
           );
 
+          console.log('THIS IS THE NIVOICE DATA', invoiceData);
+
           if (!invoiceData) {
             return res
               .status(500)
@@ -103,12 +118,29 @@ const postConvertToPdf = async (req, res) => {
           console.log(xmlFile, 'LOLOLOLOLOLOLOLOL');
           let validationReportId = undefined;
           try {
-            validationReportId = await validateUBL(
+            let validationErrors = [];
+            validationErrors = await apiCallingForValidation(
               Buffer.from(xmlFile, 'utf-8'),
               ublFilename,
-              'text/xml',
+              'text/xml'
+            );
+            validationReportId = await validateUBL(
+              validationErrors,
               missingFields
             );
+
+            if (
+              validationErrors.length === 1 &&
+              validationErrors[0]?.error === true
+            ) {
+              html = defaultHtml;
+              json = defaultJson;
+            } else {
+              html = generateHtml(validationErrors, missingFields);
+              json = { validationErrors: validationErrors };
+              console.log('HERE', validationErrors);
+            }
+
             console.log('Validation report ID:', validationReportId);
           } catch (error) {
             console.error('Error validating UBL:', error);
@@ -135,7 +167,9 @@ const postConvertToPdf = async (req, res) => {
             });
           }
 
+          console.log('pdfUblValidationObject');
           if (ublId === undefined) {
+            console.log('pdfUblValidationObject');
             return res
               .status(402)
               .json({ message: 'Failed to convert PDF to UBL' });
@@ -154,6 +188,8 @@ const postConvertToPdf = async (req, res) => {
             ublId: ublId,
             validatorId: validationReportId, //! THIS WILL ONLY BE GENERATED WHEN USER WANTS TO
             name: name,
+            validationHtml: html,
+            validationJson: json,
           };
 
           // console.log(fileId._id, pdfUblValidationObject, 'FIRLDWDWEW', userId);
@@ -179,7 +215,7 @@ const postConvertToPdf = async (req, res) => {
           );
 
           // ! THIS IS JUST A SAMPLE RETURN TO MOCK THE ACTUAL RETURN STATEMENT FOR WHEN WE ACTUALLY GET THE API KEY
-          res.json({
+          res.status(200).json({
             message: 'File converted and user updated successfully!',
             pdfId: fileId,
             ublId,
@@ -187,6 +223,8 @@ const postConvertToPdf = async (req, res) => {
             newObjectId: newlyAddedObject._id,
             date: newlyAddedObject.date,
             validatorId: validationReportId,
+            validationHtml: html,
+            validationJson: json,
           });
         } catch (updateError) {
           res.status(500).json({

@@ -23,6 +23,7 @@ router
     // validator.body(fileUploadSchema),
     converterControllers.controllers.postConvertToPdf
   )
+  .post('/gui-form', auth, converterControllers.controllers.postConvertGuiForm)
   .get(
     '/get-all-convertion-data',
     auth,

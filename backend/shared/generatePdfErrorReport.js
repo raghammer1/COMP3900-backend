@@ -166,7 +166,7 @@ Status: ${error.flag === 'fatal' ? 'Failed' : 'Passed'}
     return pdfBytes;
   } catch (err) {
     console.error('Error generating PDF:', err);
-    throw new Error('Error generating PDF');
+    return null;
   }
 };
 

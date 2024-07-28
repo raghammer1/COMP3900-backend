@@ -1,18 +1,34 @@
 const mongoose = require('mongoose');
+const { defaultHtml } = require('../shared/defaultValidationHTML');
+const { defaultJson } = require('../shared/defaultJson');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 //
+
 const pdfUblValidationSchema = new mongoose.Schema({
-  pdfId: { type: ObjectId, ref: 'GridFS' },
+  // pdfId: { type: ObjectId, ref: 'GridFS' },
+  pdfId: { type: Schema.Types.Mixed },
   ublId: { type: ObjectId, ref: 'GridFS' },
-  validatorId: { type: ObjectId, ref: 'GridFS' },
   name: { type: String },
   date: { type: Date, default: Date.now },
+  validatorId: { type: ObjectId, ref: 'GridFS' },
+  validationHtml: { type: String, required: true, default: defaultHtml },
+  validationJson: {
+    type: Schema.Types.Mixed,
+    required: true,
+    default: defaultJson,
+  },
 });
 
 const ublValidationSchema = new mongoose.Schema({
   ublId: { type: ObjectId, ref: 'GridFS' },
   validatorId: { type: ObjectId, ref: 'GridFS' },
+  validationHtml: { type: String, required: true, default: defaultHtml },
+  validationJson: {
+    type: Schema.Types.Mixed,
+    required: true,
+    default: defaultJson,
+  },
   name: { type: String },
   date: { type: Date, default: Date.now },
 });

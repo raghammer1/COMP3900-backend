@@ -1,59 +1,27 @@
-const axios = require('axios');
-const FormData = require('form-data');
 const { Readable } = require('stream');
 const crypto = require('crypto');
 const { getGridFSBucket } = require('../db');
 const generateErrorReportPDF = require('./generatePdfErrorReport');
-const { getToken } = require('../ublValidator/tokenService');
+const invalidPdfProvidedPdfCreator = require('./invalidPdfProvidedPdfCreator');
 
-const validateUBL = async (
-  ublBuffer,
-  originalFilename,
-  mimeType,
-  selfFilledIssue = null
-) => {
-  const validationUrl =
-    'https://services.ebusiness-cloud.com/ess-schematron/v1/web/validate/single?rules=Au-Nz%20peppol-1.0.10';
-
+const validateUBL = async (validationErrors, selfFilledIssue = null) => {
   try {
-    // Validate the UBL file
-
-    const apiKey = await getToken();
-
-    const form = new FormData();
-    const validationFileStream = new Readable();
-    validationFileStream.push(ublBuffer);
-    validationFileStream.push(null);
-
-    form.append('file', validationFileStream, {
-      filename: originalFilename,
-      contentType: mimeType,
-    });
-
-    console.log('validationErrors');
-
-    const response = await axios.post(validationUrl, form, {
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        Accept: 'application/json',
-        ...form.getHeaders(),
-      },
-    });
-
-    console.log('validationErrors');
-    const validationErrors =
-      response.data.report.reports.AUNZ_PEPPOL_1_0_10.firedAssertionErrors;
-    console.log(validationErrors);
-
     let pdfBytes = null;
-    // Generate PDF
-    if (selfFilledIssue === null) {
-      pdfBytes = await generateErrorReportPDF(validationErrors);
+
+    if (validationErrors.length === 1 && validationErrors[0]?.error === true) {
+      console.log('WOW I CAME HERE');
+      pdfBytes = await invalidPdfProvidedPdfCreator();
+      console.log(pdfBytes);
     } else {
-      pdfBytes = await generateErrorReportPDF(
-        validationErrors,
-        selfFilledIssue
-      );
+      // Generate PDF
+      if (selfFilledIssue === null) {
+        pdfBytes = await generateErrorReportPDF(validationErrors);
+      } else {
+        pdfBytes = await generateErrorReportPDF(
+          validationErrors,
+          selfFilledIssue
+        );
+      }
     }
 
     if (pdfBytes === null) {
@@ -86,7 +54,9 @@ const validateUBL = async (
     });
   } catch (error) {
     console.log(`Error validating UBL file: ${error.message}, error`, error);
-    throw new Error(`Error validating UBL file: ${error.message}`);
+    return res.status(500).json({
+      error: `Error validating UBL file: ${error.message}`,
+    });
   }
 };
 
