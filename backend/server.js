@@ -80,7 +80,7 @@ app.get('/history-email', auth, getUserEmailHistory);
 app.post(
   '/give-access-validation-ubl',
   auth,
-  validator.body(accessGiverSchema),
+  // validator.body(accessGiverSchema),
   giveAccessValidationUbl
 );
 app.post(

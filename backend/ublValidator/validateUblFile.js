@@ -4,6 +4,11 @@ const path = require('path');
 const user = require('../models/user');
 const { getGridFSBucket } = require('../db');
 const validateUBL = require('../shared/ublValidator');
+const { defaultHtml } = require('../shared/defaultValidationHTML');
+const { generateHtml } = require('../shared/htmlGeneratorValidation');
+const {
+  apiCallingForValidation,
+} = require('../shared/apiCallingForValidation');
 
 const validateUblFile = async (req, res) => {
   try {
@@ -11,11 +16,20 @@ const validateUblFile = async (req, res) => {
       return res.status(400).json({ error: 'No file uploaded.' });
     }
 
-    const userId = req.body.userId;
-    const name = req.body.name;
+    const userId = req.body?.userId;
+    const name = req.body?.name;
     console.log('name', name);
 
+    if (!userId || !name) {
+      return res.status(404).json({ error: 'Name not provided.' });
+    }
+
     const User = await user.findOne({ _id: userId });
+
+    if (!User) {
+      return res.status(404).json({ error: 'Invalid/Corrupt User' });
+    }
+
     // Check if the ublValidationObject already exists
     const isExistingValidation = User.ublValidation.some(
       (validation) => validation.name === name
@@ -54,17 +68,34 @@ const validateUblFile = async (req, res) => {
       try {
         const ublId = uploadStream.id;
 
-        // Step 2: Validate the UBL file and get validatorId
-        const validatorId = await validateUBL(
+        let validationErrors = [];
+        validationErrors = await apiCallingForValidation(
           req.file.buffer,
           req.file.originalname,
           req.file.mimetype
         );
 
+        // Step 2: Validate the UBL file and get validatorId
+        const validatorId = await validateUBL(validationErrors);
+
+        console.log('HERE');
+
+        let html = defaultHtml;
+        if (
+          validationErrors.length === 1 &&
+          validationErrors[0]?.error === true
+        ) {
+          html = defaultHtml;
+        } else {
+          html = generateHtml(validationErrors, []);
+          console.log('HERE', validationErrors);
+        }
+
         const ublValidationObject = {
           ublId: ublId,
           validatorId: validatorId,
           name,
+          validationHtml: html,
         };
 
         const updatedUser = await user.findByIdAndUpdate(
@@ -92,17 +123,23 @@ const validateUblFile = async (req, res) => {
           newObjectId: newlyAddedObject._id,
           name,
           date: newlyAddedObject.date,
+          validationHtml: html,
         });
       } catch (updateError) {
-        res.status(500).json({
-          error: 'Error updating user with UBL file ID',
-          details: updateError.message,
-        });
+        console.log(updateError);
+        res
+          .status(updateError.response ? updateError.response.status : 500)
+          .json({
+            error: updateError.response
+              ? updateError.response.data
+              : updateError.message,
+          });
       }
     });
 
     fileStream.pipe(uploadStream);
   } catch (error) {
+    console.log(error);
     res.status(error.response ? error.response.status : 500).json({
       error: error.response ? error.response.data : error.message,
     });

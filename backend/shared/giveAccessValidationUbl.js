@@ -2,7 +2,7 @@ const user = require('../models/user');
 
 const giveAccessValidationUbl = async (req, res) => {
   try {
-    const { ublId, validatorId, name } = req.body;
+    const { ublId, validatorId, name, validationHtml } = req.body;
 
     email = req.body.email.toLowerCase();
 
@@ -17,6 +17,7 @@ const giveAccessValidationUbl = async (req, res) => {
       ublId: ublId,
       validatorId: validatorId,
       name,
+      validationHtml,
     };
 
     // Check if the ublValidationObject already exists

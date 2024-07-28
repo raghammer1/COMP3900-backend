@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
+const { defaultHtml } = require('../shared/defaultValidationHTML');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 //
+
 const pdfUblValidationSchema = new mongoose.Schema({
   // pdfId: { type: ObjectId, ref: 'GridFS' },
   pdfId: { type: Schema.Types.Mixed },
@@ -9,11 +11,13 @@ const pdfUblValidationSchema = new mongoose.Schema({
   validatorId: { type: ObjectId, ref: 'GridFS' },
   name: { type: String },
   date: { type: Date, default: Date.now },
+  validationHtml: { type: String, required: true, default: defaultHtml },
 });
 
 const ublValidationSchema = new mongoose.Schema({
   ublId: { type: ObjectId, ref: 'GridFS' },
   validatorId: { type: ObjectId, ref: 'GridFS' },
+  validationHtml: { type: String, required: true, default: defaultHtml },
   name: { type: String },
   date: { type: Date, default: Date.now },
 });
