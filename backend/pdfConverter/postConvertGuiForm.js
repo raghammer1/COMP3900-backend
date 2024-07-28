@@ -8,6 +8,11 @@ const { Readable } = require('stream');
 const mongoose = require('mongoose');
 const uploadInvoice = require('./actualConvertionFunction');
 const validateUBL = require('../shared/ublValidator');
+const {
+  apiCallingForValidation,
+} = require('../shared/apiCallingForValidation');
+const { generateHtml } = require('../shared/htmlGeneratorValidation');
+const { defaultHtml } = require('../shared/defaultValidationHTML');
 
 const postConvertGuiForm = async (req, res) => {
   try {
@@ -39,6 +44,8 @@ const postConvertGuiForm = async (req, res) => {
       await userData.save();
     }
 
+    let html = defaultHtml;
+
     const ublFilename =
       crypto.randomBytes(16).toString('hex') +
       path.extname(Date.now() + 'makingstring') +
@@ -55,12 +62,23 @@ const postConvertGuiForm = async (req, res) => {
 
     let validationReportId = undefined;
     try {
-      validationReportId = await validateUBL(
+      let validationErrors = [];
+      validationErrors = await apiCallingForValidation(
         Buffer.from(xmlFile, 'utf-8'),
         ublFilename,
-        'text/xml',
-        missingFields
+        'text/xml'
       );
+      validationReportId = await validateUBL(validationErrors, missingFields);
+
+      if (
+        validationErrors.length === 1 &&
+        validationErrors[0]?.error === true
+      ) {
+        html = defaultHtml;
+      } else {
+        html = generateHtml(validationErrors, missingFields);
+        console.log('HERE', validationErrors);
+      }
       console.log('Validation report ID:', validationReportId);
     } catch (error) {
       console.error('Error validating UBL:', error);
@@ -96,6 +114,7 @@ const postConvertGuiForm = async (req, res) => {
       ublId: ublId,
       validatorId: validationReportId, //! THIS WILL ONLY BE GENERATED WHEN USER WANTS TO
       name,
+      validationHtml: html,
     };
 
     const updatedUser = await user.findByIdAndUpdate(
@@ -124,6 +143,7 @@ const postConvertGuiForm = async (req, res) => {
       newObjectId: newlyAddedObject._id,
       date: newlyAddedObject.date,
       validatorId: validationReportId,
+      validationHtml: html,
     });
   } catch (err) {
     res.status(500).json({ message: 'Server error', details: err.message });

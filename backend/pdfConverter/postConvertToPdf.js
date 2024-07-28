@@ -118,9 +118,6 @@ const postConvertToPdf = async (req, res) => {
           try {
             let validationErrors = [];
             validationErrors = await apiCallingForValidation(
-              // req.file.buffer,
-              // req.file.originalname,
-              // req.file.mimetype
               Buffer.from(xmlFile, 'utf-8'),
               ublFilename,
               'text/xml'
