@@ -13,6 +13,7 @@ const {
 } = require('../shared/apiCallingForValidation');
 const { generateHtml } = require('../shared/htmlGeneratorValidation');
 const { defaultHtml } = require('../shared/defaultValidationHTML');
+const { defaultJson } = require('../shared/defaultJson');
 
 const postConvertGuiForm = async (req, res) => {
   try {
@@ -45,6 +46,7 @@ const postConvertGuiForm = async (req, res) => {
     }
 
     let html = defaultHtml;
+    let json = defaultJson;
 
     const ublFilename =
       crypto.randomBytes(16).toString('hex') +
@@ -71,8 +73,10 @@ const postConvertGuiForm = async (req, res) => {
         validationErrors[0]?.error === true
       ) {
         html = defaultHtml;
+        json = defaultJson;
       } else {
         html = generateHtml(validationErrors, missingFields);
+        json = { validationErrors: validationErrors };
         console.log('HERE', validationErrors);
       }
       console.log('Validation report ID:', validationReportId);
@@ -110,6 +114,7 @@ const postConvertGuiForm = async (req, res) => {
       ublId: ublId,
       validatorId: validationReportId, //! THIS WILL ONLY BE GENERATED WHEN USER WANTS TO
       name,
+      validationJson: json,
       validationHtml: html,
     };
 
@@ -139,6 +144,7 @@ const postConvertGuiForm = async (req, res) => {
       newObjectId: newlyAddedObject._id,
       date: newlyAddedObject.date,
       validatorId: validationReportId,
+      validationJson: json,
       validationHtml: html,
     });
   } catch (err) {
