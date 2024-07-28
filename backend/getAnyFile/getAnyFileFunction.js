@@ -3,7 +3,7 @@ const { getGridFSBucket } = require('../db');
 
 const getAnyFileFunction = async (req, res) => {
   const fileId = req.query.fileId;
-  console.log(fileId);
+  console.log(fileId, 'IUASHDIUAHSEYUGWIUYEGKQWEUYGWQIEUGQYWGE');
 
   if (!fileId) {
     return res.status(400).send({ error: 'File ID is required' });
