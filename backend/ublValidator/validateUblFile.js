@@ -9,6 +9,7 @@ const { generateHtml } = require('../shared/htmlGeneratorValidation');
 const {
   apiCallingForValidation,
 } = require('../shared/apiCallingForValidation');
+const { defaultJson } = require('../shared/defaultJson');
 
 const validateUblFile = async (req, res) => {
   try {
@@ -81,13 +82,16 @@ const validateUblFile = async (req, res) => {
         console.log('HERE');
 
         let html = defaultHtml;
+        let json = defaultJson;
         if (
           validationErrors.length === 1 &&
           validationErrors[0]?.error === true
         ) {
           html = defaultHtml;
+          json = defaultJson;
         } else {
           html = generateHtml(validationErrors, []);
+          json = { validationErrors: validationErrors };
           console.log('HERE', validationErrors);
         }
 
@@ -96,6 +100,7 @@ const validateUblFile = async (req, res) => {
           validatorId: validatorId,
           name,
           validationHtml: html,
+          validationJson: json,
         };
 
         const updatedUser = await user.findByIdAndUpdate(
@@ -124,6 +129,7 @@ const validateUblFile = async (req, res) => {
           name,
           date: newlyAddedObject.date,
           validationHtml: html,
+          validationJson: json,
         });
       } catch (updateError) {
         console.log(updateError);

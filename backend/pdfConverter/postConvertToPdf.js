@@ -13,6 +13,7 @@ const {
 } = require('../shared/apiCallingForValidation');
 const { generateHtml } = require('../shared/htmlGeneratorValidation');
 const { defaultHtml } = require('../shared/defaultValidationHTML');
+const { defaultJson } = require('../shared/defaultJson');
 
 const postConvertToPdf = async (req, res) => {
   try {
@@ -66,6 +67,7 @@ const postConvertToPdf = async (req, res) => {
     }
 
     let html = defaultHtml;
+    let json = defaultJson;
 
     const filename =
       crypto.randomBytes(16).toString('hex') +
@@ -132,8 +134,10 @@ const postConvertToPdf = async (req, res) => {
               validationErrors[0]?.error === true
             ) {
               html = defaultHtml;
+              json = defaultJson;
             } else {
               html = generateHtml(validationErrors, missingFields);
+              json = { validationErrors: validationErrors };
               console.log('HERE', validationErrors);
             }
 
@@ -185,6 +189,7 @@ const postConvertToPdf = async (req, res) => {
             validatorId: validationReportId, //! THIS WILL ONLY BE GENERATED WHEN USER WANTS TO
             name: name,
             validationHtml: html,
+            validationJson: json,
           };
 
           // console.log(fileId._id, pdfUblValidationObject, 'FIRLDWDWEW', userId);
@@ -219,6 +224,7 @@ const postConvertToPdf = async (req, res) => {
             date: newlyAddedObject.date,
             validatorId: validationReportId,
             validationHtml: html,
+            validationJson: json,
           });
         } catch (updateError) {
           res.status(500).json({
