@@ -73,7 +73,7 @@ app.use('/auth', authRoutes);
 app.use('/convert', converterRoutes);
 app.use('/validate', validateRouter);
 app.use('/edit', editProfileRouter);
-app.use('/getFile', getAnyFileFunction);
+app.get('/getFile', getAnyFileFunction);
 app.post('/sendFile', auth, FileSender);
 app.get('/api/images/:filename', getImage);
 app.get('/history-email', auth, getUserEmailHistory);

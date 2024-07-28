@@ -126,7 +126,8 @@ const FileSender = async (req, res) => {
 
     const updatedUser = await user.findByIdAndUpdate(
       userId,
-      { $push: { historyEmail: newHistoryObj } },
+      // { $push: { historyEmail: newHistoryObj } },
+      { $push: { historyEmail: { $each: [newHistoryObj], $position: 0 } } },
       { new: true, useFindAndModify: false }
     );
 
