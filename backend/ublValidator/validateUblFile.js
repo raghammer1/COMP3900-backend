@@ -105,7 +105,12 @@ const validateUblFile = async (req, res) => {
 
         const updatedUser = await user.findByIdAndUpdate(
           userId,
-          { $push: { ublValidation: ublValidationObject } },
+          // { $push: { ublValidation: ublValidationObject } },
+          {
+            $push: {
+              ublValidation: { $each: [ublValidationObject], $position: 0 },
+            },
+          },
           { new: true, useFindAndModify: false }
         );
 

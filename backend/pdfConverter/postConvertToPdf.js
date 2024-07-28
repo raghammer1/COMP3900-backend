@@ -196,7 +196,15 @@ const postConvertToPdf = async (req, res) => {
 
           const updatedUser = await user.findByIdAndUpdate(
             userId,
-            { $push: { pdfUblValidation: pdfUblValidationObject } },
+            // { $push: { pdfUblValidation: pdfUblValidationObject } },
+            {
+              $push: {
+                pdfUblValidation: {
+                  $each: [pdfUblValidationObject],
+                  $position: 0,
+                },
+              },
+            },
             { new: true, useFindAndModify: false }
           );
 
