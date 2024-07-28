@@ -52,11 +52,7 @@ const postConvertGuiForm = async (req, res) => {
       '.xml';
 
     console.log(invoice);
-    const { missingFields, xml } = jsonToUbl(
-      invoice,
-      '0000000000000',
-      '0000000000001'
-    );
+    const { missingFields, xml } = jsonToUbl(invoice, vendorGln, customerGln);
     const xmlFile = xml;
     console.log(xmlFile, missingFields, 'LOLOLOLOLOLOLOLOL');
 
