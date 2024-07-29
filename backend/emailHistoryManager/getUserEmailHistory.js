@@ -10,8 +10,8 @@ const getUserEmailHistory = async (req, res) => {
     }
 
     res.status(200).json(userReal.historyEmail);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+  } catch (err) {
+    return res.status(500).json({ error: 'Server error: ' + err.message });
   }
 };
 

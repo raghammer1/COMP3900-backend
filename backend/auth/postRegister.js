@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const postRegister = async (req, res) => {
-  // res.send('register route');
   try {
     const { username, password, email } = req.body;
 
@@ -13,7 +12,7 @@ const postRegister = async (req, res) => {
     const userExists = await User.exists({ email: email.toLowerCase() });
 
     if (userExists) {
-      return res.status(409).send('Email already in use');
+      return res.status(400).json({ error: 'Email already in use' });
     }
 
     // encrypt password
@@ -38,17 +37,9 @@ const postRegister = async (req, res) => {
       { expiresIn: '24hr' }
     );
 
-    // return res.status(201).json({
-    //   username: user.username,
-    //   token,
-    //   email: user.email,
-    //   _id: user._id,
-    // });
-    // Set the token as a cookie
     res.cookie('token', token, {
-      // httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-      secure: false, // Ensures the cookie is sent over HTTPS
-      maxAge: 24 * 60 * 60 * 1000, // Cookie expiration time (24 hours)
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     return res.status(201).json({
@@ -60,7 +51,7 @@ const postRegister = async (req, res) => {
       gln: user.gln,
     });
   } catch (err) {
-    res.status(500).send('Server error: ' + err.message);
+    return res.status(500).json({ error: 'Server error: ' + err.message });
   }
 };
 

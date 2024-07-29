@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 
 const googleLogin = async (req, res) => {
   try {
-    // const { email, password } = req.body;
     const { googleId, email, username, googlePicture } = req.body;
     console.log(req.body);
 
@@ -52,7 +51,7 @@ const googleLogin = async (req, res) => {
     });
   } catch (err) {
     console.error('Error during Google OAuth login:', err);
-    return res.status(500).send('Server error');
+    return res.status(500).json({ error: 'Server error: ' + err.message });
   }
 };
 

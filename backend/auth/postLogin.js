@@ -9,10 +9,7 @@ const postLogin = async (req, res) => {
       email: email.toLowerCase(),
     });
 
-    // keeping given password first and password from db second is extremely important
     if (user && (await bcrypt.compare(password, user.password))) {
-      console.log(user, 'USEER');
-      // send token
       const token = jwt.sign(
         {
           userId: user._id,
@@ -22,17 +19,9 @@ const postLogin = async (req, res) => {
         { expiresIn: '24hr' }
       );
 
-      // return res.status(201).json({
-      //   username: user.username,
-      //   token,
-      //   email: user.email,
-      //   _id: user._id,
-      // });
-      // Set the token as a cookie
       res.cookie('token', token, {
-        // httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-        secure: false, // Ensures the cookie is sent over HTTPS
-        maxAge: 24 * 60 * 60 * 1000, // Cookie expiration time (24 hours)
+        secure: false,
+        maxAge: 24 * 60 * 60 * 1000,
       });
 
       console.log(user, 'THIS IS USER');
@@ -45,9 +34,9 @@ const postLogin = async (req, res) => {
         gln: user.gln,
       });
     }
-    return res.status(400).send('Invalid Credential');
+    return res.status(400).json({ error: 'Invalid Credential' });
   } catch (err) {
-    return res.status(500).send('Server error: ' + err.message);
+    return res.status(500).json({ error: 'Server error: ' + err.message });
   }
 };
 

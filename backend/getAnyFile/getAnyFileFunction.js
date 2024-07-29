@@ -23,9 +23,8 @@ const getAnyFileFunction = async (req, res) => {
     res.set('Content-Type', file.contentType);
     const downloadStream = gfs.openDownloadStream(_id);
     downloadStream.pipe(res);
-  } catch (error) {
-    console.error('Error retrieving file:', error);
-    res.status(500).send({ error: 'Error retrieving file' });
+  } catch (err) {
+    return res.status(500).json({ error: 'Server error: ' + err.message });
   }
 };
 

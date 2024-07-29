@@ -21,7 +21,7 @@ const getUserEmailHistoryById = async (req, res) => {
         .json({ message: 'No matching historyEmail found.' });
     }
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: 'Server error: ' + err.message });
   }
 };
 

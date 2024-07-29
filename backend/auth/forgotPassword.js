@@ -14,7 +14,7 @@ const forgotPassword = async (req, res) => {
   console.log(email);
 
   if (!email) {
-    return res.status(400).send('Email is required');
+    return res.status(400).json({ error: 'Email is required' });
   }
   console.log(email);
 
@@ -25,7 +25,17 @@ const forgotPassword = async (req, res) => {
     console.log(email);
 
     if (record) {
-      return res.status(400).send(record.createdAt);
+      const currentTime = new Date();
+      const createdAt = record.createdAt;
+      const expirationTime = new Date(createdAt.getTime() + 90 * 1000); // 90 seconds
+      const remainingTime = Math.max(
+        0,
+        Math.ceil((expirationTime - currentTime) / 1000)
+      ); // in seconds
+
+      return res
+        .status(400)
+        .json({ error: `Retry after ${remainingTime} seconds` });
     }
     console.log(email);
 
@@ -42,7 +52,7 @@ const forgotPassword = async (req, res) => {
 
     if (!User) {
       emailHTML =
-        '<h1>Please sign in to continue...</h1> <p>http://localhost:3000/register</p>';
+        '<h1>You are not a hex member yet, please sign in to continue...</h1> <p>http://localhost:3000/register</p>';
     } else {
       emailHTML = `<div><img src="https://images.pexels.com/photos/15107263/pexels-photo-15107263/free-photo-of-night-sky-above-the-trees.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"/><h1>Your OTP</h1><p>Please reset your password from here: <strong> <a href="${resetLink}">Reset Password</a></strong></p></div>`;
     }
@@ -59,9 +69,8 @@ const forgotPassword = async (req, res) => {
 
     await sendMail(mailOptions);
     res.status(200).send(`OTP SENT TO ${email}`);
-  } catch (error) {
-    console.error('Failed to process forgot password', error);
-    res.status(500).send('An error occurred: ' + error.message);
+  } catch (err) {
+    return res.status(500).json({ error: 'Server error: ' + err.message });
   }
 };
 

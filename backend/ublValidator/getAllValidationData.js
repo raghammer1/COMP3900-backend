@@ -15,9 +15,8 @@ const getAllValidationData = async (req, res) => {
     }
 
     res.json({ ublValidation: User.ublValidation });
-  } catch (error) {
-    console.error('Error fetching validation data:', error);
-    res.status(500).json({ error: 'An unexpected error occurred' });
+  } catch (err) {
+    return res.status(500).json({ error: 'Server error: ' + err.message });
   }
 };
 module.exports = getAllValidationData;

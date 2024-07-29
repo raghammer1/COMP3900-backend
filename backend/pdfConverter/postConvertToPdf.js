@@ -256,7 +256,7 @@ const postConvertToPdf = async (req, res) => {
       }
     }, 30000); // Adjust the timeout value as needed
   } catch (err) {
-    res.status(500).json({ message: 'Server error', details: err.message });
+    return res.status(500).json({ error: 'Server error: ' + err.message });
   }
 };
 

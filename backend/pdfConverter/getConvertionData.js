@@ -15,9 +15,8 @@ const getConvertionData = async (req, res) => {
     }
 
     res.status(200).json({ pdfUblValidation: User.pdfUblValidation });
-  } catch (error) {
-    console.error('Error fetching validation data:', error);
-    res.status(500).json({ error: 'An unexpected error occurred' });
+  } catch (err) {
+    return res.status(500).json({ error: 'Server error: ' + err.message });
   }
 };
 module.exports = getConvertionData;
