@@ -13,4 +13,10 @@ router.post(
   upload.single('file'),
   editProfileController.controllers.changeProfilePhoto
 );
+
+router.put(
+  '/change-username',
+  auth,
+  editProfileController.controllers.changeUsername
+);
 module.exports = router;
