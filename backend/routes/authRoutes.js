@@ -3,6 +3,7 @@ const router = express.Router();
 const authController = require('../auth/authControllers');
 const joi = require('joi');
 const validator = require('express-joi-validation').createValidator({});
+const auth = require('../middleware/auth');
 
 const registerSchema = joi.object({
   username: joi.string().required(),
@@ -37,10 +38,11 @@ router
   .post('/forgot-password', authController.controllers.forgotPassword)
   .post('/reset-password', authController.controllers.resetPassword)
   .post('/google-login', authController.controllers.googleLogin)
-  .delete('/delete-user/:email', authController.controllers.deleteUser);
+  .delete('/delete-user/:email', authController.controllers.deleteUser)
+  .post('/delete-user-account', authController.controllers.deleteUserAccount);
 
 // TEST ROUTE to test our middlewares
-const auth = require('../middleware/auth');
+
 router.route('/test').get(auth, (req, res) => {
   res.send('request Passes');
 });
