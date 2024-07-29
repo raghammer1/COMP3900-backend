@@ -6,7 +6,6 @@ const ObjectId = Schema.Types.ObjectId;
 //
 
 const pdfUblValidationSchema = new mongoose.Schema({
-  // pdfId: { type: ObjectId, ref: 'GridFS' },
   pdfId: { type: Schema.Types.Mixed },
   ublId: { type: ObjectId, ref: 'GridFS' },
   name: { type: String },
@@ -40,6 +39,7 @@ const historyEmailSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
   process: { type: String, required: true },
   sharedObjId: { type: String, required: true },
+  body: { type: String, required: true },
 });
 
 const userSchema = new mongoose.Schema({
@@ -48,10 +48,10 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   googleId: { type: String },
   gln: { type: String },
-  // googlePicture: { type: String },
+
   googlePicture: {
-    type: Schema.Types.Mixed, // Allow either String or ObjectId
-    ref: 'GridFS', // Reference to GridFS
+    type: Schema.Types.Mixed,
+    ref: 'GridFS',
   },
   pdfUblValidation: {
     type: [pdfUblValidationSchema],

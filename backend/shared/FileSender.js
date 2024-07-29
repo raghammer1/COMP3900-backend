@@ -154,6 +154,7 @@ const FileSender = async (req, res) => {
       fileTypes: fileTypes,
       process: process,
       sharedObjId,
+      body: message ? message : 'By Hexahunks',
     };
 
     const updatedUser = await user.findByIdAndUpdate(
