@@ -17,6 +17,7 @@ const auth = require('./middleware/auth');
 const giveAccessValidationUbl = require('./shared/giveAccessValidationUbl');
 const joi = require('joi');
 const giveAccessPdfUbl = require('./shared/giveAccessPdfUbl');
+const getUserEmailHistoryById = require('./emailHistoryManager/getUserEmailHistoryById');
 const validator = require('express-joi-validation').createValidator({});
 
 const PORT = process.env.BACKEND_SERVER_PORT || process.env.API_PORT;
@@ -76,7 +77,6 @@ app.use('/edit', editProfileRouter);
 app.get('/getFile', getAnyFileFunction);
 app.post('/sendFile', auth, FileSender);
 app.get('/api/images/:filename', getImage);
-app.get('/history-email', auth, getUserEmailHistory);
 app.post(
   '/give-access-validation-ubl',
   auth,
@@ -89,6 +89,8 @@ app.post(
   // validator.body(accessGiverSchemaPdf),
   giveAccessPdfUbl
 );
+app.get('/history-email', auth, getUserEmailHistory);
+app.get('/get-history-email-by-id', auth, getUserEmailHistoryById);
 
 const server = http.createServer(app);
 

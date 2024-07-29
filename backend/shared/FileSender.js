@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { getGridFSBucket } = require('../db');
 const MailSender = require('./MailSender');
 const user = require('../models/user');
+const { ObjectId } = require('mongodb');
 
 const MY_EMAIL = process.env.MY_EMAIL;
 
@@ -50,6 +51,7 @@ const FileSender = async (req, res) => {
     process,
     fileTypes,
     userId,
+    _id,
   } = req.body;
 
   const attachments = [];
@@ -79,12 +81,42 @@ const FileSender = async (req, res) => {
     }
 
     if (pdfId) {
-      const pdfFile = await getFileById(pdfId);
-      attachments.push({
-        filename: pdfFile.filename,
-        content: pdfFile.buffer.toString('base64'),
-        contentType: pdfFile.contentType,
-      });
+      const UserMy = await user.findOne(
+        { _id: userId, 'pdfUblValidation._id': _id },
+        { 'pdfUblValidation.$': 1 }
+      );
+
+      if (UserMy && UserMy.pdfUblValidation.length > 0) {
+        const pdfUblValidation = UserMy.pdfUblValidation[0];
+        const lolFuckPdf = pdfUblValidation.pdfId;
+
+        if (lolFuckPdf instanceof mongoose.Types.ObjectId) {
+          console.log('pdfId is an ObjectId:', lolFuckPdf);
+          const pdfFile = await getFileById(lolFuckPdf);
+          attachments.push({
+            filename: pdfFile.filename,
+            content: pdfFile.buffer.toString('base64'),
+            contentType: pdfFile.contentType,
+          });
+        } else if (typeof lolFuckPdf === 'object') {
+          console.log('pdfId is an object:', lolFuckPdf);
+
+          const beautifiedJson = JSON.stringify(lolFuckPdf, null, 2);
+
+          const jsonBuffer = Buffer.from(beautifiedJson, 'utf-8');
+          const jsonFileName = 'invoice.txt';
+
+          attachments.push({
+            filename: jsonFileName,
+            content: jsonBuffer.toString('base64'),
+            contentType: 'application/json',
+          });
+        } else {
+          return res.status(409).json({ error: 'Error finding the pdf file' });
+        }
+      } else {
+        return res.status(409).json({ error: 'Error finding the pdf file' });
+      }
     }
 
     if (validatorPdfId) {
@@ -122,6 +154,7 @@ const FileSender = async (req, res) => {
       fileTypes: fileTypes,
       process: process,
       sharedObjId,
+      body: message ? message : 'By Hexahunks',
     };
 
     const updatedUser = await user.findByIdAndUpdate(

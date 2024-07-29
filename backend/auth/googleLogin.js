@@ -47,6 +47,7 @@ const googleLogin = async (req, res) => {
       email: user.email,
       _id: user._id,
       googlePicture: user.googlePicture,
+      googleId: user.googleId,
       gln: user.gln,
     });
   } catch (err) {
