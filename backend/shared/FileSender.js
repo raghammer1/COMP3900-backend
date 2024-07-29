@@ -129,11 +129,11 @@ const FileSender = async (req, res) => {
     }
 
     if (attachments.length === 0) {
-      return res.status(400).send({ message: 'No valid file IDs provided' });
+      return res.status(400).json({ error: 'No valid file IDs provided' });
     }
 
     if (!MY_EMAIL) {
-      return res.status(500).send({ message: `Server Error` });
+      return res.status(500).json({ error: `Server Error` });
     }
 
     const mailOptions = {
@@ -169,7 +169,7 @@ const FileSender = async (req, res) => {
       .send({ message: 'Email sent with attachments successfully' });
   } catch (error) {
     console.error('Failed to send email with attachments:', error);
-    res.status(400).send({ message: `Failed to send email: ${error.message}` });
+    res.status(400).json({ error: `Failed to send email: ${error.message}` });
   }
 };
 

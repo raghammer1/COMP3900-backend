@@ -10,7 +10,7 @@ const giveAccessPdfUbl = async (req, res) => {
 
     if (!User) {
       console.log('User not found');
-      return res.status(404).send({ message: "This user doesn't exist" });
+      return res.status(404).json({ error: "This user doesn't exist" });
     }
 
     const ublValidationObject = {
@@ -30,7 +30,7 @@ const giveAccessPdfUbl = async (req, res) => {
     if (isExistingValidation) {
       return res
         .status(409)
-        .send({ message: 'Validation object with name already exists' });
+        .json({ error: 'Validation object with name already exists' });
     }
 
     const updatedUser = await user.findOneAndUpdate(
@@ -40,14 +40,14 @@ const giveAccessPdfUbl = async (req, res) => {
     );
 
     if (!updatedUser) {
-      return res.status(500).send({ message: 'Error updating user' });
+      return res.status(500).json({ error: 'Error updating user' });
     }
 
     console.log(req.body);
-    return res.status(200).json({ message: 'success' });
+    return res.status(200).json({ message: 'Access Granted' });
   } catch (error) {
     console.error('Error in giveAccessValidationUbl:', error);
-    return res.status(500).send({ message: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 

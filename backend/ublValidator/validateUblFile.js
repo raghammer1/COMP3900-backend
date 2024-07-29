@@ -143,7 +143,7 @@ const validateUblFile = async (req, res) => {
           .json({
             error: updateError.response
               ? updateError.response.data
-              : updateError.message,
+              : 'Server Error',
           });
       }
     });
