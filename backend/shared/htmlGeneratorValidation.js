@@ -127,8 +127,7 @@ const generateHtml = (validationErrors = [], selfFilledIssue = []) => {
       </html>
     `;
   } catch (error) {
-    console.error('Error generating HTML:', error);
-    return defaultHtml;
+    throw new Error('Error generating HTML:', error);
   }
 };
 

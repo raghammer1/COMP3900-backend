@@ -25,7 +25,7 @@ const saveXmlToMongo = async (xmlData, filename) => {
     });
   } catch (error) {
     console.error('Unexpected error:', error);
-    throw error;
+    throw new Error(error);
   }
 };
 
