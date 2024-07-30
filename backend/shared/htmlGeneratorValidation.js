@@ -51,13 +51,11 @@ const generateHtml = (validationErrors = [], selfFilledIssue = []) => {
         <style>
           body {
             font-family: Arial, sans-serif;
-            margin: 20px;
             background-color: #f9f9f9;
             color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
           }
           h1, h2 {
             color: #000;
