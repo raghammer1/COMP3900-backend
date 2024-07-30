@@ -15,7 +15,7 @@ const deleteUser = async (req, res) => {
     console.log('User deleted successfully');
     res.status(200).send({ message: 'User deleted successfully' });
   } catch (err) {
-    return res.status(500).json({ error: 'Server error: ' + err.message });
+    return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 module.exports = deleteUser;

@@ -16,7 +16,7 @@ const getAllValidationData = async (req, res) => {
 
     res.json({ ublValidation: User.ublValidation });
   } catch (err) {
-    return res.status(500).json({ error: 'Server error: ' + err.message });
+    return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 module.exports = getAllValidationData;

@@ -70,7 +70,7 @@ const forgotPassword = async (req, res) => {
     await sendMail(mailOptions);
     res.status(200).send(`OTP SENT TO ${email}`);
   } catch (err) {
-    return res.status(500).json({ error: 'Server error: ' + err.message });
+    return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 

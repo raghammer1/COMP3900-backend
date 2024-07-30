@@ -20,7 +20,7 @@ const changeUsername = async (req, res) => {
 
     return res.status(200).json({ message: 'Username updated successfully' });
   } catch (err) {
-    return res.status(500).json({ error: 'Server error: ' + err.message });
+    return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 

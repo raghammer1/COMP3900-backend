@@ -36,7 +36,7 @@ const postLogin = async (req, res) => {
     }
     return res.status(400).json({ error: 'Invalid Credential' });
   } catch (err) {
-    return res.status(500).json({ error: 'Server error: ' + err.message });
+    return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 

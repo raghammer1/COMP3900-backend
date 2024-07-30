@@ -51,7 +51,7 @@ const googleLogin = async (req, res) => {
     });
   } catch (err) {
     console.error('Error during Google OAuth login:', err);
-    return res.status(500).json({ error: 'Server error: ' + err.message });
+    return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 

@@ -51,7 +51,7 @@ const postRegister = async (req, res) => {
       gln: user.gln,
     });
   } catch (err) {
-    return res.status(500).json({ error: 'Server error: ' + err.message });
+    return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 
