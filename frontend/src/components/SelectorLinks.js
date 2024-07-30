@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 
+// This is a styled Link component with custom styles based on the isSelected prop
 const StyledLink = styled(Link)(({ isSelected }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -18,13 +19,14 @@ const StyledLink = styled(Link)(({ isSelected }) => ({
   },
 }));
 
+// This component represents a link with optional icon and styling, useful for navigation
 const SelectorLinks = ({
-  routeTo,
-  text,
-  isSelected,
-  onClick,
-  additionalStyle,
-  icon,
+  routeTo, // The route to navigate to
+  text, // The text to display
+  isSelected, // Boolean to determine if the link is selected
+  onClick, // Function to handle click events
+  additionalStyle, // Additional custom styles for the link
+  icon, // Optional icon to display alongside the text
 }) => {
   return (
     <StyledLink

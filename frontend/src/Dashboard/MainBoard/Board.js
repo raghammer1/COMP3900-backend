@@ -4,11 +4,11 @@ import useUserStore from '../../zustand/useUserStore';
 import Weather from './Weather';
 import ThoughtOfTheDay from './ThoughtOfTheDay';
 
+// This is the styling for the board container
 const BoardContainer = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
   padding: theme.spacing(4),
   borderRadius: theme.shape.borderRadius,
-  // boxShadow: theme.shadows[3],
   margin: '0 auto',
   textAlign: 'center',
   display: 'flex',
@@ -20,11 +20,13 @@ const BoardContainer = styled('div')(({ theme }) => ({
   width: '80%',
 }));
 
+// This is the styling for the main heading
 const Heading = styled('h1')(({ theme }) => ({
   color: '#000',
   margin: theme.spacing(2, 0),
 }));
 
+// This is the styling for the subheading
 const SubHeading = styled('h1')(({ theme }) => ({
   color: '#000',
   margin: theme.spacing(1, 0),
@@ -32,8 +34,10 @@ const SubHeading = styled('h1')(({ theme }) => ({
 
 // The main dashboard that is displayed on user login
 const Board = () => {
+  // Getting the user data from the store
   const { getUser } = useUserStore();
 
+  // Here, we return the JSX for rendering the dashboard
   return (
     <BoardContainer>
       <Weather />

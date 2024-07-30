@@ -13,7 +13,11 @@ import {
 import { styled } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import EmailHistoryItem from './EmailHistoryItem';
-import { changeProfilePhoto, getHistoryEmail } from '../../services/api';
+import {
+  changeProfilePhoto,
+  changeUsername,
+  getHistoryEmail,
+} from '../../services/api';
 import { useAlert } from '../../components/AlertError';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
@@ -21,44 +25,63 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import CloseIcon from '@mui/icons-material/Close';
 import useUserStore from '../../zustand/useUserStore';
 
+// This is the styling for the main container of the profile board
 const StyledContainer = styled(Container)({
   marginTop: '32px',
+  padding: '16px',
+  backgroundColor: '#f4f6f8',
+  borderRadius: '16px',
+  boxShadow: '0 3px 6px rgba(0,0,0,0.1)',
 });
 
+// This is the styling for the profile card
 const ProfileCard = styled(Paper)({
   padding: '32px',
   textAlign: 'center',
+  borderRadius: '16px',
+  boxShadow: '0 3px 6px rgba(0,0,0,0.1)',
+  backgroundColor: '#ffffff',
 });
 
+// This is the styling for the profile avatar
 const ProfileAvatar = styled(Avatar)({
   width: 120,
   height: 120,
   margin: 'auto',
   marginBottom: '16px',
+  border: '3px solid #651FFF',
+  boxShadow: '0 3px 6px rgba(0,0,0,0.1)',
 });
 
+// This is the styling for the history card
 const HistoryCard = styled(Paper)({
   padding: '32px',
+  borderRadius: '16px',
+  boxShadow: '0 3px 6px rgba(0,0,0,0.1)',
+  backgroundColor: '#ffffff',
 });
 
+// This is the styling for the list of email history items
 const StyledList = styled(List)({
   maxHeight: 400,
   overflowY: 'auto',
 });
 
+// This is the styling for the icon button used to close the profile board
 const LargeIconButton = styled(IconButton)({
   position: 'absolute',
-  top: '50px',
-  left: '80px',
+  top: '20px',
+  left: '20px',
   border: '1px solid #999',
-  '@media (max-width: 640px)': {
-    top: '30px',
-    left: '30px',
+  backgroundColor: '#ffffff',
+  '&:hover': {
+    backgroundColor: '#f0f0f0',
   },
 });
 
+// Main component for displaying the user profile board
 const ProfileBoard = () => {
-  const { getUser, updateGoogleImage } = useUserStore();
+  const { getUser, updateGoogleImage, updateUsername } = useUserStore();
   const user = getUser();
 
   const [username, setUsername] = useState(user.username);
@@ -67,80 +90,99 @@ const ProfileBoard = () => {
   const [isEditing, setIsEditing] = useState(false);
   const { showAlert } = useAlert();
   const navigate = useNavigate();
-  console.log(user, 'USIDAHUDUIASDUOHASODIUHOAS');
 
+  // Set the profile image when the component mounts
   useEffect(() => {
     setProfileImage(user.googlePicture);
-  }, []);
+  }, [user.googlePicture]);
 
+  // Handle changes to the username input field
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
   };
 
+  // Fetch the email history when the component mounts
   useEffect(() => {
     async function fetchData() {
       const res = await getHistoryEmail();
       if (!res.error) {
-        setHistory(res); // Assuming res is the array of history email items
+        setHistory(res);
       } else {
-        showAlert('Failed to fetch history email:', 'tomato');
+        showAlert(
+          res.data.error ? res.data.error : 'Failed to fetch history email',
+          'tomato'
+        );
       }
     }
     fetchData();
-  }, []);
+  }, [showAlert]);
 
+  // Handle changes to the profile picture
   const handleProfilePicChange = async (event) => {
     const userId = user._id;
     const file = event.target.files[0];
 
-    // Confirm file is of type image
     if (file && file.type.startsWith('image/')) {
-      // Create file data to send to backend
       const formData = new FormData();
       formData.append('file', file);
       formData.append('userId', userId);
-      console.log(file, userId);
+
       const result = await changeProfilePhoto(formData);
 
       if (result.error) {
-        if (result.data.error) {
-          return showAlert(`${result.data.error}`, 'tomato');
-        } else {
-          return showAlert('Unable to change profile photo', 'tomato');
-        }
+        return showAlert(
+          result.data.error || 'Unable to change profile photo',
+          'tomato'
+        );
       }
-      console.log(result);
+
       setProfileImage(result.googlePicture);
       updateGoogleImage(result.googlePicture);
-      return showAlert('Profile photo changed successfully', 'green');
+      showAlert('Profile photo changed successfully', 'green');
+    } else {
+      showAlert('Invalid file type given', 'tomato');
     }
-    return showAlert('Invalid file type given', 'tomato');
   };
 
+  // Handle deletion of an email history item
   const handleDeleteHistory = (index) => {
     const newHistory = [...history];
     newHistory.splice(index, 1);
     setHistory(newHistory);
   };
 
+  // Handle opening of an email report
   const handleOpenReport = (e, item) => {
     e.stopPropagation();
-    console.log(item);
   };
 
+  // Toggle the edit mode for the username
   const toggleEditMode = () => {
     setIsEditing(!isEditing);
   };
 
-  const handleUpdate = () => {
+  // Handle updating the username
+  const handleUpdate = async () => {
     setIsEditing(false);
-    // Implement your update logic here
+    const res = await changeUsername({
+      newUsername: username,
+      userId: user._id,
+    });
+    if (res.error) {
+      showAlert(res.data.error, 'tomato');
+      setUsername(user.username);
+    } else {
+      showAlert('Username successfully updated', 'green');
+      updateUsername(username);
+    }
   };
 
+  // Handle closing the profile board
   const handleClose = () => {
     navigate('/dashboard/main');
   };
 
+  // Here, we return the JSX for rendering the profile board
   return (
     <StyledContainer maxWidth="md">
       <LargeIconButton onClick={handleClose}>
@@ -151,8 +193,9 @@ const ProfileBoard = () => {
         gutterBottom
         style={{
           textAlign: 'center',
-          marginTop: '50px',
+          marginTop: '20px',
           marginBottom: '30px',
+          color: '#333',
         }}
       >
         User Dashboard
@@ -183,10 +226,11 @@ const ProfileBoard = () => {
                 onChange={handleUsernameChange}
                 fullWidth
                 margin="normal"
+                variant="outlined"
               />
             ) : (
               <Typography
-                style={{ marginTop: '20px' }}
+                style={{ marginTop: '20px', color: '#555' }}
                 variant="body1"
                 gutterBottom
               >
@@ -200,6 +244,7 @@ const ProfileBoard = () => {
                   color="secondary"
                   startIcon={<SaveIcon />}
                   onClick={handleUpdate}
+                  style={{ marginTop: '20px' }}
                 >
                   Save
                 </Button>
@@ -209,6 +254,7 @@ const ProfileBoard = () => {
                   color="primary"
                   startIcon={<EditIcon />}
                   onClick={toggleEditMode}
+                  style={{ marginTop: '20px' }}
                 >
                   Edit
                 </Button>

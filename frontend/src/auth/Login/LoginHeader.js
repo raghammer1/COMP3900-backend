@@ -1,7 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // The hexahunks login logo
 const LoginHeader = () => {
+  const nav = useNavigate();
+
+  const goToHome = () => {
+    nav('/');
+    return;
+  };
+
   return (
     <div
       style={{
@@ -10,7 +18,9 @@ const LoginHeader = () => {
         alignItems: 'center',
         gap: '20px',
         width: '100%',
+        cursor: 'pointer',
       }}
+      onClick={goToHome}
     >
       <img
         style={{ width: '64px', height: '64px' }}

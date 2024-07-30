@@ -3,70 +3,80 @@ import { styled } from '@mui/system';
 import CustomPrimaryButton from '../../components/CustomPrimaryButton';
 import { useNavigate } from 'react-router-dom';
 
+// Styled container for the hero section
 const Container = styled('div')({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   flexDirection: 'column',
+  height: '86vh',
+  textAlign: 'center',
+  padding: '0 20px',
+  background: 'linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%)',
 });
 
+// Styled heading section for the hero content
 const Heading = styled('div')({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   flexDirection: 'column',
   gap: '0',
+  maxWidth: '800px',
+  padding: '0 20px',
 });
 
-const Image = styled('img')({
-  width: '80%',
+const Header = styled('h1')({
+  marginBottom: '-10px',
+  fontSize: '3.5rem',
+  fontWeight: '400',
+  '@media (max-width: 550px)': {
+    fontSize: '2.6rem',
+  },
 });
 
+// Main hero component
 const Hero = () => {
-  const nav = useNavigate();
+  const nav = useNavigate(); // Hook to navigate programmatically
 
+  // Function to navigate to the register page
   const goToRegister = () => {
-    nav('/register');
+    nav('/dashboard/main');
   };
 
   return (
     <Container>
       <Heading>
-        <h1 style={{ marginBottom: '0', fontSize: '56px', fontWeight: '400' }}>
-          Helping SME's Move Towards the
-        </h1>
-        <h1
-          style={{
-            fontSize: '56px',
-            fontWeight: '400',
-            marginTop: '5px',
-            marginBottom: '0',
-          }}
-        >
-          Next Revolution <span style={{ color: '#FFE0E5' }}>#Industry4.0</span>
-        </h1>
+        <Header>Helping SME's Move Towards the</Header>
+        <Header>
+          Next Revolution <span style={{ color: '#651FFF' }}>#Industry4.0</span>
+        </Header>
         <h4
           style={{
             marginTop: '14px',
-            textAlign: 'center',
-            fontSize: '20px',
+            fontSize: '1.25rem',
             fontWeight: '300',
+            color: '#555',
           }}
         >
-          HexaHunks is a online file manager allowing users to convert various
-          file formats to UBL,
-          <br /> validate UBL files, and securely share them with team
-          collaboration
+          HexaHunks is an online file manager allowing users to convert various
+          file formats to UBL, validate UBL files, and securely share them with
+          team collaboration.
         </h4>
         <CustomPrimaryButton
           label="Get Started"
           onClick={goToRegister}
           bgcolour="#651FFF"
-          additionalStyle={{ width: '50%' }}
+          additionalStyle={{
+            width: '200px',
+            height: '50px',
+            fontSize: '1rem',
+            marginTop: '20px',
+          }}
         />
       </Heading>
-      <Image src={`${process.env.PUBLIC_URL}/home-hero-2.png`} alt="hero" />
     </Container>
   );
 };
+
 export default Hero;

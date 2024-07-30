@@ -4,6 +4,7 @@ import LoginInputs from './LoginInputs';
 import LoginText from './LoginText';
 import { useNavigate } from 'react-router-dom';
 
+// This is a styled component for the background container with an image
 const BackgroundContainer = styled('div')({
   backgroundImage: `url(${process.env.PUBLIC_URL}/login.jpg)`,
   backgroundSize: 'cover',
@@ -13,6 +14,7 @@ const BackgroundContainer = styled('div')({
   position: 'relative',
 });
 
+// This is a styled component for the main login container
 const Container = styled('div')({
   width: '450px',
   height: '658px',
@@ -38,6 +40,7 @@ const Container = styled('div')({
   },
 });
 
+// This is a styled component for the secondary container
 const Container2 = styled('div')({
   width: '450px',
   height: '658px',
@@ -63,17 +66,18 @@ const Container2 = styled('div')({
   },
 });
 
-// The main component for user login interface
+// This is the main component for the user login interface
 const Login = () => {
-  const [exitLeft, setExitLeft] = useState(false);
-  const [exitBottom, setExitBottom] = useState(false);
-  const nav = useNavigate();
+  const [exitLeft, setExitLeft] = useState(false); // State to manage the left exit animation
+  const [exitBottom, setExitBottom] = useState(false); // State to manage the bottom exit animation
+  const nav = useNavigate(); // Hook to navigate programmatically
 
-  // To send the user to dashboard on successful login
+  // This function navigates the user to the dashboard on successful login
   const goToDashboard = () => {
-    // Just some animation on login success
+    // Trigger the exit animations
     setExitLeft(true);
     setExitBottom(true);
+    // Navigate to the dashboard after a delay to allow animations to complete
     setTimeout(() => {
       nav('/dashboard/main');
     }, 400);
@@ -81,9 +85,11 @@ const Login = () => {
 
   return (
     <BackgroundContainer>
+      {/* Render the secondary container with a conditional left position for animation */}
       <Container2 style={{ left: exitLeft ? '-100%' : '' }}>
         <LoginText />
       </Container2>
+      {/* Render the main login container with a conditional bottom position for animation */}
       <Container style={{ bottom: exitBottom ? '-100%' : '' }}>
         <LoginInputs goToDashboard={goToDashboard} />
       </Container>

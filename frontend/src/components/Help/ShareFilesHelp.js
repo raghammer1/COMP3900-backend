@@ -7,7 +7,9 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import { styled } from '@mui/material/styles';
 
+// This is a styled container for the main content wrapper
 const ContentWrapper = styled(Box)(({ theme }) => ({
+  marginTop: '90px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -16,6 +18,7 @@ const ContentWrapper = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(4),
 }));
 
+// This is a styled container for the video wrapper
 const VideoWrapper = styled(Box)(({ theme }) => ({
   width: '100%',
   margin: theme.spacing(4, 0),
@@ -28,21 +31,23 @@ const VideoWrapper = styled(Box)(({ theme }) => ({
   },
 }));
 
+// This is a styled Paper component for the steps list
 const StepsPaper = styled(Paper)(({ theme }) => ({
   width: '100%',
   padding: theme.spacing(4),
   boxShadow: theme.shadows[3],
 }));
 
-const ValidateUblHelp = () => {
+// This component represents the help section for sharing files
+const ShareFilesHelp = () => {
   return (
     <ContentWrapper>
       <Typography variant="h4" component="h1" gutterBottom>
-        UBL VALIDATION
+        Share File
       </Typography>
       <VideoWrapper>
         <iframe
-          src="https://www.youtube.com/embed/kiddMKPiQUw?mute=1"
+          src="https://www.youtube.com/embed/qxCD-y4y8wQ?mute=1&controls=0&modestbranding=1"
           title="Help Video"
           allowFullScreen
         ></iframe>
@@ -53,15 +58,15 @@ const ValidateUblHelp = () => {
         </Typography>
         <List>
           <ListItem>
-            <ListItemText primary="Step 1: Upload your UBL file to the system." />
+            <ListItemText primary="Step 1: Go to the Validate option on the Navbar." />
           </ListItem>
           <Divider />
           <ListItem>
-            <ListItemText primary="Step 2: The system will automatically validate the UBL file." />
+            <ListItemText primary="Step 2: Click the plus (+) sign." />
           </ListItem>
           <Divider />
           <ListItem>
-            <ListItemText primary="Step 3: Check the validation report for any errors." />
+            <ListItemText primary="Step 3: Add the file name and choose the UBL you want to validate." />
           </ListItem>
           <Divider />
           <ListItem>
@@ -69,15 +74,16 @@ const ValidateUblHelp = () => {
           </ListItem>
           <Divider />
           <ListItem>
-            <ListItemText primary="Step 5: Download the validation report as a PDF for your records." />
+            <ListItemText primary="Step 5: Click on the created box and view the validation report." />
           </ListItem>
           <Divider />
           <ListItem>
-            <ListItemText primary="Step 6: Once validation is successful, proceed with your business process." />
+            <ListItemText primary="Step 6: Furthermore, you can email, give access, download, and view the files in the chosen file's dashboard as well." />
           </ListItem>
         </List>
       </StepsPaper>
     </ContentWrapper>
   );
 };
-export default ValidateUblHelp;
+
+export default ShareFilesHelp;

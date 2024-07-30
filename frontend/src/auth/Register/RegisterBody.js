@@ -1,6 +1,7 @@
 import React from 'react';
 import RegisterSlider from './RegisterSlider';
 
+// This is the body component for the registration body
 const RegisterBody = () => {
   return (
     <div

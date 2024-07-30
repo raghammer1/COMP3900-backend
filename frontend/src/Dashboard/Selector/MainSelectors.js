@@ -6,11 +6,12 @@ import SelectorLinks from '../../components/SelectorLinks';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ReceiptIcon from '@mui/icons-material/Receipt';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HelpIcon from '@mui/icons-material/Help';
 import Button from '@mui/material/Button';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 
+// This is the styling for the main selector container
 const SelectorContainer = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'column',
@@ -21,18 +22,21 @@ const SelectorContainer = styled('div')(() => ({
   alignContent: 'center',
 }));
 
+// This is the styling for the first part of the selector container
 const SelectorContainer1 = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'column',
   alignContent: 'center',
 }));
 
+// This is the styling for the second part of the selector container
 const SelectorContainer2 = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'column',
   alignContent: 'center',
 }));
 
+// This is the styling for the logout button
 const StyledLogoutButton = styled(Button)(({ theme }) => ({
   backgroundColor: '#555555',
   color: '#fff',
@@ -44,13 +48,12 @@ const StyledLogoutButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-// The component that contains the left hand side selectors on the
-// main dashboard for users navigation on the main dashboard
+// The component that contains the left-hand side selectors on the main dashboard for user's navigation on the main dashboard
 const MainSelectors = ({ handleLogout }) => {
   const { process } = useParams();
   const [selectedRoute, setSelectedRoute] = useState('');
 
-  // Checks the params and sets the mani board accordingly for the main dashboard
+  // Checks the params and sets the main board accordingly for the main dashboard
   useEffect(() => {
     if (process === 'main') {
       setSelectedRoute('/dashboard/main');
@@ -67,6 +70,7 @@ const MainSelectors = ({ handleLogout }) => {
     }
   }, [process]);
 
+  // Here, we return the JSX for rendering the main selectors
   return (
     <SelectorContainer>
       <SelectorContainer1>
@@ -86,10 +90,10 @@ const MainSelectors = ({ handleLogout }) => {
         />
         <SelectorLinks
           routeTo="/dashboard/convert"
-          text="Invoices"
+          text="Convert"
           isSelected={selectedRoute === '/dashboard/convert'}
           onClick={() => setSelectedRoute('/dashboard/convert')}
-          icon={<ReceiptIcon />}
+          icon={<SwapHorizIcon />}
         />
         <SelectorLinks
           routeTo="/dashboard/settings"

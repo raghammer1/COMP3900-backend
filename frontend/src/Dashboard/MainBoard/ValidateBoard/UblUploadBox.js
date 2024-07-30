@@ -5,9 +5,10 @@ import Box from '@mui/material/Box';
 import CustomInputBox from '../../../components/CustomInputBox';
 import CustomPrimaryButton from '../../../components/CustomPrimaryButton';
 
+// This is the styling for the upload box container
 const UploadBox = styled('div')({
   width: '200px',
-  height: '240px',
+  height: '200px',
   margin: '10px',
   border: '2px dashed #007BFF',
   borderRadius: '10px',
@@ -25,6 +26,7 @@ const UploadBox = styled('div')({
   },
 });
 
+// This is the styling for the upload label
 const UploadLabel = styled('label')({
   fontSize: '3em',
   color: '#007BFF',
@@ -34,6 +36,7 @@ const UploadLabel = styled('label')({
   },
 });
 
+// This is the style for the modal box
 const modalStyle = {
   position: 'absolute',
   top: '50%',
@@ -46,6 +49,7 @@ const modalStyle = {
   p: 4,
 };
 
+// This is the header for the modal
 const ModalHeader = styled('h2')({
   margin: 0,
   marginBottom: '16px',
@@ -54,6 +58,7 @@ const ModalHeader = styled('h2')({
   color: '#333',
 });
 
+// This is the styling for the file input field
 const FileInput = styled('input')({
   display: 'block',
   marginBottom: '16px',
@@ -67,22 +72,25 @@ const FileInput = styled('input')({
   },
 });
 
-// To upload a ubl xml file to the app for validation purposes
+// Main component to upload a UBL XML file to the app for validation purposes
 const UblUploadBox = ({ handleUpload }) => {
+  // Here, we are defining the state for modal visibility, file, and name
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState(null);
   const [name, setName] = useState('');
 
-  // Handles modal for uploading files
+  // Function to handle opening the modal
   const handleOpen = () => setOpen(true);
+
+  // Function to handle closing the modal
   const handleClose = () => setOpen(false);
 
-  // Sets the file when it is uploaded by the user
+  // Function to set the file when it is uploaded by the user
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
   };
 
-  // Finally if user clicks submit the file is sent to the backend for processing
+  // Finally, if user clicks submit, the file is sent to the backend for processing
   const handleSubmit = () => {
     if (file) {
       handleUpload(file, name);
@@ -92,6 +100,7 @@ const UblUploadBox = ({ handleUpload }) => {
     setName('');
   };
 
+  // Here, we return the JSX for rendering the upload box and modal
   return (
     <>
       <UploadBox data-testid={'upload-xml-plus-btn'} onClick={handleOpen}>

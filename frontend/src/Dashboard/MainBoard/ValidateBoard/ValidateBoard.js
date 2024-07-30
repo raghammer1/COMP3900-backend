@@ -8,6 +8,7 @@ import { useAlert } from '../../../components/AlertError';
 import useValidatorStore from '../../../zustand/useValidatorStore';
 import CustomInputBox from '../../../components/CustomInputBox';
 
+// This is the styling for the board container
 const BoardContainer = styled('div')(({ theme }) => ({
   padding: theme.spacing(4),
   borderRadius: theme.shape.borderRadius,
@@ -21,6 +22,7 @@ const BoardContainer = styled('div')(({ theme }) => ({
   width: '80%',
 }));
 
+// This is the wrapper for arranging the board content in a grid layout
 const BoardWrapper = styled('div')({
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
@@ -31,7 +33,7 @@ const BoardWrapper = styled('div')({
   width: '100%',
 });
 
-// Main component for keeping the record of validations of xmls (ubl)
+// Main component for keeping the record of validations of XMLs (UBL)
 const ValidateBoard = () => {
   const [xmlFiles, setXmlFiles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,16 +50,21 @@ const ValidateBoard = () => {
   useEffect(() => {
     const fetchInitialXmlFiles = async () => {
       try {
-        // gets user data
+        // Gets user data
         const user = getUser();
         const userId = user._id;
 
-        // sends request to get the latest validation data
+        // Sends request to get the latest validation data
         const result = await getAllValidationUblInfo({ userId });
         if (result.error) {
-          showAlert('Error fetching initial XML files', 'tomato');
+          showAlert(
+            result.data.error
+              ? result.data.error
+              : 'Error fetching initial XML files',
+            'tomato'
+          );
         } else {
-          // sets the latest data to zustand and state
+          // Sets the latest data to zustand and state
           setXmlFiles(result);
           setLatestData(result);
         }
@@ -71,18 +78,19 @@ const ValidateBoard = () => {
     };
 
     fetchInitialXmlFiles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getUser, setLatestData]);
 
-  // To handle upload of the latest xml and send for processing in backend
+  // To handle upload of the latest XML and send for processing in backend
   const handleUpload = async (file, name) => {
     // Start loading so that user knows something is working in the backend
     setIsLoading(true);
     try {
-      // get user data
+      // Get user data
       const user = getUser();
       const userId = user._id;
 
-      // Confirm file is of type xml
+      // Confirm file is of type XML
       if (file && file.type === 'text/xml') {
         // Create file data to send to backend
         const formData = new FormData();
@@ -92,6 +100,7 @@ const ValidateBoard = () => {
 
         // Finally send the data to backend for processing
         const result = await validateUBL(formData);
+        console.log(result);
 
         if (result.error) {
           showAlert(
@@ -103,12 +112,14 @@ const ValidateBoard = () => {
         } else {
           showAlert('UBL successfully validated', 'green');
 
-          // On success save the new ubl data to zustand and the state
+          // On success save the new UBL data to zustand and the state
           const data = {
             _id: result.newObjectId,
             ublId: result.ublId,
             validationId: result.validatorId,
-            validationReport: result.validationReport,
+            validationHtml: result.validationHtml,
+            validationJson: result.validationJson,
+            date: result.date,
             name,
           };
           setXmlFiles((prevXmlFiles) => [...prevXmlFiles, data]);
@@ -130,20 +141,9 @@ const ValidateBoard = () => {
     }
   };
 
-  // Filter xmlFiles based on search term and filter date
-  const filteredXmlFiles = xmlFiles.filter((file) => {
-    const matchesSearchTerm = file.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesFilterDate = filterDate
-      ? new Date(file.date).toDateString() ===
-        new Date(filterDate).toDateString()
-      : true;
-    return matchesSearchTerm && matchesFilterDate;
-  });
-
   console.log(xmlFiles);
 
+  // Here, we return the JSX for rendering the validation board
   return (
     <BoardContainer>
       <div
@@ -181,7 +181,11 @@ const ValidateBoard = () => {
         />
       </div>
       <BoardWrapper>
-        <ShowUblBox xmlFiles={filteredXmlFiles} isLoading={isLoading} />
+        <ShowUblBox
+          isLoading={isLoading}
+          searchTerm={searchTerm}
+          filterDate={filterDate}
+        />
         <UblUploadBox handleUpload={handleUpload} />
       </BoardWrapper>
     </BoardContainer>
