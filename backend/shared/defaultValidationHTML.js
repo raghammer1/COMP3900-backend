@@ -13,8 +13,6 @@ const defaultHtml = `
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
     }
     .container {
       background-color: white;
