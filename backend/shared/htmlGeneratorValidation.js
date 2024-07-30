@@ -1,5 +1,3 @@
-const { defaultHtml } = require('./defaultValidationHTML');
-
 const generateHtml = (validationErrors = [], selfFilledIssue = []) => {
   try {
     let errorCards = '';
