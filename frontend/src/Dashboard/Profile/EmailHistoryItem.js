@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Typography,
   Avatar,
@@ -12,24 +13,35 @@ import { Edit, Delete } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { styled } from '@mui/system';
 
+// This is the styling for the list item with hover effects
 const StyledListItem = styled(ListItem)({
   padding: '16px',
+  transition: 'background-color 0.3s ease, transform 0.2s ease',
   '&:hover': {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f0f0f0',
+    transform: 'scale(1.02)',
+  },
+  '&:hover .MuiIconButton-root': {
+    opacity: 1,
   },
 });
 
+// This is the styling for the text inside the list item
 const StyledListItemText = styled(ListItemText)({
   '& .MuiListItemText-primary': {
     fontWeight: 'bold',
+    fontSize: '1.1rem',
+    color: '#333',
   },
   '& .MuiListItemText-secondary': {
     display: 'flex',
     flexDirection: 'column',
-    gap: '8px',
+    gap: '4px',
+    color: '#666',
   },
 });
 
+// This is the styling for the link to file types
 const FileTypeLink = styled(Link)({
   textDecoration: 'none',
   color: '#1976d2',
@@ -38,6 +50,20 @@ const FileTypeLink = styled(Link)({
   },
 });
 
+// This is the styling for the avatar in the list item
+const StyledAvatar = styled(Avatar)({
+  backgroundColor: '#651FFF',
+  color: '#fff',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+});
+
+// This is the styling for the delete icon button which is hidden initially
+const HiddenIconButton = styled(IconButton)({
+  opacity: 0,
+  transition: 'opacity 0.2s ease',
+});
+
+// Component to display each email history item
 const EmailHistoryItem = ({
   handleOpenReport,
   item,
@@ -51,9 +77,9 @@ const EmailHistoryItem = ({
         onClick={(e) => handleOpenReport(e, item)}
       >
         <ListItemAvatar>
-          <Avatar>
+          <StyledAvatar>
             <Edit />
-          </Avatar>
+          </StyledAvatar>
         </ListItemAvatar>
         <StyledListItemText
           primary={`Send to: ${item.email}`}
@@ -90,13 +116,13 @@ const EmailHistoryItem = ({
             </Box>
           }
         />
-        <IconButton
+        <HiddenIconButton
           edge="end"
           aria-label="delete"
           onClick={() => handleDeleteHistory(index)}
         >
-          <Delete />
-        </IconButton>
+          <Delete color="error" />
+        </HiddenIconButton>
       </StyledListItem>
       <Divider variant="inset" component="li" />
     </div>

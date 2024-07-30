@@ -11,19 +11,21 @@ import Tooltip from '@mui/material/Tooltip';
 import InfoIcon from '@mui/icons-material/Info';
 import GoogleAuth from '../GoogleAuth';
 
+/** Main component for user registration inputs and handling registration process */
 const RegisterInputs = ({ goToDashboard }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [checkPassword, setCheckPassword] = useState('');
+  const [name, setName] = useState(''); // State to manage user's name input
+  const [email, setEmail] = useState(''); // State to manage user's email input
+  const [password, setPassword] = useState(''); // State to manage user's password input
+  const [checkPassword, setCheckPassword] = useState(''); // State to confirm password input
 
-  const [newUser, setNewUser] = useState([]);
+  const [newUser, setNewUser] = useState([]); // State to manage new user data from GoogleAuth
 
-  const [loading, setLoading] = useState(false);
-  const { showAlert } = useAlert();
+  const [loading, setLoading] = useState(false); // State to manage loading indicator
+  const { showAlert } = useAlert(); // Custom hook to show alert messages
 
-  const { setUser } = useUserStore();
+  const { setUser } = useUserStore(); // Zustand store hook to set user data
 
+  // This function handles the registration process
   const submitRegister = async () => {
     if (name === '') {
       showAlert('Name cannot be empty', 'tomato');
@@ -44,23 +46,19 @@ const RegisterInputs = ({ goToDashboard }) => {
     }
 
     setLoading(true);
-    try {
-      const response = await register({ username: name, email, password });
-      if (response.error) {
-        showAlert(response.data, 'tomato');
-      } else {
-        showAlert(`Welcome ${name}`, 'green');
-        console.log(response.data);
-        setUser({ user: response.data });
-        goToDashboard();
-      }
-    } catch (e) {
-      showAlert('An unexpected error occurred.', 'tomato');
-    } finally {
-      setLoading(false);
+    const response = await register({ username: name, email, password });
+    if (response.error) {
+      showAlert(response.data.error, 'tomato');
+    } else {
+      showAlert(`Welcome ${name}`, 'green');
+      setUser({ user: response.data });
+      goToDashboard();
     }
+
+    setLoading(false);
   };
 
+  // This function handles the 'Enter' key press to submit the registration form
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       submitRegister(e);
@@ -163,4 +161,5 @@ const RegisterInputs = ({ goToDashboard }) => {
     </div>
   );
 };
+
 export default RegisterInputs;

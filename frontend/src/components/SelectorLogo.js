@@ -2,6 +2,7 @@ import React from 'react';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 
+// This is a styled div that acts like a link
 const StyledLink = styled('div')({
   display: 'flex',
   justifyContent: 'center',
@@ -9,8 +10,11 @@ const StyledLink = styled('div')({
   cursor: 'pointer',
 });
 
+// This component represents a logo that navigates to a specified link when clicked
 const SelectorLogo = ({ link }) => {
-  const nav = useNavigate();
+  const nav = useNavigate(); // Hook to navigate programmatically
+
+  // Function to navigate to the specified link
   const handleGoToDashboard = () => {
     nav(link);
   };
@@ -32,4 +36,5 @@ const SelectorLogo = ({ link }) => {
     </StyledLink>
   );
 };
+
 export default SelectorLogo;

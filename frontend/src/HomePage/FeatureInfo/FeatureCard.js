@@ -1,89 +1,106 @@
-import React from 'react';
-import Cookies from 'js-cookie';
+import { styled, keyframes } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
+import SyncAltIcon from '@mui/icons-material/SyncAlt';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ShareIcon from '@mui/icons-material/Share';
 
-const FeatureCard = ({ logo, heading, text }) => {
-  const nav = useNavigate();
+// Keyframes for the fade-in animation
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
 
-  const redirect = () => {
-    const token = Cookies.get('token');
+// Keyframes for the pulse animation
+const pulse = keyframes`
+  0% { background-color: rgba(255, 255, 255, 0.1); }
+  50% { background-color: rgba(255, 255, 255, 0.3); }
+  100% { background-color: rgba(255, 255, 255, 0.1); }
+`;
 
-    if (token) {
-      nav('/dashboard');
+// Styled component for the product card
+const ProductCard = styled('div')(({ hoverColor }) => ({
+  height: '370px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  textAlign: 'center',
+  margin: '20px',
+  border: '2px solid #fff',
+  padding: '20px',
+  borderRadius: '10px',
+  width: '400px',
+  boxSizing: 'border-box',
+  backgroundColor: 'transparent',
+  transition: 'all 0.5s ease',
+  animation: `${fadeIn} 1.5s ease-out`,
+  cursor: 'pointer',
+  '&:hover': {
+    transform: 'scale(1.08)',
+    boxShadow: `0 8px 16px ${hoverColor}`,
+    borderColor: hoverColor,
+    animation: `${pulse} 3s infinite ease-in-out`,
+  },
+  '@media (max-width: 750px)': {
+    width: '80%',
+  },
+}));
+
+// Styled component for the product image
+const ProductImage = styled('div')({
+  width: '150px',
+  height: '150px',
+  borderRadius: '50%',
+  backgroundColor: '#651FFF',
+  marginBottom: '20px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  color: '#fff',
+});
+
+// Styled component for the product information
+const ProductInfo = styled('div')({
+  fontSize: '1rem',
+});
+
+// This component represents a feature card
+const FeatureCard = ({ hoverColor, info, type }) => {
+  const nav = useNavigate(); // Hook to navigate programmatically
+
+  // Function to navigate to a specific route based on the card type
+  const handleGoTo = () => {
+    console.log(type);
+    if (type === 'Share') {
+      nav('/dashboard/help');
     } else {
-      nav('/register');
+      nav(`/dashboard/${type.toLowerCase()}`);
+    }
+    return;
+  };
+
+  // Function to render the appropriate icon based on the card type
+  const renderIcon = () => {
+    switch (type) {
+      case 'Convert':
+        return <SyncAltIcon style={{ fontSize: '3rem' }} />;
+      case 'Validate':
+        return <CheckCircleIcon style={{ fontSize: '3rem' }} />;
+      case 'Share':
+        return <ShareIcon style={{ fontSize: '3rem' }} />;
+      default:
+        return <SyncAltIcon style={{ fontSize: '3rem' }} />;
     }
   };
 
   return (
-    <div
-      style={{
-        height: '400px',
-        width: '28%',
-        borderRadius: '9px',
-        backgroundColor: '#651FFF',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <div
-        style={{
-          width: '80px',
-          height: '80px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#fff',
-          borderRadius: '50%',
-          marginTop: '48px',
-          marginLeft: '48px',
-        }}
-      >
-        <img
-          style={{ width: '38px', height: '38px' }}
-          src={`${process.env.PUBLIC_URL}/${logo}`}
-          alt="logo"
-        />
-      </div>
-      <h1
-        style={{
-          fontSize: '28px',
-          marginLeft: '48px',
-          marginTop: '32px',
-          marginBottom: '0',
-          fontFamily: 'Adamina, serif',
-          fontWeight: '400',
-        }}
-      >
-        {heading}
-      </h1>
-      <p
-        style={{
-          fontFamily: 'Adamina, serif',
-          marginLeft: '48px',
-          marginRight: '48px',
-          marginTop: '7px',
-          lineHeight: '24px',
-          fontSize: '16px',
-        }}
-      >
-        {text}
-      </p>
-      <p
-        style={{
-          fontFamily: 'Adamina, serif',
-          margin: '0',
-          fontSize: '16px',
-          marginLeft: '48px',
-          position: 'relative',
-          bottom: '0',
-          cursor: 'pointer',
-        }}
-        onClick={redirect}
-      >
-        <u>{heading} Now</u>
-      </p>
-    </div>
+    <ProductCard onClick={handleGoTo} hoverColor={hoverColor}>
+      <ProductImage>{renderIcon()}</ProductImage>
+      <ProductInfo>
+        <h3>{type}</h3>
+        <p>{info}</p>
+      </ProductInfo>
+    </ProductCard>
   );
 };
+
 export default FeatureCard;

@@ -10,11 +10,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import usePdfStore from '../../../zustand/usePdfStore';
 import useUserStore from '../../../zustand/useUserStore';
 import { deleteOnePdfInfo } from '../../../services/api';
 import { useAlert } from '../../../components/AlertError';
+import usePdfStore from '../../../zustand/usePdfStore';
 
+// This is the styling for the box that contains each PDF preview
 const PdfBox = styled('div')(({ theme }) => ({
   position: 'relative',
   width: '200px',
@@ -29,6 +30,7 @@ const PdfBox = styled('div')(({ theme }) => ({
   transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
   borderRadius: '12px',
   backgroundColor: '#f0f0f0',
+  overflow: 'hidden',
   '&:hover': {
     transform: 'scale(1.05)',
     boxShadow: '0px 4px 20px rgba(0,0,0,0.1)',
@@ -37,6 +39,7 @@ const PdfBox = styled('div')(({ theme }) => ({
   },
 }));
 
+// This is the styling for the delete button
 const DeleteButton = styled(IconButton)({
   position: 'absolute',
   top: '8px',
@@ -48,6 +51,7 @@ const DeleteButton = styled(IconButton)({
   },
 });
 
+// This is the styling for the share button
 const ShareButton = styled(IconButton)({
   position: 'absolute',
   top: '8px',
@@ -59,56 +63,96 @@ const ShareButton = styled(IconButton)({
   },
 });
 
-const ShowPdf = ({ pdfs, isLoading }) => {
+// This is the styling for the date and time label
+const DateTimeLabel = styled('p')({
+  margin: '8px 0 0 0',
+  fontSize: '12px',
+  color: '#666',
+});
+
+// Main component for showing PDF files
+const ShowPdf = ({ isLoading, searchTerm, filterDate }) => {
+  // Here, we are defining the state for dialog visibility and selected PDF
   const nav = useNavigate();
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedPdf, setSelectedPdf] = useState(null);
 
+  // Function to show alerts
   const { showAlert } = useAlert();
 
+  // Function to delete PDF data by ID
   const deletePdfDataById = usePdfStore((state) => state.deletePdfDataById);
-  const getPdfData = usePdfStore((state) => state.getPdfData);
   const getUser = useUserStore((state) => state.getUser);
-  const pdfFiles = getPdfData();
+  const getPdfData = usePdfStore((state) => state.getPdfData);
+  const FilesPDF = getPdfData();
 
-  const handleOpenPdf = (pdf) => {
-    nav(`/handle-files/pdf-reports/pdf/${pdf._id}`);
+  // Filter PDF files based on search term and filter date
+  const pdfs = FilesPDF.filter((file) => {
+    const matchesSearchTerm = file.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesFilterDate = filterDate
+      ? new Date(file.date).toDateString() ===
+        new Date(filterDate).toDateString()
+      : true;
+    return matchesSearchTerm && matchesFilterDate;
+  });
+
+  // Handle opening the validation report for a PDF
+  const handleOpenValidationReport = (pdf) => {
+    nav(`/handle-files/convertion-reports/ubl/${pdf._id}`);
   };
 
+  // Handle sharing a PDF
+  const handleShareClick = (pdf) => {
+    nav(`/handle-files/convertion-reports/share/${pdf._id}`);
+  };
+
+  console.log(pdfs, 'EWR(ew9ryE98wryewyruewiruewuYRIG');
+
+  // Handle delete button click
   const handleDeleteClick = (pdf) => {
     setSelectedPdf(pdf);
     setOpenDialog(true);
   };
 
+  // Handle confirming the deletion of a PDF
   const handleConfirmDelete = async () => {
     const user = getUser();
     try {
-      await deleteOnePdfInfo({
+      setOpenDialog(false);
+      const res = await deleteOnePdfInfo({
         userId: user._id,
         dataId: selectedPdf._id,
       });
 
-      deletePdfDataById(selectedPdf._id);
-
-      showAlert('Deleted PDF successfully', 'green');
-      setOpenDialog(false);
+      if (res.error) {
+        showAlert(
+          res.data.error ? res.data.error : 'Error: Cannot delete',
+          'tomato'
+        );
+      } else {
+        deletePdfDataById(selectedPdf._id);
+        showAlert('Deleted record successfully', 'green');
+      }
     } catch (error) {
-      showAlert('Failed to delete the PDF. Please try again.', 'tomato');
+      showAlert(
+        'Failed to delete the validation data. Please try again.',
+        'tomato'
+      );
     }
   };
 
+  // Handle closing the delete confirmation dialog
   const handleClose = () => {
     setOpenDialog(false);
   };
 
-  const handleShareClick = (pdf) => {
-    nav(`/handle-files/pdf-reports/share/${pdf._id}`);
-  };
-
+  // Here, we return the JSX for rendering the PDF preview boxes and dialogs
   return (
     <>
-      {pdfFiles.map((pdf) => (
-        <PdfBox key={pdf._id} onClick={() => handleOpenPdf(pdf)}>
+      {pdfs.map((pdf) => (
+        <PdfBox key={pdf._id} onClick={() => handleOpenValidationReport(pdf)}>
           <DeleteButton
             onClick={(e) => {
               e.stopPropagation();
@@ -125,12 +169,13 @@ const ShowPdf = ({ pdfs, isLoading }) => {
           >
             <ShareIcon />
           </ShareButton>
-          <embed
-            src={pdf.url}
-            type="application/pdf"
-            width="100%"
-            height="100%"
-          />
+          <h2 style={{ margin: '0', fontWeight: '500', color: '#333' }}>
+            {pdf.name}
+          </h2>
+          <DateTimeLabel>
+            {new Date(pdf.date).toLocaleTimeString()}{' '}
+            {new Date(pdf.date).toLocaleDateString()}
+          </DateTimeLabel>
         </PdfBox>
       ))}
       {isLoading && (

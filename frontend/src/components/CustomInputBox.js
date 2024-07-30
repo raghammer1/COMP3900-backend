@@ -1,12 +1,14 @@
 import React from 'react';
 import { styled } from '@mui/system';
 
+// This is a styled container for the input field
 const InputContainer = styled('div')({
   position: 'relative',
   margin: '20px 0',
   width: '300px',
 });
 
+// This is a styled input field
 const StyledInput = styled('input')({
   width: '100%',
   padding: '20px',
@@ -19,6 +21,7 @@ const StyledInput = styled('input')({
   },
 });
 
+// This is a styled label for the input field
 const InputLabel = styled('label')({
   position: 'absolute',
   top: '-10px',
@@ -29,20 +32,23 @@ const InputLabel = styled('label')({
   color: '#424242',
 });
 
+// This component represents a custom input box with a label
 const CustomInputBox = ({
   value,
   setValue,
   style,
   placeholder,
   label,
+  additionalStyles,
   ...props
 }) => {
+  // Function to handle the input change
   const handleOnChange = (e) => {
     setValue(e.target.value);
   };
 
   return (
-    <InputContainer style={style}>
+    <InputContainer style={{ ...style, ...additionalStyles }}>
       <StyledInput
         value={value}
         onChange={handleOnChange}

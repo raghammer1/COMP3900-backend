@@ -12,6 +12,7 @@ import {
   Paper,
 } from '@mui/material';
 
+// This is a styled component for the form container
 const FormContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
   marginTop: theme.spacing(8),
@@ -22,6 +23,7 @@ const FormContainer = styled(Paper)(({ theme }) => ({
   boxShadow: theme.shadows[5],
 }));
 
+// This is a styled component for the button
 const StyledButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(3, 0, 2),
   backgroundColor: '#3f51b5',
@@ -31,23 +33,23 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-// Component that handles user setting new password from the email
+// This component handles the user setting a new password from the email
 const ResetPassword = () => {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setPassword] = useState(''); // State to manage the new password input
+  const [confirmPassword, setConfirmPassword] = useState(''); // State to manage the confirm password input
 
-  const { token } = useParams();
-  const navigate = useNavigate();
-  const { showAlert } = useAlert();
+  const { token } = useParams(); // Hook to get the token from the URL params
+  const navigate = useNavigate(); // Hook to navigate programmatically
+  const { showAlert } = useAlert(); // Custom hook to show alert messages
 
-  // Checks if the token is there in the params for security
+  // This effect checks if the token is present in the URL params for security
   useEffect(() => {
     if (!token) {
       navigate('*');
     }
   }, [token, navigate]);
 
-  // On submit resets the password if token is valid
+  // This function handles the form submission to reset the password if the token is valid
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -56,24 +58,15 @@ const ResetPassword = () => {
       return;
     }
 
-    try {
-      // sends the request to reset password
-      const response = await resetPassword({ newPassword: password, token });
-      if (response.error) {
-        showAlert(
-          response.data.message || 'Failed to reset password',
-          'tomato'
-        );
-      } else {
-        // On success user is sent to login page to login with new password
-        showAlert('Password reset successfully', 'green');
-        navigate('/login');
-      }
-    } catch (e) {
-      showAlert(
-        'An unexpected error occurred. Please try again later.',
-        'tomato'
-      );
+    // Sends the request to reset the password
+    const response = await resetPassword({ newPassword: password, token });
+    if (response.error) {
+      // Show error alert if password reset fails
+      showAlert(response.data.error || 'Failed to reset password', 'tomato');
+    } else {
+      // Show success alert and redirect to login page if password reset is successful
+      showAlert('Password reset successfully', 'green');
+      navigate('/login');
     }
   };
 

@@ -2,13 +2,14 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import { darken } from '@mui/material/styles';
 
+// This component is a for a consistent button design in the application
 const CustomPrimaryButton = ({
-  label,
-  additionalStyle,
-  disabled,
-  onClick,
-  dataTestid,
-  bgcolour,
+  label, // The text label of the button
+  additionalStyle, // Additional custom styles for the button
+  disabled, // Boolean to determine if the button is disabled
+  onClick, // Function to handle button click events
+  dataTestid, // Data-testid for testing purposes
+  bgcolour, // Background color of the button
 }) => {
   return (
     <Button

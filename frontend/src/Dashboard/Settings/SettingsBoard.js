@@ -1,125 +1,207 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { styled, keyframes } from '@mui/system';
+import Button from '@mui/material/Button';
+import useUserStore from '../../zustand/useUserStore';
+import { useNavigate } from 'react-router-dom';
+import DeleteModal from './DeleteModal';
+import { deleteUserAccount } from '../../services/api';
+import { useAlert } from '../../components/AlertError';
+import { googleLogout } from '@react-oauth/google';
+import Cookies from 'js-cookie';
+import useValidatorStore from '../../zustand/useValidatorStore';
+import usePdfStore from '../../zustand/usePdfStore';
 
-const boardSize = 10;
-const initialSnake = [{ x: 2, y: 2 }];
-const initialApple = { x: 5, y: 5 };
+// Keyframes for animations
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
-const useInterval = (callback, delay) => {
-  const savedCallback = React.useRef();
+const popIn = keyframes`
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+`;
 
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
+// This is the styling for the main settings container
+const SettingsContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '80vh',
+  width: '50vw',
+  padding: '20px',
+  backgroundColor: 'rgba(0, 0, 0, 0.9)',
+  borderRadius: '16px',
+  margin: '0 auto',
+  boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.2)',
+  animation: `${fadeIn} 0.5s ease-out`,
+});
 
-  useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-    if (delay !== null) {
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
-};
+// This is the styling for the profile picture
+const ProfilePicture = styled('img')({
+  width: '140px',
+  height: '140px',
+  borderRadius: '50%',
+  marginBottom: '20px',
+  border: '4px solid #651FFF',
+  objectFit: 'cover',
+  objectPosition: 'center',
+  animation: `${popIn} 0.5s ease-out`,
+});
 
+// This is the styling for the user info container
+const UserInfo = styled('div')({
+  textAlign: 'center',
+  marginBottom: '20px',
+  color: '#fff',
+});
+
+// This is the styling for individual user fields
+const UserField = styled('div')({
+  marginBottom: '12px',
+  fontSize: '18px',
+  background: '#651FFF',
+  padding: '10px',
+  borderRadius: '8px',
+  animation: `${fadeIn} 0.5s ease-out`,
+});
+
+// This is the styling for the button container
+const ButtonContainer = styled('div')({
+  display: 'flex',
+  gap: '10px',
+  marginTop: '20px',
+});
+
+// This is the styling for the delete button
+const DeleteButton = styled(Button)({
+  backgroundColor: '#e74c3c',
+  color: '#fff',
+  marginTop: '20px',
+  width: '180px',
+  '&:hover': {
+    backgroundColor: '#c0392b',
+  },
+  animation: `${fadeIn} 0.5s ease-out`,
+});
+
+// This is the styling for the edit button
+const EditButton = styled(Button)({
+  backgroundColor: '#3498db',
+  color: '#fff',
+  marginTop: '20px',
+  width: '180px',
+  '&:hover': {
+    backgroundColor: '#2980b9',
+  },
+  animation: `${fadeIn} 0.5s ease-out`,
+});
+
+// Main component for displaying the user settings board
 const SettingsBoard = () => {
-  const [snake, setSnake] = useState(initialSnake);
-  const [apple, setApple] = useState(initialApple);
-  const [direction, setDirection] = useState('RIGHT');
-  const [delay, setDelay] = useState(200);
+  const { getUser } = useUserStore();
+  const user = getUser();
+  const { showAlert } = useAlert();
+  const [open, setOpen] = useState(false);
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const navigate = useNavigate();
 
-  useInterval(() => gameLoop(), delay);
+  // Handles the click event for the delete button
+  const handleDeleteClick = () => {
+    setOpen(true);
+  };
 
-  const createApple = () =>
-    setApple({
-      x: Math.floor(Math.random() * boardSize),
-      y: Math.floor(Math.random() * boardSize),
+  // Handles the click event for the edit button
+  const handleEditClick = () => {
+    navigate(`/profile/${user._id}`);
+  };
+
+  // Handles the close event for the delete modal
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const clearValidatorData = useValidatorStore(
+    (state) => state.clearValidatorData
+  );
+  const clearPdfData = usePdfStore((state) => state.clearPdfData);
+  const clearUser = useUserStore((state) => state.clearUser);
+
+  // Handles the confirmation of account deletion
+  const handleConfirmDelete = async () => {
+    console.log('User deleted');
+    setOpen(false);
+    const res = await deleteUserAccount({
+      password,
+      googleId: user.googleId,
+      username,
+      userId: user._id,
     });
 
-  const moveSnake = ({ x, y }) => {
-    const newSnake = [...snake];
-    newSnake.unshift({ x, y });
-    if (newSnake[0].x === apple.x && newSnake[0].y === apple.y) {
-      createApple();
+    if (res.error) {
+      showAlert(
+        res.data.error
+          ? res.data.error
+          : 'Error deleting the account, try again later',
+        'tomato'
+      );
     } else {
-      newSnake.pop();
-    }
-    setSnake(newSnake);
-  };
-
-  const changeDirection = (event) => {
-    switch (event.keyCode) {
-      case 37: // left
-        setDirection('LEFT');
-        break;
-      case 38: // up
-        setDirection('UP');
-        break;
-      case 39: // right
-        setDirection('RIGHT');
-        break;
-      case 40: // down
-        setDirection('DOWN');
-        break;
+      googleLogout();
+      localStorage.clear();
+      Cookies.remove('token', { path: '/' });
+      clearValidatorData();
+      clearPdfData();
+      clearUser();
+      navigate('/');
     }
   };
 
-  useEffect(() => {
-    window.addEventListener('keydown', changeDirection);
-    return () => window.removeEventListener('keydown', changeDirection);
-  }, []);
-
-  const gameLoop = () => {
-    const head = snake[0];
-    let newHead;
-    switch (direction) {
-      case 'RIGHT':
-        newHead = { x: head.x + 1, y: head.y };
-        break;
-      case 'LEFT':
-        newHead = { x: head.x - 1, y: head.y };
-        break;
-      case 'DOWN':
-        newHead = { x: head.x, y: head.y + 1 };
-        break;
-      case 'UP':
-        newHead = { x: head.x, y: head.y - 1 };
-        break;
-    }
-    moveSnake(newHead);
-  };
-
+  // Here, we return the JSX for rendering the settings board
   return (
-    <div>
-      <h2>We don't have anything for you to set so Play SNAKE!</h2>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${boardSize}, 20px)`,
-        }}
-      >
-        {Array.from({ length: boardSize * boardSize }).map((_, index) => {
-          const x = index % boardSize;
-          const y = Math.floor(index / boardSize);
-          const isSnake = snake.some(
-            (segment) => segment.x === x && segment.y === y
-          );
-          const isApple = apple.x === x && apple.y === y;
+    <SettingsContainer>
+      <ProfilePicture src={user?.googlePicture} alt="Profile" />
+      <UserInfo>
+        <UserField>
+          <strong>Username:</strong> {user?.username}
+        </UserField>
+        <UserField>
+          <strong>Email:</strong> {user?.email}
+        </UserField>
+        <UserField>
+          <strong>GLN:</strong> {user?.gln ? user?.gln : 'Not set'}
+        </UserField>
+      </UserInfo>
+      <ButtonContainer>
+        <EditButton variant="contained" onClick={handleEditClick}>
+          Edit Profile
+        </EditButton>
+        <DeleteButton variant="contained" onClick={handleDeleteClick}>
+          Delete Account
+        </DeleteButton>
+      </ButtonContainer>
 
-          return (
-            <div
-              key={index}
-              style={{
-                width: '20px',
-                height: '20px',
-                backgroundColor: isSnake ? 'green' : isApple ? 'red' : 'white',
-                border: '1px solid black',
-              }}
-            />
-          );
-        })}
-      </div>
-    </div>
+      <DeleteModal
+        open={open}
+        handleClose={handleClose}
+        setPassword={setPassword}
+        password={password}
+        handleConfirmDelete={handleConfirmDelete}
+        username={username}
+        setUsername={setUsername}
+      />
+    </SettingsContainer>
   );
 };
 

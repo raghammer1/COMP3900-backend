@@ -4,6 +4,7 @@ import { Box, Button, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 
+// Styled Box component for the 404 page
 const StyledBox = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   padding: theme.spacing(4),
@@ -14,22 +15,23 @@ const StyledBox = styled(Box)(({ theme }) => ({
   height: '100vh',
 }));
 
+// Main component for the 404 page
 const PageNotFound = () => {
-  const [countdown, setCountdown] = useState(10);
-  const navigate = useNavigate();
+  const [countdown, setCountdown] = useState(10); // State for countdown timer
+  const navigate = useNavigate(); // Hook to navigate programmatically
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCountdown((prevCountdown) => prevCountdown - 1);
+      setCountdown((prevCountdown) => prevCountdown - 1); // Decrement countdown
     }, 1000);
 
     const redirectTimeout = setTimeout(() => {
-      navigate('/dashboard/main');
+      navigate('/dashboard/main'); // Redirect after 10 seconds
     }, 10000);
 
     return () => {
-      clearInterval(timer);
-      clearTimeout(redirectTimeout);
+      clearInterval(timer); // Clear timer on component unmount
+      clearTimeout(redirectTimeout); // Clear redirect timeout on component unmount
     };
   }, [navigate]);
 

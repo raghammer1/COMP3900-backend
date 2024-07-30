@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import { fetchWeather } from '../../services/api';
 import useUserStore from '../../zustand/useUserStore';
 
+// This is the styling for the weather bar container
 const WeatherBar = styled('div')(({ theme }) => ({
   backgroundColor: '#111',
   color: theme.palette.common.white,
@@ -16,6 +17,7 @@ const WeatherBar = styled('div')(({ theme }) => ({
   margin: '0 auto',
 }));
 
+// This is the styling for the weather information container
 const WeatherInfo = styled('div')({
   display: 'flex',
   flexDirection: 'column',
@@ -23,6 +25,7 @@ const WeatherInfo = styled('div')({
   margin: '0 10px',
 });
 
+// This is the styling for the weather text
 const WeatherText = styled('p')(({ theme }) => ({
   margin: 0,
   fontSize: '14px',
@@ -31,30 +34,33 @@ const WeatherText = styled('p')(({ theme }) => ({
   },
 }));
 
+// This is the styling for the weather icon
 const WeatherIcon = styled('img')({
   width: '60px',
   height: '60px',
   margin: '0 10px',
 });
 
+// This is the styling for the loading message
 const Loading = styled('div')(({ theme }) => ({
   color: theme.palette.common.white,
   margin: theme.spacing(2, 0),
 }));
 
+// This is the styling for the error message
 const Error = styled('div')(({ theme }) => ({
   color: theme.palette.error.main,
   margin: theme.spacing(2, 0),
 }));
 
-// To display the latest weather data on users location on the dashboard
+// Component to display the latest weather data on user's location on the dashboard
 const Weather = () => {
   const { user, setUser } = useUserStore();
   const [weather, setWeather] = useState(user.weather || null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(!weather);
 
-  // Api to get the latest weather data
+  // Fetch the latest weather data when the component mounts
   useEffect(() => {
     const getWeather = async (lat, lon) => {
       try {
@@ -89,14 +95,17 @@ const Weather = () => {
     }
   }, [weather, setUser]);
 
+  // Display loading message if data is being fetched
   if (loading) {
     return <Loading>Loading...</Loading>;
   }
 
+  // Display error message if there was an error fetching the data
   if (error) {
     return <Error>Error: {error}</Error>;
   }
 
+  // Here, we return the JSX for rendering the weather information
   return (
     <WeatherBar>
       <WeatherIcon

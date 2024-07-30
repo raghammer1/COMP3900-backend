@@ -1,12 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { styled, useTheme } from '@mui/system';
-import {
-  useMediaQuery,
-  Drawer,
-  IconButton,
-  Typography,
-  Avatar,
-} from '@mui/material';
+import { useMediaQuery, Drawer, IconButton, Avatar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Selector from './Selector/Selector';
 import Board from './MainBoard/Board';
@@ -15,16 +9,16 @@ import PdfUploadBoard from './MainBoard/PdfUpload/PdfUploadBoard';
 import ValidateBoard from './MainBoard/ValidateBoard/ValidateBoard';
 import useUserStore from '../zustand/useUserStore';
 import SettingsBoard from './Settings/SettingsBoard';
-import HelpBoard from './Help/HelpBoard';
-import ProfileBoard from './Profile/ProfileBoard';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HelpBoard from '../components/Help/HelpBoard';
 
+// This is the styling for the main container
 const Container = styled('div')(({ theme }) => ({
   width: '100vw',
   height: '100vh',
   display: 'flex',
 }));
 
+// This is the styling for the profile avatar
 const ProfileAvatar = styled(Avatar)({
   width: '26px',
   height: '26px',
@@ -33,6 +27,7 @@ const ProfileAvatar = styled(Avatar)({
   marginRight: '10px',
 });
 
+// This is the styling for the username display
 const Username = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -49,13 +44,13 @@ const Username = styled('div')(({ theme }) => ({
     background: '#f0f0f0',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',
   },
-
   '& svg': {
     marginRight: '5px',
     fontSize: '1.2rem',
   },
 }));
 
+// This is the styling for the drawer container
 const DrawerContainer = styled(Drawer)(({ theme }) => ({
   width: '240px',
   flexShrink: 0,
@@ -65,6 +60,7 @@ const DrawerContainer = styled(Drawer)(({ theme }) => ({
   },
 }));
 
+// This is the styling for the header container
 const HeaderContainer = styled('div')(({ theme }) => ({
   height: '10vh',
   width: '80%',
@@ -72,24 +68,22 @@ const HeaderContainer = styled('div')(({ theme }) => ({
   alignItems: 'center',
   padding: '0 20px',
   justifyContent: 'right',
-
   '@media (max-width: 1200px)': {
     justifyContent: 'space-between',
     right: '10%',
   },
 }));
 
-// Main dashboard component where user comes first to interact with the app
+// Main dashboard component where user first interacts with the app
 const Dashboard = () => {
-  // to handle media queries
+  // Handles media queries for responsive design
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  // Get user info
+  // Get user info from the store
   const { getUser } = useUserStore();
   const user = getUser();
-  const username = user.username;
 
   const { process } = useParams();
 
@@ -100,8 +94,7 @@ const Dashboard = () => {
     nav(`/profile/${user._id}`);
   };
 
-  // To set the dashboard according to the params that are set
-  // and the option user has picked on the selectors
+  // Sets the dashboard content according to the route params and user's choice
   let content;
   switch (process) {
     case 'convert':
@@ -123,6 +116,7 @@ const Dashboard = () => {
       content = <></>;
   }
 
+  // Here, we return the JSX for rendering the dashboard
   return (
     <Container>
       {isMobile ? (
@@ -150,8 +144,8 @@ const Dashboard = () => {
             </IconButton>
           )}
           <Username onClick={handleOpenProfile}>
-            <ProfileAvatar src={user.googlePicture} alt="Profile Picture" />
-            {username}
+            <ProfileAvatar src={user?.googlePicture} alt="Profile Picture" />
+            {user?.username}
           </Username>
         </HeaderContainer>
         <div>{content}</div>
