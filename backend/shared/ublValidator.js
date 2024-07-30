@@ -25,9 +25,7 @@ const validateUBL = async (validationErrors, selfFilledIssue = null) => {
     }
 
     if (pdfBytes === null) {
-      return res.status(400).json({
-        error: 'Error validating UBL, failed to generate PDF report',
-      });
+      throw new Error('Error validating UBL, failed to generate PDF report');
     }
 
     // Save PDF to GridFS
@@ -54,9 +52,11 @@ const validateUBL = async (validationErrors, selfFilledIssue = null) => {
     });
   } catch (error) {
     console.log(`Error validating UBL file: ${error.message}, error`, error);
-    return res.status(500).json({
-      error: `Error validating UBL file: ${error.message}`,
-    });
+    // return res.status(500).json({
+    //   error: `Error validating UBL file: ${error.message}`,
+    // });
+
+    throw new Error('UBL validation failed');
   }
 };
 

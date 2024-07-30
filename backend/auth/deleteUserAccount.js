@@ -16,7 +16,7 @@ const deleteUserAccount = async (req, res) => {
           .status(200)
           .json({ message: 'Google user account deleted successfully' });
       } else {
-        return res.status(401).json({ error: 'Unauthorized' });
+        return res.status(401).json({ error: 'Invalid username' });
       }
     } else {
       if (User && (await bcrypt.compare(password, User.password))) {
@@ -26,8 +26,8 @@ const deleteUserAccount = async (req, res) => {
         return res.status(400).json({ error: 'Invalid Password' });
       }
     }
-  } catch (error) {
-    res.status(500).send({ message: 'Server error', error: error.message });
+  } catch (err) {
+    return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 

@@ -20,9 +20,8 @@ const getImage = async (req, res) => {
     downloadStream.on('end', () => {
       res.end();
     });
-  } catch (error) {
-    console.error('Error in image retrieval function:', error);
-    res.status(500).json({ error: 'Internal server error' });
+  } catch (err) {
+    return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 

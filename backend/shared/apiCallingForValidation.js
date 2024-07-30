@@ -43,7 +43,7 @@ const apiCallingForValidation = async (
     return validationErrors;
   } catch (err) {
     console.log(err);
-    return [{ error: true }];
+    throw new Error('API validation failed');
   }
 };
 

@@ -26,7 +26,7 @@ const postConvertGuiForm = async (req, res) => {
     const userData = await user.findById(userId);
 
     if (!userData) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ error: 'User not found' });
     }
 
     // Check if the ublValidationObject already exists
@@ -36,7 +36,7 @@ const postConvertGuiForm = async (req, res) => {
     if (isExistingValidation) {
       return res
         .status(409)
-        .send({ message: 'Validation object with name already exists' });
+        .json({ error: 'Validation object with name already exists' });
     }
 
     if (saveGln !== 'false') {
@@ -100,13 +100,13 @@ const postConvertGuiForm = async (req, res) => {
     } catch (error) {
       console.error('Error saving XML to MongoDB:', error);
       return res.status(500).json({
-        message: 'Error saving XML to MongoDB',
+        error: 'Error saving XML to MongoDB',
         details: error.message,
       });
     }
 
     if (ublId === undefined) {
-      return res.status(402).json({ message: 'Failed to convert PDF to UBL' });
+      return res.status(402).json({ error: 'Failed to convert PDF to UBL' });
     }
 
     const pdfUblValidationObject = {
@@ -156,7 +156,8 @@ const postConvertGuiForm = async (req, res) => {
       validationHtml: html,
     });
   } catch (err) {
-    res.status(500).json({ message: 'Server error', details: err.message });
+    console.log(err);
+    return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 

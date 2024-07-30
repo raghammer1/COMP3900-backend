@@ -143,17 +143,14 @@ const validateUblFile = async (req, res) => {
           .json({
             error: updateError.response
               ? updateError.response.data
-              : updateError.message,
+              : 'Server Error',
           });
       }
     });
 
     fileStream.pipe(uploadStream);
-  } catch (error) {
-    console.log(error);
-    res.status(error.response ? error.response.status : 500).json({
-      error: error.response ? error.response.data : error.message,
-    });
+  } catch (err) {
+    return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 

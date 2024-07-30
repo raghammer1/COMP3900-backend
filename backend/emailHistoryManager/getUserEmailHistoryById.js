@@ -18,10 +18,10 @@ const getUserEmailHistoryById = async (req, res) => {
     } else {
       return res
         .status(404)
-        .json({ message: 'No matching historyEmail found.' });
+        .json({ error: 'Share the file to view email history.' });
     }
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 
