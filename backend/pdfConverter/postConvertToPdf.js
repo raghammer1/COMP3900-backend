@@ -139,7 +139,7 @@ const postConvertToPdf = async (req, res) => {
               json = defaultJson;
             } else {
               html = generateHtml(validationErrors, missingFields);
-              json = { validationErrors: validationErrors };
+              json = { validationErrors: validationErrors, missingFields };
               console.log('HERE', validationErrors);
             }
 
