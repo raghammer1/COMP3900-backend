@@ -15,7 +15,7 @@ const generateHtml = (validationErrors = [], selfFilledIssue = []) => {
         `
         )
         .join('');
-    } else {
+    } else if (selfFilledIssue.length === 0 && validationErrors.length === 0) {
       errorCards = `
         <div class="no-errors">
           <p style="text-align: center; color: green; font-weight: bold;">No errors were detected</p>

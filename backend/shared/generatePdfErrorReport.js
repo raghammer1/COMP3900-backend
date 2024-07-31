@@ -60,7 +60,10 @@ const generateErrorReportPDF = async (errors, selfFilledIssue = null) => {
       y -= lineSpacing;
       return { y, page };
     };
-    if (errors.length === 0) {
+    if (
+      errors.length === 0 &&
+      (selfFilledIssue === null || selfFilledIssue.length === 0)
+    ) {
       // page.drawText('No Errors were found, your UBL is valid', {
       //   x: 50,
       //   y: height / 2 + fontSize,
