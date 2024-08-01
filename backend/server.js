@@ -77,18 +77,8 @@ app.use('/edit', editProfileRouter);
 app.get('/getFile', getAnyFileFunction);
 app.post('/sendFile', auth, FileSender);
 app.get('/api/images/:filename', getImage);
-app.post(
-  '/give-access-validation-ubl',
-  auth,
-  // validator.body(accessGiverSchema),
-  giveAccessValidationUbl
-);
-app.post(
-  '/give-access-convertion-ubl',
-  auth,
-  // validator.body(accessGiverSchemaPdf),
-  giveAccessPdfUbl
-);
+app.post('/give-access-validation-ubl', auth, giveAccessValidationUbl);
+app.post('/give-access-convertion-ubl', auth, giveAccessPdfUbl);
 app.get('/history-email', auth, getUserEmailHistory);
 app.get('/get-history-email-by-id', auth, getUserEmailHistoryById);
 

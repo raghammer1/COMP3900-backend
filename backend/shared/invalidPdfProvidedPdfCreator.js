@@ -6,8 +6,6 @@ const invalidPdfProvidedPdfCreator = async () => {
     const page = pdfDoc.addPage([600, 800]);
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const fontSize = 20;
-    const marginTop = 50;
-    const marginLeft = 50;
 
     const text = 'INVALID PDF PROVIDED';
 

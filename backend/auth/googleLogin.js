@@ -17,7 +17,7 @@ const googleLogin = async (req, res) => {
       // If the user doesn't exist, create a new user
       user = new User({
         googleId,
-        email: email.toLowerCase(), // Store Google email in lowercase
+        email: email.toLowerCase(),
         username,
         googlePicture,
       });

@@ -5,7 +5,7 @@ const giveAccessValidationUbl = async (req, res) => {
     const { ublId, validatorId, name, validationHtml, validationJson } =
       req.body;
 
-    email = req.body.email.toLowerCase();
+    const email = req.body.email.toLowerCase();
 
     const User = await user.findOne({ email });
 
