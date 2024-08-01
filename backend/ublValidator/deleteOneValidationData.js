@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const deleteOneValidationData = async (req, res) => {
   const { userId, dataId } = req.query;
-  console.log(userId, dataId);
+
   try {
     const user = await mongoose.model('User').findById(userId);
     if (!user) return res.status(409).json({ error: 'User not found' });
@@ -19,10 +19,8 @@ const deleteOneValidationData = async (req, res) => {
     // Save the updated user document
     await user.save();
 
-    console.log('Validation entry deleted successfully');
     res.status(200).send({ message: 'Validation entry deleted successfully' });
   } catch (error) {
-    console.error('Error during deletion process:', error);
     res.status(401).json({ error: `Error during deletion process: ${error}` });
   }
 };

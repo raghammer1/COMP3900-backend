@@ -67,7 +67,7 @@ const ForgotPassword = () => {
   const handleSubmit = async () => {
     setLoading(true);
     handleClose();
-    console.log('Email:', email);
+
     if (!email) {
       showAlert('Please enter a valid email address.', 'tomato');
       setLoading(false);

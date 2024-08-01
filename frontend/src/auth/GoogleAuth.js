@@ -62,7 +62,6 @@ const GoogleAuth = ({ setNewUser, newUser, goToDashboard }) => {
           // Finally, navigate to the dashboard
           goToDashboard();
         }
-        console.log('Google User Info:', userInfo);
       }
     };
 

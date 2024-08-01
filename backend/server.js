@@ -15,10 +15,8 @@ const getUserEmailHistory = require('./emailHistoryManager/getUserEmailHistory')
 require('dotenv').config();
 const auth = require('./middleware/auth');
 const giveAccessValidationUbl = require('./shared/giveAccessValidationUbl');
-const joi = require('joi');
 const giveAccessPdfUbl = require('./shared/giveAccessPdfUbl');
 const getUserEmailHistoryById = require('./emailHistoryManager/getUserEmailHistoryById');
-const validator = require('express-joi-validation').createValidator({});
 
 const PORT = process.env.BACKEND_SERVER_PORT || process.env.API_PORT;
 
@@ -55,21 +53,6 @@ app.get('/test', (req, res) => {
   res.json({ message: 'Hello World!' });
 });
 
-const accessGiverSchema = joi.object({
-  email: joi.string().email().required(),
-  ublId: joi.string().required(),
-  validatorId: joi.string().required(),
-  name: joi.string().required(),
-});
-
-const accessGiverSchemaPdf = joi.object({
-  email: joi.string().email().required(),
-  ublId: joi.string().required(),
-  validatorId: joi.string().required(),
-  pdfId: joi.string().required(),
-  name: joi.string().required(),
-});
-
 app.use('/auth', authRoutes);
 app.use('/convert', converterRoutes);
 app.use('/validate', validateRouter);
@@ -77,18 +60,8 @@ app.use('/edit', editProfileRouter);
 app.get('/getFile', getAnyFileFunction);
 app.post('/sendFile', auth, FileSender);
 app.get('/api/images/:filename', getImage);
-app.post(
-  '/give-access-validation-ubl',
-  auth,
-  // validator.body(accessGiverSchema),
-  giveAccessValidationUbl
-);
-app.post(
-  '/give-access-convertion-ubl',
-  auth,
-  // validator.body(accessGiverSchemaPdf),
-  giveAccessPdfUbl
-);
+app.post('/give-access-validation-ubl', auth, giveAccessValidationUbl);
+app.post('/give-access-convertion-ubl', auth, giveAccessPdfUbl);
 app.get('/history-email', auth, getUserEmailHistory);
 app.get('/get-history-email-by-id', auth, getUserEmailHistoryById);
 

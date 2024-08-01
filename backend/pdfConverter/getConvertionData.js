@@ -15,7 +15,7 @@ const getConvertionData = async (req, res) => {
     }
 
     res.status(200).json({ pdfUblValidation: User.pdfUblValidation });
-  } catch (err) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

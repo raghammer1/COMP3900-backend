@@ -1,7 +1,5 @@
 const axios = require('axios');
 const FormData = require('form-data');
-const fs = require('fs');
-const path = require('path');
 
 // Veryfi API credentials
 // const client_id = 'vrfCmSwXe2kGXlHaG85J5eNk0jfIxo8i0MBHapY';
@@ -38,11 +36,9 @@ async function uploadInvoice(fileBuffer, fileName) {
     const response = await axios.post(url, formData, {
       headers: { ...headers, ...formHeaders },
     });
-    console.log('Conversion successful!');
+
     return response.data; // This will be the JSON representation of your invoice
-  } catch (error) {
-    console.error('Failed to convert PDF to JSON:', error.response.status);
-    console.error(error.response.data);
+  } catch {
     return null;
   }
 }

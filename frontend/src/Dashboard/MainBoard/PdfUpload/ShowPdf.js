@@ -108,8 +108,6 @@ const ShowPdf = ({ isLoading, searchTerm, filterDate }) => {
     nav(`/handle-files/convertion-reports/share/${pdf._id}`);
   };
 
-  console.log(pdfs, 'EWR(ew9ryE98wryewyruewiruewuYRIG');
-
   // Handle delete button click
   const handleDeleteClick = (pdf) => {
     setSelectedPdf(pdf);
@@ -155,19 +153,22 @@ const ShowPdf = ({ isLoading, searchTerm, filterDate }) => {
         <PdfBox
           data-testid={'conversion-record'}
           key={pdf._id}
-          onClick={() => handleOpenValidationReport(pdf)}>
+          onClick={() => handleOpenValidationReport(pdf)}
+        >
           <DeleteButton
             onClick={(e) => {
               e.stopPropagation();
               handleDeleteClick(pdf);
-            }}>
+            }}
+          >
             <DeleteIcon />
           </DeleteButton>
           <ShareButton
             onClick={(e) => {
               e.stopPropagation();
               handleShareClick(pdf);
-            }}>
+            }}
+          >
             <ShareIcon />
           </ShareButton>
           <h2 style={{ margin: '0', fontWeight: '500', color: '#333' }}>

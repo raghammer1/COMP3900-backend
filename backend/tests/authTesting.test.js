@@ -1,12 +1,8 @@
 const request = require('supertest');
 const express = require('express');
 const bodyParser = require('body-parser');
-const User = require('../models/user');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const authRoutes = require('../routes/authRoutes');
 const { connectDB, disconnectDB } = require('../db');
-const deleteUser = require('../auth/deleteUser');
 
 jest.mock('../models/user');
 jest.mock('bcryptjs');
@@ -97,7 +93,6 @@ describe('AUTH LOGIN AND REGISTER', () => {
     });
 
     expect(response.status).toBe(400);
-    const _id = response.body._id;
     expect(response.body).toEqual({ error: 'Invalid Credential' });
   });
 

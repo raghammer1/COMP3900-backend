@@ -67,8 +67,6 @@ const AccessManagerBoardPdfUbl = () => {
   // Handler to submit the access request
   const handleSubmit = async () => {
     const data = getPdfDataById(id); // Get PDF data by ID
-    console.log(data, id);
-    console.log('Access granted to:', email);
 
     const response = await giveAccessPdfUbl({
       email,
@@ -81,7 +79,6 @@ const AccessManagerBoardPdfUbl = () => {
     });
 
     setOpen(false); // Close the dialog after submission
-    console.log(response, 'LOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL');
 
     // Show alert based on the response
     if (response.error) {
@@ -124,7 +121,8 @@ const AccessManagerBoardPdfUbl = () => {
           data-testid={'access-manager-convert-submit'}
           variant="contained"
           color="primary"
-          onClick={handleClickOpen}>
+          onClick={handleClickOpen}
+        >
           Give Access
         </Button>
       </FormContainer>
@@ -150,7 +148,8 @@ const AccessManagerBoardPdfUbl = () => {
           <Button
             data-testid={'access-manager-convert-submit-yes'}
             onClick={handleSubmit}
-            color="primary">
+            color="primary"
+          >
             Yes
           </Button>
         </DialogActions>

@@ -137,8 +137,6 @@ const sendEmailUsingGmailAPI = async (mailOptions) => {
       raw: encodedEmail,
     },
   });
-
-  console.log('Email sent successfully:', res.data);
 };
 ```
 
@@ -150,9 +148,7 @@ The main function `MailSender` orchestrates the process of creating and sending 
 const MailSender = async (mailOptions) => {
   try {
     await sendEmailUsingGmailAPI(mailOptions);
-    console.log('Email sent successfully');
   } catch (error) {
-    console.error('Failed to send email:', error);
     throw new Error('Failed to send email');
   }
 };
@@ -181,8 +177,8 @@ const mailOptions = {
 };
 
 MailSender(mailOptions)
-  .then(() => console.log('Email sent successfully'))
-  .catch((error) => console.error('Failed to send email:', error));
+  .then(() =>
+  .catch((error) =>
 ```
 
 ## Conclusion

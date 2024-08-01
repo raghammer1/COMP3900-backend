@@ -158,7 +158,6 @@ const SettingsBoard = () => {
 
   // Handles the confirmation of account deletion
   const handleConfirmDelete = async () => {
-    console.log('User deleted');
     setOpen(false);
     const res = await deleteUserAccount({
       password,
@@ -204,13 +203,15 @@ const SettingsBoard = () => {
         <EditButton
           data-testid={'edit-profile-button'}
           variant="contained"
-          onClick={handleEditClick}>
+          onClick={handleEditClick}
+        >
           Edit Profile
         </EditButton>
         <DeleteButton
           data-testid={'delete-profile-button'}
           variant="contained"
-          onClick={handleDeleteClick}>
+          onClick={handleDeleteClick}
+        >
           Delete Account
         </DeleteButton>
       </ButtonContainer>

@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const user = require('../models/user');
 
 const changeUsername = async (req, res) => {
@@ -19,7 +18,7 @@ const changeUsername = async (req, res) => {
     await User.save();
 
     return res.status(200).json({ message: 'Username updated successfully' });
-  } catch (err) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

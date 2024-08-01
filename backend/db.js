@@ -16,8 +16,7 @@ const connectDB = async () => {
     console.log('GridFSBucket initialized');
 
     return conn;
-  } catch (err) {
-    console.error('Database connection failed:', err.message);
+  } catch {
     process.exit(1);
   }
 };
@@ -33,8 +32,7 @@ const disconnectDB = async () => {
   try {
     await mongoose.disconnect();
     console.log('MongoDB disconnected');
-  } catch (err) {
-    console.error(err.message);
+  } catch {
     process.exit(1);
   }
 };

@@ -109,7 +109,6 @@ const ValidateBoard = () => {
 
         // Finally send the data to backend for processing
         const result = await validateUBL(formData);
-        console.log(result);
 
         if (result.error) {
           showAlert(
@@ -139,7 +138,7 @@ const ValidateBoard = () => {
       }
     } catch (error) {
       // Error handling
-      console.error('An unexpected error occurred:', error);
+
       showAlert(
         'An unexpected error occurred. Please try again later.',
         'tomato'
@@ -149,8 +148,6 @@ const ValidateBoard = () => {
       setIsLoading(false);
     }
   };
-
-  console.log(xmlFiles);
 
   // Here, we return the JSX for rendering the validation board
   return (

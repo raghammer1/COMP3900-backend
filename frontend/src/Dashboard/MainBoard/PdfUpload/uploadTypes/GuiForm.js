@@ -269,7 +269,6 @@ const GuiForm = ({ setPdfs, handleClose, setIsLoading }) => {
         addPdfData(data);
       }
       setIsLoading(false);
-      console.log(response);
     } else {
       showAlert('Error: All required fields must be filled', 'tomato');
     }
@@ -404,7 +403,8 @@ const GuiForm = ({ setPdfs, handleClose, setIsLoading }) => {
             name === '' || vendorGln.length !== 13 || customerGln.length !== 13
               ? 'File Name and GLN are also compulsory'
               : ''
-          }>
+          }
+        >
           <SubmitButton
             data-testid={'gui-form-submit-button'}
             disabled={
@@ -412,7 +412,8 @@ const GuiForm = ({ setPdfs, handleClose, setIsLoading }) => {
               vendorGln.length !== 13 ||
               customerGln.length !== 13
             }
-            type="submit">
+            type="submit"
+          >
             Submit
           </SubmitButton>
         </Tooltip>

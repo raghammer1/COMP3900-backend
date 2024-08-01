@@ -167,8 +167,7 @@ Status: ${error.flag === 'fatal' ? 'Failed' : 'Passed'}
 
     const pdfBytes = await pdfDoc.save();
     return pdfBytes;
-  } catch (err) {
-    console.error('Error generating PDF:', err);
+  } catch {
     return null;
   }
 };

@@ -165,11 +165,9 @@ async function uploadInvoice(fileBuffer, fileName) {
     const response = await axios.post(url, formData, {
       headers: { ...headers, ...formHeaders },
     });
-    console.log('Conversion successful!');
+
     return response.data; // JSON representation of your invoice
   } catch (error) {
-    console.error('Failed to convert PDF to JSON:', error.response.status);
-    console.error(error.response.data);
     return null;
   }
 }

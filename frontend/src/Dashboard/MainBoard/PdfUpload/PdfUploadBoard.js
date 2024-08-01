@@ -82,7 +82,6 @@ const PdfUploadBoard = () => {
           setLatestData(result);
         }
       } catch (error) {
-        console.log(error);
         // Error handling
         showAlert(
           'An unexpected error occurred while fetching initial PDFs. Please try again later.',
@@ -126,13 +125,12 @@ const PdfUploadBoard = () => {
               : 'Error converting/uploading PDF',
             'tomato'
           );
-          console.log(result.data, 'THIS IS THERERRRRREREERRR');
         } else {
           // Show success alert
           showAlert('PDF successfully converted to UBL', 'green');
 
           // On success save the new PDF data to zustand and the state
-          console.log(result, 'RESULT');
+
           const data = {
             _id: result.newObjectId,
             date: result.date,
@@ -151,7 +149,7 @@ const PdfUploadBoard = () => {
       }
     } catch (error) {
       // Error handling
-      console.error('An unexpected error occurred:', error);
+
       showAlert(
         error.data.error ? error.data.error : 'Error converting/uploading PDF',
         'tomato'

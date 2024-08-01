@@ -10,7 +10,7 @@ const apiClient = axios.create({
 apiClient.interceptors.response.use(
   (response) => response, // Simply return the response if it's successful
   (error) => {
-    console.error('Axios interceptor error:', error); // Log the error for debugging purposes
+    // Log the error for debugging purposes
     return Promise.reject(error); // Reject the promise with the error, allowing error handling in the calling code
   }
 );

@@ -1,4 +1,3 @@
-const express = require('express');
 const { getGridFSBucket } = require('../db'); // Replace with your database connection
 
 const getImage = async (req, res) => {
@@ -12,15 +11,14 @@ const getImage = async (req, res) => {
       res.write(chunk);
     });
 
-    downloadStream.on('error', (err) => {
-      console.error('Error downloading image from GridFS:', err);
+    downloadStream.on('error', () => {
       res.status(500).json({ error: 'Error retrieving image' });
     });
 
     downloadStream.on('end', () => {
       res.end();
     });
-  } catch (err) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
