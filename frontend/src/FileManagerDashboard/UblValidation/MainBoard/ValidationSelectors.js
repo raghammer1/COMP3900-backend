@@ -56,20 +56,19 @@ const ValidationSelectors = ({ htmlContent, fileId, jsonContent }) => {
         <ButtonGroup>
           <StyledButton
             selected={selectedView === 'html'}
-            onClick={() => handleViewChange('html')}
-          >
+            onClick={() => handleViewChange('html')}>
             HTML View
           </StyledButton>
           <StyledButton
+            data-testid={'json-validation'}
             selected={selectedView === 'json'}
-            onClick={() => handleViewChange('json')}
-          >
+            onClick={() => handleViewChange('json')}>
             JSON View
           </StyledButton>
           <StyledButton
+            data-testid={'pdf-lol-validation'}
             selected={selectedView === 'pdf'}
-            onClick={() => handleViewChange('pdf')}
-          >
+            onClick={() => handleViewChange('pdf')}>
             PDF View
           </StyledButton>
         </ButtonGroup>

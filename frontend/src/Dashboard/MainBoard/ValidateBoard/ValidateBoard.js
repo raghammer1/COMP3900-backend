@@ -33,6 +33,15 @@ const BoardWrapper = styled('div')({
   width: '100%',
 });
 
+const Container = styled('div')({
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+  '@media (max-width: 750px)': {
+    width: '90%',
+  },
+});
+
 // Main component for keeping the record of validations of XMLs (UBL)
 const ValidateBoard = () => {
   const [xmlFiles, setXmlFiles] = useState([]);
@@ -146,20 +155,14 @@ const ValidateBoard = () => {
   // Here, we return the JSX for rendering the validation board
   return (
     <BoardContainer>
-      <div
-        style={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
+      <Container>
         <CustomInputBox
           value={searchTerm}
           setValue={setSearchTerm}
           label="Search Files"
           placeholder="Search for files by name"
         />
-      </div>
+      </Container>
       <div
         style={{
           width: '100%',

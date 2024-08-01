@@ -50,7 +50,7 @@ const StyledLogoutButton = styled(Button)(({ theme }) => ({
 }));
 
 // Main component for rendering all selectors
-const AllSelectors = () => {
+const AllSelectors = ({ setDrawerOpen }) => {
   const { file, id } = useParams(); // Get file and id from URL parameters
   const [selectedRoute, setSelectedRoute] = useState(''); // State for storing selected route
 
@@ -88,93 +88,106 @@ const AllSelectors = () => {
     <SelectorContainer>
       <SelectorContainer1>
         <SelectorLinks
+          dataTestId={'file-manager-convert-pdf'}
           routeTo={`/handle-files/convertion-reports/pdf/${id}`}
           text="Invoice Pdf"
           isSelected={
             selectedRoute === `/handle-files/convertion-reports/pdf/${id}`
           }
-          onClick={() =>
-            setSelectedRoute(`/handle-files/convertion-reports/pdf/${id}`)
-          }
+          onClick={() => {
+            setSelectedRoute(`/handle-files/convertion-reports/pdf/${id}`);
+            setDrawerOpen(false);
+          }}
           icon={<ReceiptIcon />}
         />
         <SelectorLinks
+          dataTestId={'file-manager-convert-ubl'}
           routeTo={`/handle-files/convertion-reports/ubl/${id}`}
           text="UBL"
           isSelected={
             selectedRoute === `/handle-files/convertion-reports/ubl/${id}`
           }
-          onClick={() =>
-            setSelectedRoute(`/handle-files/convertion-reports/ubl/${id}`)
-          }
+          onClick={() => {
+            setSelectedRoute(`/handle-files/convertion-reports/ubl/${id}`);
+            setDrawerOpen(false);
+          }}
           icon={<DescriptionIcon />}
         />
         <SelectorLinks
+          dataTestId={'file-manager-convert-validate'}
           routeTo={`/handle-files/convertion-reports/validate/${id}`}
           text="Validation Report"
           isSelected={
             selectedRoute === `/handle-files/convertion-reports/validate/${id}`
           }
-          onClick={() =>
-            setSelectedRoute(`/handle-files/convertion-reports/validate/${id}`)
-          }
+          onClick={() => {
+            setSelectedRoute(`/handle-files/convertion-reports/validate/${id}`);
+            setDrawerOpen(false);
+          }}
           icon={<CheckCircleIcon />}
         />
         <SelectorLinks
+          dataTestId={'file-manager-convert-share'}
           routeTo={`/handle-files/convertion-reports/share/${id}`}
           text="Share"
           isSelected={
             selectedRoute === `/handle-files/convertion-reports/share/${id}`
           }
-          onClick={() =>
-            setSelectedRoute(`/handle-files/convertion-reports/share/${id}`)
-          }
+          onClick={() => {
+            setSelectedRoute(`/handle-files/convertion-reports/share/${id}`);
+            setDrawerOpen(false);
+          }}
           icon={<ShareIcon />}
         />
         <SelectorLinks
+          dataTestId={'file-manager-convert-access'}
           routeTo={`/handle-files/convertion-reports/access/${id}`}
           text="Access"
           isSelected={
             selectedRoute === `/handle-files/convertion-reports/access/${id}`
           }
-          onClick={() =>
-            setSelectedRoute(`/handle-files/convertion-reports/access/${id}`)
-          }
+          onClick={() => {
+            setSelectedRoute(`/handle-files/convertion-reports/access/${id}`);
+            setDrawerOpen(false);
+          }}
           icon={<LockOpenIcon />}
         />
         <SelectorLinks
+          dataTestId={'file-manager-convert-email-history'}
           routeTo={`/handle-files/convertion-reports/email-history/${id}`}
           text="Email History"
           isSelected={
             selectedRoute ===
             `/handle-files/convertion-reports/email-history/${id}`
           }
-          onClick={() =>
+          onClick={() => {
             setSelectedRoute(
               `/handle-files/convertion-reports/email-history/${id}`
-            )
-          }
+            );
+            setDrawerOpen(false);
+          }}
           icon={<EmailIcon />}
         />
       </SelectorContainer1>
       <SelectorContainer2>
         <SelectorLinks
+          dataTestId={'file-manager-convert-help'}
           routeTo={`/handle-files/convertion-reports/help/${id}`}
           text="Help"
           isSelected={
             selectedRoute === `/handle-files/convertion-reports/help/${id}`
           }
-          onClick={() =>
-            setSelectedRoute(`/handle-files/convertion-reports/help/${id}`)
-          }
+          onClick={() => {
+            setSelectedRoute(`/handle-files/convertion-reports/help/${id}`);
+            setDrawerOpen(false);
+          }}
           icon={<HelpIcon />}
         />
         <StyledLogoutButton
           variant="contained"
           startIcon={<DashboardIcon />}
           onClick={handleGotoDashboard}
-          data-testid={'logout-button'}
-        >
+          data-testid={'dashboard-button'}>
           Dashboard
         </StyledLogoutButton>
       </SelectorContainer2>

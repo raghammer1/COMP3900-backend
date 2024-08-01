@@ -217,6 +217,7 @@ const ShareFilesBoardPdfUbl = () => {
     <BoardContainer>
       <FormContainer>
         <CustomInputBox
+          dataTestId={'email-share-board'}
           value={email}
           setValue={setEmail}
           label="Email Address"
@@ -224,6 +225,7 @@ const ShareFilesBoardPdfUbl = () => {
           type="email"
         />
         <CustomInputBox
+          dataTestId={'subject-share-board'}
           value={subject}
           setValue={setSubject}
           label="Email Subject"
@@ -231,6 +233,7 @@ const ShareFilesBoardPdfUbl = () => {
         />
         <TextareaContainer>
           <StyledTextarea
+            data-testid={'body-share-board'}
             value={body}
             onChange={(e) => setBody(e.target.value)}
             placeholder="Enter email body"
@@ -243,6 +246,7 @@ const ShareFilesBoardPdfUbl = () => {
             <FormControlLabel
               control={
                 <Checkbox
+                  data-testid={'share-convert-xml'}
                   checked={selectedFiles.xml}
                   onChange={handleCheckboxChange}
                   name="xml"
@@ -254,6 +258,7 @@ const ShareFilesBoardPdfUbl = () => {
             <FormControlLabel
               control={
                 <Checkbox
+                  data-testid={'share-convert-validator'}
                   checked={selectedFiles.validatorPdf}
                   onChange={handleCheckboxChange}
                   name="validatorPdf"
@@ -265,6 +270,7 @@ const ShareFilesBoardPdfUbl = () => {
             <FormControlLabel
               control={
                 <Checkbox
+                  data-testid={'share-convert-pdf'}
                   checked={selectedFiles.pdf}
                   onChange={handleCheckboxChange}
                   name="pdf"
@@ -279,6 +285,7 @@ const ShareFilesBoardPdfUbl = () => {
           <LoadingAnimation>SENDING...</LoadingAnimation>
         ) : (
           <CustomPrimaryButton
+            dataTestid={'confirm-send-convert-email'}
             label="Send Email"
             onClick={handleSubmit}
             bgcolour="#007BFF"

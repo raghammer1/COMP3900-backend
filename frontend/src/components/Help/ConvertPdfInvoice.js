@@ -1,3 +1,4 @@
+import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
@@ -58,7 +59,7 @@ const ConvertPdfInvoice = () => {
         </Typography>
         <List>
           <ListItem>
-            <ListItemText primary="Step 1: Go to the Validate option on the Navbar." />
+            <ListItemText primary="Step 1: Go to the Convert option on the Navbar." />
           </ListItem>
           <Divider />
           <ListItem>
@@ -66,19 +67,23 @@ const ConvertPdfInvoice = () => {
           </ListItem>
           <Divider />
           <ListItem>
-            <ListItemText primary="Step 3: Add the file name and choose the UBL you want to validate." />
+            <ListItemText primary="Step 3: Add the file name, give the customers and vendors GLN numbers and choose the PDF you want to convert." />
           </ListItem>
           <Divider />
           <ListItem>
-            <ListItemText primary="Step 4: If there are errors, correct them and re-upload the UBL file." />
+            <ListItemText primary="Step 4: Click submit and convertion will start." />
           </ListItem>
           <Divider />
           <ListItem>
-            <ListItemText primary="Step 5: Click on the created box and view the validation report." />
+            <ListItemText primary="Step 5: Click on the created box and view the newly generated UBL." />
           </ListItem>
           <Divider />
           <ListItem>
-            <ListItemText primary="Step 6: Further more you can email, give access, download and view the files in the chosen file's dashboard as well." />
+            <ListItemText primary="Step 6: A validation report will also be generated to tell you about the extra info that might be required to create a valid UBL." />
+          </ListItem>
+          <Divider />
+          <ListItem>
+            <ListItemText primary="Step 7: Further more you can email, give access, download and view the files in the chosen file's dashboard as well." />
           </ListItem>
         </List>
       </StepsPaper>

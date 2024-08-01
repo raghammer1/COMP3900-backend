@@ -1,3 +1,4 @@
+import React from 'react';
 import { styled } from '@mui/system';
 
 // Styling for the delete button
@@ -85,6 +86,7 @@ const InvoiceLineItem = ({
             ID: <span style={{ color: 'red' }}>*</span>
           </Label>
           <Input
+            data-testid={'text-id'}
             type="text"
             name="id"
             value={item.id}
@@ -101,6 +103,7 @@ const InvoiceLineItem = ({
             Quantity: <span style={{ color: 'red' }}>*</span>
           </Label>
           <Input
+            data-testid={'text-id-number'}
             type="number"
             name="quantity"
             value={item.quantity}
@@ -119,6 +122,7 @@ const InvoiceLineItem = ({
             Total: <span style={{ color: 'red' }}>*</span>
           </Label>
           <Input
+            data-testid={'text-id-total'}
             type="number"
             name="total"
             value={item.total}
@@ -137,6 +141,7 @@ const InvoiceLineItem = ({
             Description: <span style={{ color: 'red' }}>*</span>
           </Label>
           <Input
+            data-testid={'text-id-description'}
             type="text"
             name="description"
             value={item.description}
@@ -155,6 +160,7 @@ const InvoiceLineItem = ({
             Price: <span style={{ color: 'red' }}>*</span>
           </Label>
           <Input
+            data-testid={'text-id-price'}
             type="number"
             name="price"
             value={item.price}
@@ -174,8 +180,7 @@ const InvoiceLineItem = ({
             if (window.confirm('Are you sure you want to delete this item?')) {
               deleteLineItem(index);
             }
-          }}
-        >
+          }}>
           Delete Item
         </DeleteButton>
       )}

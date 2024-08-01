@@ -9,7 +9,7 @@ import { googleLogout } from '@react-oauth/google';
 import usePdfStore from '../../zustand/usePdfStore';
 
 // Main component to set all the selector settings on the main dashboard
-const Selector = () => {
+const Selector = ({ setDrawerOpen }) => {
   const navigate = useNavigate();
   const clearValidatorData = useValidatorStore(
     (state) => state.clearValidatorData
@@ -33,7 +33,10 @@ const Selector = () => {
     <div style={{ height: '80%' }}>
       <SelectorLogo link={'/dashboard/main'} />{' '}
       {/* Displays the selector logo linking to the main dashboard */}
-      <MainSelectors handleLogout={handleLogout} />{' '}
+      <MainSelectors
+        handleLogout={handleLogout}
+        setDrawerOpen={setDrawerOpen}
+      />{' '}
       {/* Displays the main selectors with logout functionality */}
     </div>
   );

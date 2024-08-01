@@ -104,6 +104,7 @@ const AccessManagerBoardPdfUbl = () => {
       </Typography>
       <FormContainer>
         <TextField
+          data-testid={'access-manager-convert-email'}
           label="Email Address"
           variant="outlined"
           fullWidth
@@ -119,7 +120,11 @@ const AccessManagerBoardPdfUbl = () => {
             ),
           }}
         />
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>
+        <Button
+          data-testid={'access-manager-convert-submit'}
+          variant="contained"
+          color="primary"
+          onClick={handleClickOpen}>
           Give Access
         </Button>
       </FormContainer>
@@ -142,7 +147,10 @@ const AccessManagerBoardPdfUbl = () => {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary">
+          <Button
+            data-testid={'access-manager-convert-submit-yes'}
+            onClick={handleSubmit}
+            color="primary">
             Yes
           </Button>
         </DialogActions>

@@ -283,6 +283,7 @@ const GuiForm = ({ setPdfs, handleClose, setIsLoading }) => {
 
         <FlexContainer>
           <InvoiceFormInputs
+            dataTestId={'invoice-number'}
             label={`Invoice Number: `}
             type={'text'}
             name={'invoice_number'}
@@ -292,6 +293,7 @@ const GuiForm = ({ setPdfs, handleClose, setIsLoading }) => {
             required={true}
           />
           <InvoiceFormInputs
+            dataTestId={'issue-date'}
             label={`Issue Date: `}
             type={'date'}
             name={'date'}
@@ -304,6 +306,7 @@ const GuiForm = ({ setPdfs, handleClose, setIsLoading }) => {
 
         <FlexContainer>
           <InvoiceFormInputs
+            dataTestId={'due-date'}
             label={`Due Date: `}
             type={'date'}
             name={'due_date'}
@@ -313,6 +316,7 @@ const GuiForm = ({ setPdfs, handleClose, setIsLoading }) => {
             required={true}
           />
           <InvoiceFormInputs
+            dataTestId={'purchase-order-number'}
             label={`Purchase Order Number:`}
             type={'text'}
             name={'purchase_order_number'}
@@ -324,6 +328,7 @@ const GuiForm = ({ setPdfs, handleClose, setIsLoading }) => {
 
         <FlexContainer>
           <InvoiceFormInputs
+            dataTestId={'subtotal-amount'}
             label={`Subtotal: `}
             type={'number'}
             name={'subtotal'}
@@ -333,6 +338,7 @@ const GuiForm = ({ setPdfs, handleClose, setIsLoading }) => {
             required={true}
           />
           <InvoiceFormInputs
+            dataTestId={'tax-amount'}
             label={`Tax:`}
             type={'number'}
             name={'tax'}
@@ -342,6 +348,7 @@ const GuiForm = ({ setPdfs, handleClose, setIsLoading }) => {
           />
         </FlexContainer>
         <InvoiceFormInputs
+          dataTestId={'total-amount'}
           label={`Total: `}
           type={'number'}
           name={'total'}
@@ -397,16 +404,15 @@ const GuiForm = ({ setPdfs, handleClose, setIsLoading }) => {
             name === '' || vendorGln.length !== 13 || customerGln.length !== 13
               ? 'File Name and GLN are also compulsory'
               : ''
-          }
-        >
+          }>
           <SubmitButton
+            data-testid={'gui-form-submit-button'}
             disabled={
               name === '' ||
               vendorGln.length !== 13 ||
               customerGln.length !== 13
             }
-            type="submit"
-          >
+            type="submit">
             Submit
           </SubmitButton>
         </Tooltip>

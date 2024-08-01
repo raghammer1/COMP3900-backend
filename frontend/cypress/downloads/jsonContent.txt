@@ -1,0 +1,25 @@
+{
+  "validationErrors": [
+    {
+      "id": "PEPPOL-EN16931-R008",
+      "text": "Document MUST not contain empty elements.",
+      "location": "/*:schema[namespace-uri()='http://www.w3.org/2001/XMLSchema'][1]/*:import[namespace-uri()='http://www.w3.org/2001/XMLSchema'][1]",
+      "test": "false()",
+      "flag": "fatal"
+    },
+    {
+      "id": "PEPPOL-EN16931-R008",
+      "text": "Document MUST not contain empty elements.",
+      "location": "/*:schema[namespace-uri()='http://www.w3.org/2001/XMLSchema'][1]/*:import[namespace-uri()='http://www.w3.org/2001/XMLSchema'][2]",
+      "test": "false()",
+      "flag": "fatal"
+    },
+    {
+      "id": "PEPPOL-EN16931-R008",
+      "text": "Document MUST not contain empty elements.",
+      "location": "/*:schema[namespace-uri()='http://www.w3.org/2001/XMLSchema'][1]/*:import[namespace-uri()='http://www.w3.org/2001/XMLSchema'][3]",
+      "test": "false()",
+      "flag": "fatal"
+    }
+  ]
+}

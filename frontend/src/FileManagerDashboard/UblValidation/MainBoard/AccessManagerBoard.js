@@ -107,6 +107,7 @@ const AccessManagerBoard = () => {
       <FormContainer>
         {/* Input field for email address */}
         <TextField
+          data-testid={'access-manager-validate-email'}
           label="Email Address"
           variant="outlined"
           fullWidth
@@ -123,7 +124,11 @@ const AccessManagerBoard = () => {
           }}
         />
         {/* Button to open the dialog */}
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>
+        <Button
+          data-testid={'access-manager-validate-submit'}
+          variant="contained"
+          color="primary"
+          onClick={handleClickOpen}>
           Give Access
         </Button>
       </FormContainer>
@@ -150,7 +155,10 @@ const AccessManagerBoard = () => {
             Cancel
           </Button>
           {/* Button to confirm the access grant */}
-          <Button onClick={handleSubmit} color="primary">
+          <Button
+            data-testid={'access-manager-validate-submit-yes'}
+            onClick={handleSubmit}
+            color="primary">
             Yes
           </Button>
         </DialogActions>

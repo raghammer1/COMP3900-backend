@@ -27,14 +27,15 @@ const SelectorLinks = ({
   onClick, // Function to handle click events
   additionalStyle, // Additional custom styles for the link
   icon, // Optional icon to display alongside the text
+  dataTestId = null,
 }) => {
   return (
     <StyledLink
       to={routeTo}
       isSelected={isSelected}
+      data-testid={dataTestId}
       onClick={onClick}
-      style={additionalStyle}
-    >
+      style={additionalStyle}>
       {icon}
       <span style={{ marginLeft: '10px' }}>{text}</span>
     </StyledLink>

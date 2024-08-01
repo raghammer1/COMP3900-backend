@@ -88,7 +88,9 @@ const JsonValidationBoard = ({ jsonContent }) => {
   return (
     <div>
       {/* Here is the button to download the JSON content */}
-      <DownloadButton onClick={() => downloadJson(jsonContent)}>
+      <DownloadButton
+        data-testid={'json-download'}
+        onClick={() => downloadJson(jsonContent)}>
         <GetAppIcon fontSize="small" />
         <ButtonText>Download</ButtonText>
       </DownloadButton>

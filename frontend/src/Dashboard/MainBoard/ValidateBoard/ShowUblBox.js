@@ -161,21 +161,22 @@ const ShowUblBox = ({ isLoading, searchTerm, filterDate }) => {
   return (
     <>
       {xmlFiles.map((xml) => (
-        <PdfBox key={xml._id} onClick={() => handleOpenValidationReport(xml)}>
+        <PdfBox
+          data-testid={'validation-record'}
+          key={xml._id}
+          onClick={() => handleOpenValidationReport(xml)}>
           <DeleteButton
             onClick={(e) => {
               e.stopPropagation();
               handleDeleteClick(xml);
-            }}
-          >
+            }}>
             <DeleteIcon />
           </DeleteButton>
           <ShareButton
             onClick={(e) => {
               e.stopPropagation();
               handleShareClick(xml);
-            }}
-          >
+            }}>
             <ShareIcon />
           </ShareButton>
           <h2 style={{ margin: '0', fontWeight: '500', color: '#333' }}>

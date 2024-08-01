@@ -46,6 +46,12 @@ const SettingsContainer = styled('div')({
   margin: '0 auto',
   boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.2)',
   animation: `${fadeIn} 0.5s ease-out`,
+  '@media (max-width: 700px)': {
+    width: '70vw',
+  },
+  '@media (max-width: 500px)': {
+    width: '85vw',
+  },
 });
 
 // This is the styling for the profile picture
@@ -82,6 +88,11 @@ const ButtonContainer = styled('div')({
   display: 'flex',
   gap: '10px',
   marginTop: '20px',
+  '@media (max-width: 400px)': {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0px',
+  },
 });
 
 // This is the styling for the delete button
@@ -94,6 +105,9 @@ const DeleteButton = styled(Button)({
     backgroundColor: '#c0392b',
   },
   animation: `${fadeIn} 0.5s ease-out`,
+  '@media (max-width: 400px)': {
+    width: '80vw',
+  },
 });
 
 // This is the styling for the edit button
@@ -106,6 +120,9 @@ const EditButton = styled(Button)({
     backgroundColor: '#2980b9',
   },
   animation: `${fadeIn} 0.5s ease-out`,
+  '@media (max-width: 400px)': {
+    width: '80vw',
+  },
 });
 
 // Main component for displaying the user settings board
@@ -184,10 +201,16 @@ const SettingsBoard = () => {
         </UserField>
       </UserInfo>
       <ButtonContainer>
-        <EditButton variant="contained" onClick={handleEditClick}>
+        <EditButton
+          data-testid={'edit-profile-button'}
+          variant="contained"
+          onClick={handleEditClick}>
           Edit Profile
         </EditButton>
-        <DeleteButton variant="contained" onClick={handleDeleteClick}>
+        <DeleteButton
+          data-testid={'delete-profile-button'}
+          variant="contained"
+          onClick={handleDeleteClick}>
           Delete Account
         </DeleteButton>
       </ButtonContainer>

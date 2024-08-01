@@ -1,3 +1,4 @@
+import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
@@ -58,27 +59,23 @@ const ShareFilesHelp = () => {
         </Typography>
         <List>
           <ListItem>
-            <ListItemText primary="Step 1: Go to the Validate option on the Navbar." />
+            <ListItemText primary="Step 1: Go to the record you want to share." />
           </ListItem>
           <Divider />
           <ListItem>
-            <ListItemText primary="Step 2: Click the plus (+) sign." />
+            <ListItemText primary="Step 2: Go to the Share option to email or the Access option to share in app." />
           </ListItem>
           <Divider />
           <ListItem>
-            <ListItemText primary="Step 3: Add the file name and choose the UBL you want to validate." />
+            <ListItemText primary="Step 3: For access option type the email of a registered user and give them access to the record, it will appear on there dashboard as well." />
           </ListItem>
           <Divider />
           <ListItem>
-            <ListItemText primary="Step 4: If there are errors, correct them and re-upload the UBL file." />
+            <ListItemText primary="Step 4: For the Share option give users email (required), body and subject (optional) and finally select the files you want to send." />
           </ListItem>
           <Divider />
           <ListItem>
-            <ListItemText primary="Step 5: Click on the created box and view the validation report." />
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemText primary="Step 6: Furthermore, you can email, give access, download, and view the files in the chosen file's dashboard as well." />
+            <ListItemText primary="Step 5: Click on the send button and email with the attachments will be sent to the users email." />
           </ListItem>
         </List>
       </StepsPaper>

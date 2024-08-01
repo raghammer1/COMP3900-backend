@@ -196,8 +196,7 @@ const ProfileBoard = () => {
           marginTop: '20px',
           marginBottom: '30px',
           color: '#333',
-        }}
-      >
+        }}>
         User Dashboard
       </Typography>
       <Grid container spacing={4}>
@@ -208,6 +207,7 @@ const ProfileBoard = () => {
             </Typography>
             <ProfileAvatar src={profileImage} alt="Profile Picture" />
             <input
+              data-testid="profile-picture-change"
               accept="image/*"
               style={{ display: 'none' }}
               id="profile-pic-upload"
@@ -221,6 +221,7 @@ const ProfileBoard = () => {
             </label>
             {isEditing ? (
               <TextField
+                data-testid={'profile-name-input'}
                 label="Username"
                 value={username}
                 onChange={handleUsernameChange}
@@ -232,30 +233,29 @@ const ProfileBoard = () => {
               <Typography
                 style={{ marginTop: '20px', color: '#555' }}
                 variant="body1"
-                gutterBottom
-              >
+                gutterBottom>
                 {username}
               </Typography>
             )}
             <div>
               {isEditing ? (
                 <Button
+                  data-testid={'profile-submit'}
                   variant="contained"
                   color="secondary"
                   startIcon={<SaveIcon />}
                   onClick={handleUpdate}
-                  style={{ marginTop: '20px' }}
-                >
+                  style={{ marginTop: '20px' }}>
                   Save
                 </Button>
               ) : (
                 <Button
+                  data-testid={'edit-username-button'}
                   variant="contained"
                   color="primary"
                   startIcon={<EditIcon />}
                   onClick={toggleEditMode}
-                  style={{ marginTop: '20px' }}
-                >
+                  style={{ marginTop: '20px' }}>
                   Edit
                 </Button>
               )}

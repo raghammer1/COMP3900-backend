@@ -3,6 +3,7 @@ describe('template spec', () => {
     cy.visit('http://localhost:3000/');
   });
 });
+
 describe('Auth Testing', () => {
   let uniqueEmail;
   let timestamp;
@@ -31,29 +32,29 @@ describe('Auth Testing', () => {
 
     cy.wait(1000);
 
-    cy.get('[data-testid="logout-button"]').click();
+    // Replace these with actual data-testid values for elements you want to interact with
+    const dashboardElements = [
+      'goto-validate-dashboard',
+      'goto-convert-dashboard',
+      'goto-settings-dashboard',
+      'goto-help-dashboard',
+    ];
+
+    dashboardElements.forEach((testId) => {
+      cy.get(`[data-testid="${testId}"]`).first().click();
+      cy.wait(1000); // Adjust wait time as needed
+    });
   });
 
-  it('allows a user to login', () => {
-    cy.visit('/login');
-    cy.viewport(1500, 1000);
+  //   it('navigates and interacts with elements on the dashboard', () => {
 
-    // Logging in same user and going to the dashboard
-    cy.get('[data-testid="login-email"]').type(uniqueEmail);
-    cy.get('[data-testid="login-password"]').type('T@123timestamp');
-    cy.get('[data-testid="login-submit"]').click();
-
-    cy.url().should('include', '/dashboard');
-
-    cy.visit('/');
-    cy.visit('/dashboard/main');
-
-    cy.wait(1000);
-
-    cy.get('[data-testid="logout-button"]').click();
-  });
+  //     // Example of navigating to the validate page and interacting with elements there
+  //   });
 
   after(() => {
+    // Navigating to the dashboard and logging out
+    cy.get('[data-testid="logout-button"]').click();
+
     // Making a request to delete the user after each test
     cy.request({
       method: 'DELETE',

@@ -38,6 +38,12 @@ const Container = styled('div')({
     left: '50%',
     transform: 'translateX(-50%)',
   },
+  '@media (max-width: 500px)': {
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '90vw',
+    right: '0',
+  },
 });
 
 // This is a styled component for the secondary container

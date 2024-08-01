@@ -1,3 +1,4 @@
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import useUserStore from '../../zustand/useUserStore';
 import { useEffect, useState } from 'react';
@@ -47,15 +48,13 @@ const EmailHistory = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-      }}
-    >
+      }}>
       <div
         style={{
           height: '90vh',
           overflow: 'auto',
           width: '70vw',
-        }}
-      >
+        }}>
         <h2>Email History</h2>
         {/* Conditionally render EmailHistoryCard components if emails exist */}
         {emails.length > 0 ? (

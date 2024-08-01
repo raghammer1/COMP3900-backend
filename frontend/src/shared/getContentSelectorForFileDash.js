@@ -1,3 +1,4 @@
+import React from 'react';
 import HelpBoard from '../components/Help/HelpBoard';
 import AccessManagerBoardPdfUbl from '../FileManagerDashboard/PdfConverter/MainBoard/AccessManagerBoardPdfUbl';
 import GuiFormDisplay from '../FileManagerDashboard/PdfConverter/MainBoard/GuiFormDisplay';
@@ -21,13 +22,14 @@ export const getContentSelectorForFileDash = (
   PdfUblValidateData,
   getPdfDataById,
   setLatestDataPdf,
-  navigate
+  navigate,
+  setDrawerOpen
 ) => {
   let selector;
   let content;
   switch (process) {
     case 'validation-reports':
-      selector = <UblValidSelector id={id} />;
+      selector = <UblValidSelector id={id} setDrawerOpen={setDrawerOpen} />;
       switch (file) {
         case 'ubl':
           content = (
@@ -67,7 +69,7 @@ export const getContentSelectorForFileDash = (
       }
       break;
     case 'convertion-reports':
-      selector = <PdfUblValidSelector id={id} />;
+      selector = <PdfUblValidSelector id={id} setDrawerOpen={setDrawerOpen} />;
       switch (file) {
         case 'pdf':
           if (PdfUblValidateData === undefined) {

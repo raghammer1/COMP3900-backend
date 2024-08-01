@@ -154,7 +154,8 @@ const FileManagerDashboard = () => {
       PdfUblValidateData,
       getPdfDataById,
       setLatestDataPdf,
-      navigate
+      navigate,
+      setDrawerOpen
     );
     selector = result?.selector ? result.selector : <></>;
     content = result?.content ? result.content : <></>;

@@ -3,6 +3,7 @@ describe('template spec', () => {
     cy.visit('http://localhost:3000/');
   });
 });
+
 describe('Auth Testing', () => {
   let uniqueEmail;
   let timestamp;
@@ -29,31 +30,45 @@ describe('Auth Testing', () => {
     cy.wait(2000);
     cy.url().should('include', '/dashboard');
 
+    // Navigate to settings
+    cy.get('[data-testid="goto-settings-dashboard"]').click();
     cy.wait(1000);
 
-    cy.get('[data-testid="logout-button"]').click();
-  });
+    // Navigate to edit profile section
+    cy.get('[data-testid="edit-profile-button"]').click();
+    cy.wait(1000);
 
-  it('allows a user to login', () => {
-    cy.visit('/login');
-    cy.viewport(1500, 1000);
+    // Click the edit button to change username
+    cy.get('[data-testid="profile-picture-change"]');
+    cy.wait(1000);
 
-    // Logging in same user and going to the dashboard
-    cy.get('[data-testid="login-email"]').type(uniqueEmail);
-    cy.get('[data-testid="login-password"]').type('T@123timestamp');
-    cy.get('[data-testid="login-submit"]').click();
+    // // Change profile picture
+    const imagePath = 'picture.jpg'; // Update this with the correct path
+    // cy.get('[data-testid="profile-picture-change"]').attachFile(imagePath);
+    // cy.wait(1000);
 
-    cy.url().should('include', '/dashboard');
-
-    cy.visit('/');
-    cy.visit('/dashboard/main');
+    // Change profile picture
+    cy.fixture(imagePath, 'base64').then((fileContent) => {
+      cy.get('[data-testid="profile-picture-change"]').attachFile({
+        fileContent,
+        fileName: imagePath, // Ensure this matches the file type
+        mimeType: 'image/jpg', // Adjust based on the file type
+        encoding: 'base64',
+      });
+    });
 
     cy.wait(1000);
 
-    cy.get('[data-testid="logout-button"]').click();
+    // Submit changes
+    //     cy.get('[data-testid="profile-submit"]').click();
+    //     cy.wait(2000);
   });
 
   after(() => {
+    // Navigating to the dashboard and logging out
+    cy.visit('/dashboard/main');
+    cy.get('[data-testid="logout-button"]').click();
+
     // Making a request to delete the user after each test
     cy.request({
       method: 'DELETE',

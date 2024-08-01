@@ -39,17 +39,16 @@ const DeleteModal = ({
           type="text"
           setValue={setUsername}
           value={username}
-          data-testid={'login-password'}
         />
       ) : (
         <CustomInputBox
+          dataTestId={'delete-user-password-final'}
           style={{ marginLeft: '70px', marginBottom: '30px', width: '70%' }}
           placeholder="########"
           label="Password"
           type="password"
           setValue={setPassword}
           value={password}
-          data-testid={'login-password'}
         />
       )}
       <DialogActions
@@ -59,8 +58,7 @@ const DeleteModal = ({
           justifyContent: 'center',
           gap: '20px',
           marginBottom: '10px',
-        }}
-      >
+        }}>
         <CustomPrimaryButton
           label="Cancel"
           bgcolour="#666"
@@ -70,9 +68,9 @@ const DeleteModal = ({
             fontSize: '15px',
           }}
           onClick={handleClose}
-          dataTestid={'login-submit'}
         />
         <CustomPrimaryButton
+          dataTestid={'submit-delete-user-button'}
           label="Confirm"
           bgcolour="#651FFF"
           additionalStyle={{
@@ -81,7 +79,6 @@ const DeleteModal = ({
             fontSize: '15px',
           }}
           onClick={handleConfirmDelete}
-          dataTestid={'login-submit'}
         />
       </DialogActions>
     </Dialog>

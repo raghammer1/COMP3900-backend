@@ -82,7 +82,7 @@ const EmailHistoryItem = ({
           </StyledAvatar>
         </ListItemAvatar>
         <StyledListItemText
-          primary={`Send to: ${item.email}`}
+          primary={`Sent to: ${item.email}`}
           secondary={
             <Box component="span">
               <Typography component="span" variant="body2" color="textPrimary">

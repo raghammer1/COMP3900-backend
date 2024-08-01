@@ -1,3 +1,4 @@
+import React from 'react';
 import { Checkbox, FormControlLabel, Tooltip } from '@mui/material';
 import CustomInputBox from '../../../../components/CustomInputBox';
 import InfoIcon from '@mui/icons-material/Info';
@@ -17,6 +18,7 @@ const UserInfoForm = ({
     <div>
       {/* Input for file name */}
       <CustomInputBox
+        dataTestId={'user-name-file'}
         value={name}
         setValue={setName}
         type="text"
@@ -28,6 +30,7 @@ const UserInfoForm = ({
       {/* Input for vendor GLN with tooltip */}
       <div style={{ position: 'relative', marginTop: '30px' }}>
         <CustomInputBox
+          dataTestId={'user-vendor-name-2'}
           value={vendorGln}
           setValue={setVendorGln}
           type="text"
@@ -51,6 +54,7 @@ const UserInfoForm = ({
       {/* Input for customer GLN with tooltip */}
       <div style={{ position: 'relative', marginTop: '30px' }}>
         <CustomInputBox
+          dataTestId={'user-customer-name-2'}
           value={customerGln}
           setValue={setCustomerGln}
           type="text"
@@ -76,6 +80,7 @@ const UserInfoForm = ({
         style={{ marginLeft: '5px' }}
         control={
           <Checkbox
+            data-testid={'user-save-gln-check-this'}
             checked={saveGln}
             onChange={(e) => setSaveGln(e.target.checked)}
             name="saveGln"
