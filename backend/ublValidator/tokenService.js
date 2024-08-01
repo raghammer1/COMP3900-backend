@@ -26,7 +26,6 @@ const fetchToken = async () => {
 
     return token;
   } catch (error) {
-    console.error('Error fetching token:', error);
     throw error;
   }
 };

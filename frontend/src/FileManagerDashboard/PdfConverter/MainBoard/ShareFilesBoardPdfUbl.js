@@ -194,15 +194,6 @@ const ShareFilesBoardPdfUbl = () => {
       } else {
         showAlert('Email sent successfully!', 'green'); // Show success alert if email sent
       }
-
-      console.log(result, 'RESDSDSDSDSDD');
-
-      console.log('Email:', email);
-      console.log('Subject:', subject);
-      console.log('Body:', body);
-      console.log('Selected Files:', selectedFiles);
-      console.log('File IDs:', fileIds);
-      console.log(fileIds, selectedFiles);
     } catch (error) {
       showAlert(
         'There was an error sending the email. Please try again.',

@@ -5,9 +5,7 @@ module.exports = {
     function () {
       return {
         visitor: {
-          Program(path) {
-            console.log('Instrumenting file:', path.hub.file.opts.filename);
-          },
+          Program(path) {},
         },
       };
     },

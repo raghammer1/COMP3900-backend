@@ -70,7 +70,6 @@ const FeatureCard = ({ hoverColor, info, type }) => {
 
   // Function to navigate to a specific route based on the card type
   const handleGoTo = () => {
-    console.log(type);
     if (type === 'Share') {
       nav('/dashboard/help');
     } else {

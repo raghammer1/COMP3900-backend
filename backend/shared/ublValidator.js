@@ -9,9 +9,7 @@ const validateUBL = async (validationErrors, selfFilledIssue = null) => {
     let pdfBytes = null;
 
     if (validationErrors.length === 1 && validationErrors[0]?.error === true) {
-      console.log('WOW I CAME HERE');
       pdfBytes = await invalidPdfProvidedPdfCreator();
-      console.log(pdfBytes);
     } else {
       // Generate PDF
       if (selfFilledIssue === null) {
@@ -51,7 +49,6 @@ const validateUBL = async (validationErrors, selfFilledIssue = null) => {
       });
     });
   } catch (error) {
-    console.log(`Error validating UBL file: ${error.message}, error`, error);
     // return res.status(500).json({
     //   error: `Error validating UBL file: ${error.message}`,
     // });

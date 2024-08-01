@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 const googleLogin = async (req, res) => {
   try {
     const { googleId, email, username, googlePicture } = req.body;
-    console.log(req.body);
 
     // Check if a user with the Google ID exists in the database
     let user = await User.findOne({ googleId });
@@ -49,8 +48,7 @@ const googleLogin = async (req, res) => {
       googleId: user.googleId,
       gln: user.gln,
     });
-  } catch (err) {
-    console.error('Error during Google OAuth login:', err);
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

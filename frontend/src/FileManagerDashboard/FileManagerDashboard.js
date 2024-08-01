@@ -105,7 +105,6 @@ const FileManagerDashboard = () => {
   useEffect(() => {
     const ans = getValidatorData();
     setUser(getUserData);
-    console.log(ans, 'THIS IS ANSwer', getUserData);
 
     async function fetchData() {
       try {
@@ -122,7 +121,6 @@ const FileManagerDashboard = () => {
         }
         setLoading(false);
       } catch (error) {
-        console.error('An unexpected error occurred:', error);
         showAlert(
           'An unexpected error occurred while fetching initial XML files. Please try again later.',
           'tomato'

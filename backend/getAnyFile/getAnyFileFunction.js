@@ -3,7 +3,6 @@ const { getGridFSBucket } = require('../db');
 
 const getAnyFileFunction = async (req, res) => {
   const fileId = req.query.fileId;
-  console.log(fileId, 'IUASHDIUAHSEYUGWIUYEGKQWEUYGWQIEUGQYWGE');
 
   if (!fileId) {
     return res.status(400).json({ error: 'File ID is required' });
@@ -23,7 +22,7 @@ const getAnyFileFunction = async (req, res) => {
     res.set('Content-Type', file.contentType);
     const downloadStream = gfs.openDownloadStream(_id);
     downloadStream.pipe(res);
-  } catch (err) {
+  } catch (  ) {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

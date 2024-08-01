@@ -176,15 +176,6 @@ const ShareFilesBoard = () => {
         userId: user._id,
       });
 
-      console.log(result, 'RESDSDSDSDSDD');
-
-      console.log('Email:', email);
-      console.log('Subject:', subject);
-      console.log('Body:', body);
-      console.log('Selected Files:', selectedFiles);
-      console.log('File IDs:', fileIds);
-      console.log(fileIds, selectedFiles);
-
       if (result.error) {
         showAlert(
           result.data.error ? result.data.error : 'Email not sent',

@@ -27,7 +27,7 @@ const resetPassword = async (req, res) => {
     await forgotPasswordModel.deleteOne({ token });
 
     res.status(200).send('Password reset successful');
-  } catch (err) {
+  } catch (  ) {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

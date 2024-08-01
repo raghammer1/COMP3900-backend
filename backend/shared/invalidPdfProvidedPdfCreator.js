@@ -24,8 +24,7 @@ const invalidPdfProvidedPdfCreator = async () => {
 
     const pdfBytes = await pdfDoc.save();
     return pdfBytes;
-  } catch (err) {
-    console.error('Error generating invalid PDF:', err);
+  } catch (  ) {
     return null;
   }
 };

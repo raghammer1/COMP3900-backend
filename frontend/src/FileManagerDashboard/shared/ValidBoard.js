@@ -29,7 +29,6 @@ const ValidBoard = ({ fileId }) => {
       try {
         // Fetch the file as an ArrayBuffer
         const arrayBuffer = await getAnyFile({ fileId });
-        console.log('File Response as ArrayBuffer:', arrayBuffer);
 
         // Check for errors in the response
         if (arrayBuffer.error) {
@@ -46,7 +45,6 @@ const ValidBoard = ({ fileId }) => {
           setPdfUrl(url); // Set the PDF URL in state
         }
       } catch (error) {
-        console.error('Error fetching PDF:', error);
         showAlert('Error fetching PDF', 'tomato'); // Show an alert if there is an error
       }
     };

@@ -62,7 +62,7 @@ const GoogleAuth = ({ setNewUser, newUser, goToDashboard }) => {
           // Finally, navigate to the dashboard
           goToDashboard();
         }
-        console.log('Google User Info:', userInfo);
+         
       }
     };
 
@@ -76,7 +76,7 @@ const GoogleAuth = ({ setNewUser, newUser, goToDashboard }) => {
   // Function to get the access token for the Google user
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => setNewUser(codeResponse),
-    onError: (error) => console.log('Login Failed:', error),
+    onError: (error) =>  ,
   });
 
   return (

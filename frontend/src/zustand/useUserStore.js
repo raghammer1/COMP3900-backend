@@ -22,7 +22,6 @@ const useUserStore = create((set, get) => ({
 
   // Function to clear the user data
   clearUser: () => {
-    console.log('Clearing user');
     set({ user: null });
   },
 

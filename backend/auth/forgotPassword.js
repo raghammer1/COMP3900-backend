@@ -13,20 +13,18 @@ const generateToken = () => {
 const forgotPassword = async (req, res) => {
   const email = req.body.email; // Extract the email from the request body
 
-  console.log(email); // Log the email for debugging
+  // Log the email for debugging
 
   if (!email) {
     // Check if email is provided
     return res.status(400).json({ error: 'Email is required' }); // Return an error if email is missing
   }
-  console.log(email);
 
   try {
     // Try to process the password reset request
     const User = await user.findOne({ email: email.toLowerCase() }); // Find the user by email
 
     const record = await forgotPasswordModel.findOne({ email }); // Check if there is already a reset request for this email
-    console.log(email);
 
     if (record) {
       // If a reset request already exists, calculate the remaining wait time
@@ -42,18 +40,13 @@ const forgotPassword = async (req, res) => {
         .status(400)
         .json({ error: `Retry after ${remainingTime} seconds` }); // Inform the user to retry later
     }
-    console.log(email);
 
     const token = generateToken(); // Generate a new token
     await forgotPasswordModel.create({ email, token }); // Save the token in the database
-    console.log(email);
 
     const resetLink = `http://localhost:3000/reset-password/${token}`; // Create a password reset link
-    console.log(email);
 
     let emailHTML = null; // Initialize the HTML content for the email
-
-    console.log(User);
 
     // Prepare different email content based on user type
     if (!User) {
@@ -68,7 +61,6 @@ const forgotPassword = async (req, res) => {
       // For regular users, provide the reset link
       emailHTML = `<div><img src="https://images.pexels.com/photos/15107263/pexels-photo-15107263/free-photo-of-night-sky-above-the-trees.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load"/><h1>Your OTP</h1><p>Please reset your password from here: <strong> <a href="${resetLink}">Reset Password</a></strong></p></div>`;
     }
-    console.log(email);
 
     // Set up mail options
     const mailOptions = {
@@ -78,11 +70,10 @@ const forgotPassword = async (req, res) => {
       text: `Reset your Password`, // Plain text message
       html: emailHTML, // HTML content
     };
-    console.log(email);
 
     await sendMail(mailOptions); // Send the email
     res.status(200).send(`OTP SENT TO ${email}`); // Respond with a success message
-  } catch (err) {
+  } catch (  ) {
     return res.status(500).json({ error: 'Server error, try again later' }); // Handle server errors
   }
 };

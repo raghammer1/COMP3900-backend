@@ -25,6 +25,4 @@ const option = {
 const spacs = swaggerjsdoc(option);
 app.use('/api-docs', swaggeruiexpress.serve, swaggeruiexpress.setup(spacs));
 
-app.listen(3005, () => {
-  console.log('Swagger running on http://localhost:3005/api-docs/');
-});
+app.listen(3005, () => {});

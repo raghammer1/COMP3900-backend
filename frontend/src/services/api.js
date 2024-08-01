@@ -15,7 +15,6 @@ export const register = async (data) => {
   try {
     return await apiClient.post('/auth/register', data);
   } catch (e) {
-    console.log(e);
     return { error: true, data: e.response.data };
   }
 };
@@ -88,7 +87,7 @@ export const validateUBL = async (formData) => {
         'Content-Type': 'multipart/form-data',
       },
     });
-    console.log(response);
+
     return response.data;
   } catch (error) {
     return { error: true, data: error.response.data };
@@ -107,7 +106,7 @@ export const changeProfilePhoto = async (formData) => {
         },
       }
     );
-    console.log(response);
+
     return response.data;
   } catch (error) {
     return { error: true, data: error.response.data };
@@ -129,7 +128,7 @@ export const getAllValidationUblInfo = async (data) => {
     const response = await apiClient.get('/validate/get-all-validation-data', {
       params: { userId: data.userId },
     });
-    console.log(response.data);
+
     return response.data.ublValidation;
   } catch (e) {
     return { error: true, data: e.response.data };
@@ -182,7 +181,7 @@ export const getAllPdfInfo = async (data) => {
     const response = await apiClient.get('/convert/get-all-convertion-data', {
       params: { userId: data.userId },
     });
-    console.log(response.data);
+
     return response.data.pdfUblValidation;
   } catch (error) {
     return { error: true, data: error.response.data };
@@ -198,7 +197,7 @@ export const deleteOnePdfInfo = async (data) => {
         params: { userId: data.userId, dataId: data.dataId },
       }
     );
-    console.log(response.data);
+
     return response.data;
   } catch (error) {
     return { error: true, data: error.response.data };
@@ -214,7 +213,7 @@ export const deleteOneValidationUblInfo = async (data) => {
         params: { userId: data.userId, dataId: data.dataId },
       }
     );
-    console.log(response.data);
+
     return response.data;
   } catch (error) {
     return { error: true, data: error.response.data };
@@ -228,10 +227,9 @@ export const getAnyFile = async (data) => {
       params: { fileId: data.fileId },
       responseType: 'arraybuffer',
     });
-    console.log(response.data);
+
     return response.data;
   } catch (error) {
-    console.log(error);
     return { error: true, data: error.response.data };
   }
 };
@@ -299,7 +297,6 @@ export async function getThoughtOfTheDay() {
 
     return thought;
   } catch (error) {
-    console.error('There was a problem with your fetch request:', error);
     return null;
   }
 }
@@ -327,7 +324,6 @@ export const fetchGoogleUserInfo = async (accessToken) => {
     );
     return response.data;
   } catch (error) {
-    console.error('Error fetching Google user info:', error);
     throw new Error('Failed to fetch Google user info');
   }
 };

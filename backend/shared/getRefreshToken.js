@@ -21,8 +21,6 @@ const authUrl = oauth2Client.generateAuthUrl({
   scope: scopes,
 });
 
-console.log('Authorize this app by visiting this url:', authUrl);
-
 const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
@@ -33,10 +31,6 @@ rl.question('Enter the code from that page here: ', async (code) => {
   try {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
-    console.log('Access Token:', tokens.access_token);
-    console.log('Refresh Token:', tokens.refresh_token);
-  } catch (error) {
-    console.error('Error retrieving access token', error);
-  }
+  } catch (error) {}
   rl.close();
 });

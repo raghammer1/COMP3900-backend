@@ -85,9 +85,7 @@ app.get('/get-history-email-by-id', auth, getUserEmailHistoryById);
 const server = http.createServer(app);
 
 connectDB().then(() => {
-  server.listen(PORT, () => {
-    console.log('Server running on port:', PORT);
-  });
+  server.listen(PORT, () => {});
 });
 
 module.exports = app;

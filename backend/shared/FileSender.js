@@ -91,7 +91,6 @@ const FileSender = async (req, res) => {
         const lolFuckPdf = pdfUblValidation.pdfId;
 
         if (lolFuckPdf instanceof mongoose.Types.ObjectId) {
-          console.log('pdfId is an ObjectId:', lolFuckPdf);
           const pdfFile = await getFileById(lolFuckPdf);
           attachments.push({
             filename: pdfFile.filename,
@@ -99,8 +98,6 @@ const FileSender = async (req, res) => {
             contentType: pdfFile.contentType,
           });
         } else if (typeof lolFuckPdf === 'object') {
-          console.log('pdfId is an object:', lolFuckPdf);
-
           const beautifiedJson = JSON.stringify(lolFuckPdf, null, 2);
 
           const jsonBuffer = Buffer.from(beautifiedJson, 'utf-8');
@@ -147,7 +144,6 @@ const FileSender = async (req, res) => {
 
     await MailSender(mailOptions);
 
-    console.log(sharedObjId);
     const newHistoryObj = {
       email: email,
       subject: sub,
@@ -168,7 +164,6 @@ const FileSender = async (req, res) => {
       .status(200)
       .send({ message: 'Email sent with attachments successfully' });
   } catch (error) {
-    console.error('Failed to send email with attachments:', error);
     res.status(400).json({ error: `Failed to send email: ${error.message}` });
   }
 };

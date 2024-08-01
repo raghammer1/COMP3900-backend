@@ -5,7 +5,7 @@ const deleteUser = async (req, res) => {
   try {
     // Extracting the email from the request parameters
     let email = req.params.email;
-    console.log('CAME HERE TO DELETE USER', email); // Logging for debugging
+    // Logging for debugging
 
     // Convert email to lowercase to ensure consistency in queries
     email = email.toLowerCase();
@@ -18,9 +18,9 @@ const deleteUser = async (req, res) => {
       return res.status(404).send({ message: 'User not found' }); // Respond with 404
     }
 
-    console.log('User deleted successfully'); // User successfully deleted
+    // User successfully deleted
     res.status(200).send({ message: 'User deleted successfully' }); // Respond with success message
-  } catch (err) {
+  } catch (  ) {
     // Handle server errors
     return res.status(500).json({ error: 'Server error, try again later' });
   }

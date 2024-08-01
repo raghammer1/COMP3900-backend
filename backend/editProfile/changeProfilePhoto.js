@@ -31,7 +31,6 @@ const changeProfilePhoto = async (req, res) => {
     fileStream.pipe(uploadStream);
 
     uploadStream.on('error', (error) => {
-      console.error('Error uploading image to GridFS:', error);
       return res.status(500).json({ error: 'Error uploading image' });
     });
 
@@ -55,11 +54,10 @@ const changeProfilePhoto = async (req, res) => {
           googlePicture: updatedUser.googlePicture,
         });
       } catch (updateError) {
-        console.error('Error updating user with image URL:', updateError);
         res.status(500).json({ error: 'Error updating user with image URL' });
       }
     });
-  } catch (err) {
+  } catch (  ) {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

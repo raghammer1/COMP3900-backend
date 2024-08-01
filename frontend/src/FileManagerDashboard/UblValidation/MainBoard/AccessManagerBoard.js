@@ -69,8 +69,6 @@ const AccessManagerBoard = () => {
   // Handler to submit the access request
   const handleSubmit = async () => {
     const data = getValidatorDataById(id); // Get validator data by ID
-    console.log(data, id);
-    console.log('Access granted to:', email);
 
     const response = await giveAccessValidationUbl({
       email,
@@ -82,7 +80,6 @@ const AccessManagerBoard = () => {
     });
 
     setOpen(false); // Close the dialog after submission
-    console.log(response, 'LOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOLOL');
 
     // Show alert based on the response
     if (response.error) {
@@ -128,7 +125,8 @@ const AccessManagerBoard = () => {
           data-testid={'access-manager-validate-submit'}
           variant="contained"
           color="primary"
-          onClick={handleClickOpen}>
+          onClick={handleClickOpen}
+        >
           Give Access
         </Button>
       </FormContainer>
@@ -158,7 +156,8 @@ const AccessManagerBoard = () => {
           <Button
             data-testid={'access-manager-validate-submit-yes'}
             onClick={handleSubmit}
-            color="primary">
+            color="primary"
+          >
             Yes
           </Button>
         </DialogActions>

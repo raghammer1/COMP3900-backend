@@ -19,5 +19,3 @@ if (!semver.satisfies(npmVersion, engines.npm)) {
   );
   process.exit(1);
 }
-
-console.log('Node.js and npm versions are correct.');

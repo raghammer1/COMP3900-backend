@@ -10,7 +10,6 @@ const giveAccessValidationUbl = async (req, res) => {
     const User = await user.findOne({ email });
 
     if (!User) {
-      console.log('User not found');
       return res.status(404).json({ error: "This user doesn't exist" });
     }
 
@@ -43,10 +42,8 @@ const giveAccessValidationUbl = async (req, res) => {
       return res.status(500).json({ error: 'Error updating user' });
     }
 
-    console.log(req.body);
     return res.status(200).json({ message: 'Access Granted' });
   } catch (error) {
-    console.error('Error in giveAccessValidationUbl:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };

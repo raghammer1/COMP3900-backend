@@ -24,8 +24,6 @@ const postLogin = async (req, res) => {
         maxAge: 24 * 60 * 60 * 1000,
       });
 
-      console.log(user, 'THIS IS USER');
-
       return res.status(201).json({
         username: user.username,
         email: user.email,
@@ -35,7 +33,7 @@ const postLogin = async (req, res) => {
       });
     }
     return res.status(400).json({ error: 'Invalid Credential' });
-  } catch (err) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
