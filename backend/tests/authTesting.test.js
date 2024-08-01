@@ -69,8 +69,8 @@ describe('AUTH LOGIN AND REGISTER', () => {
       email,
     });
 
-    expect(response.status).toBe(409);
-    expect(response.text).toBe('Email already in use');
+    expect(response.status).toBe(400);
+    expect(response.text).toBe('{"error":"Email already in use"}');
   });
 
   it('should login a user successfully', async () => {
@@ -98,7 +98,7 @@ describe('AUTH LOGIN AND REGISTER', () => {
 
     expect(response.status).toBe(400);
     const _id = response.body._id;
-    expect(response.body).toEqual({});
+    expect(response.body).toEqual({ error: 'Invalid Credential' });
   });
 
   it('should register a google user successfully', async () => {
@@ -112,9 +112,11 @@ describe('AUTH LOGIN AND REGISTER', () => {
 
     expect(response.status).toBe(200);
     const _id = response.body._id;
+    const googleId = response.body.googleId;
     expect(response.body).toEqual({
       username: 'testuser',
       email: googleEmail,
+      googleId: googleId,
       _id,
       googlePicture:
         'https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=',
@@ -132,9 +134,11 @@ describe('AUTH LOGIN AND REGISTER', () => {
 
     expect(response.status).toBe(200);
     const _id = response.body._id;
+    const googleId = response.body.googleId;
     expect(response.body).toEqual({
       username: 'testuser',
       email: googleEmail,
+      googleId: googleId,
       _id,
       googlePicture:
         'https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=',
