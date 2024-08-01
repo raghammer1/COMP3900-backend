@@ -19,7 +19,7 @@ const getUserEmailHistoryById = async (req, res) => {
         .status(404)
         .json({ error: 'Share the file to view email history.' });
     }
-  } catch (  ) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

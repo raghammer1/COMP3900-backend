@@ -29,7 +29,7 @@ const deleteUserAccount = async (req, res) => {
         return res.status(400).json({ error: 'Invalid Password' }); // Password mismatch
       }
     }
-  } catch (  ) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' }); // Handle server errors
   }
 };

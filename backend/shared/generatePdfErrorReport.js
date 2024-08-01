@@ -167,7 +167,7 @@ Status: ${error.flag === 'fatal' ? 'Failed' : 'Passed'}
 
     const pdfBytes = await pdfDoc.save();
     return pdfBytes;
-  } catch (  ) {
+  } catch {
     return null;
   }
 };

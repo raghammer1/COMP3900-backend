@@ -12,14 +12,14 @@ const getImage = async (req, res) => {
       res.write(chunk);
     });
 
-    downloadStream.on('error', (  ) => {
+    downloadStream.on('error',  => {
       res.status(500).json({ error: 'Error retrieving image' });
     });
 
     downloadStream.on('end', () => {
       res.end();
     });
-  } catch (  ) {
+  } catch  {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

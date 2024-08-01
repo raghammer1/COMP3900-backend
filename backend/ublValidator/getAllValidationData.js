@@ -15,7 +15,7 @@ const getAllValidationData = async (req, res) => {
     }
 
     res.json({ ublValidation: User.ublValidation });
-  } catch (  ) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

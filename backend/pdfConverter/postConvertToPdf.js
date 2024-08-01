@@ -242,7 +242,7 @@ const postConvertToPdf = async (req, res) => {
           .json({ error: 'File upload did not finish as expected' });
       }
     }, 30000); // Adjust the timeout value as needed
-  } catch (  ) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

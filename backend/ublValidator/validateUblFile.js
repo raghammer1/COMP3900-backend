@@ -144,7 +144,7 @@ const validateUblFile = async (req, res) => {
     });
 
     fileStream.pipe(uploadStream);
-  } catch (  ) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

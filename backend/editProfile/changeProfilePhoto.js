@@ -57,7 +57,7 @@ const changeProfilePhoto = async (req, res) => {
         res.status(500).json({ error: 'Error updating user with image URL' });
       }
     });
-  } catch (  ) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

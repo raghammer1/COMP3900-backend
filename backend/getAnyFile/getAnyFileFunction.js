@@ -22,7 +22,7 @@ const getAnyFileFunction = async (req, res) => {
     res.set('Content-Type', file.contentType);
     const downloadStream = gfs.openDownloadStream(_id);
     downloadStream.pipe(res);
-  } catch (  ) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

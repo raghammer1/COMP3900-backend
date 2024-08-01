@@ -12,7 +12,7 @@ const connectDB = async () => {
     });
 
     return conn;
-  } catch (  ) {
+  } catch {
     process.exit(1);
   }
 };
@@ -27,7 +27,7 @@ const getGridFSBucket = () => {
 const disconnectDB = async () => {
   try {
     await mongoose.disconnect();
-  } catch (  ) {
+  } catch {
     process.exit(1);
   }
 };

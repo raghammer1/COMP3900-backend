@@ -20,7 +20,7 @@ const deleteUser = async (req, res) => {
 
     // User successfully deleted
     res.status(200).send({ message: 'User deleted successfully' }); // Respond with success message
-  } catch (  ) {
+  } catch {
     // Handle server errors
     return res.status(500).json({ error: 'Server error, try again later' });
   }

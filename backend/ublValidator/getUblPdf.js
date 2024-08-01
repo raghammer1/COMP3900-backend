@@ -35,7 +35,7 @@ const getUblPdf = async (req, res) => {
     // Pipe the streams to the response
     // ublStream.pipe(res);
     validatorStream.pipe(res);
-  } catch (  ) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

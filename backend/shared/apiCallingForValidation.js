@@ -38,7 +38,7 @@ const apiCallingForValidation = async (
       response.data.report.reports.AUNZ_PEPPOL_1_0_10.firedAssertionErrors;
 
     return validationErrors;
-  } catch (  ) {
+  } catch {
     throw new Error('API validation failed');
   }
 };

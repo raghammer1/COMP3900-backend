@@ -19,7 +19,7 @@ const changeUsername = async (req, res) => {
     await User.save();
 
     return res.status(200).json({ message: 'Username updated successfully' });
-  } catch (  ) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

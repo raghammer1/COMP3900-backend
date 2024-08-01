@@ -146,7 +146,7 @@ const postConvertGuiForm = async (req, res) => {
       validationJson: json,
       validationHtml: html,
     });
-  } catch (  ) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

@@ -24,7 +24,7 @@ const invalidPdfProvidedPdfCreator = async () => {
 
     const pdfBytes = await pdfDoc.save();
     return pdfBytes;
-  } catch (  ) {
+  } catch {
     return null;
   }
 };
