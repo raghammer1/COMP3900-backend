@@ -20,6 +20,7 @@ const SelectorContainer = styled('div')(() => ({
   paddingLeft: '20px',
   paddingRight: '20px',
   alignContent: 'center',
+  zIndex: 1000,
 }));
 
 // This is the styling for the first part of the selector container
@@ -49,7 +50,7 @@ const StyledLogoutButton = styled(Button)(({ theme }) => ({
 }));
 
 // The component that contains the left-hand side selectors on the main dashboard for user's navigation on the main dashboard
-const MainSelectors = ({ handleLogout }) => {
+const MainSelectors = ({ handleLogout, setDrawerOpen }) => {
   const { process } = useParams();
   const [selectedRoute, setSelectedRoute] = useState('');
 
@@ -78,28 +79,43 @@ const MainSelectors = ({ handleLogout }) => {
           routeTo="/dashboard/main"
           text="Dashboard"
           isSelected={selectedRoute === '/dashboard/main'}
-          onClick={() => setSelectedRoute('/dashboard/main')}
+          onClick={() => {
+            setDrawerOpen(false);
+            setSelectedRoute('/dashboard/main');
+          }}
           icon={<DashboardIcon />}
         />
         <SelectorLinks
           routeTo="/dashboard/validate"
           text="Validate"
+          dataTestId={'goto-validate-dashboard'}
           isSelected={selectedRoute === '/dashboard/validate'}
-          onClick={() => setSelectedRoute('/dashboard/validate')}
+          onClick={() => {
+            setDrawerOpen(false);
+            setSelectedRoute('/dashboard/validate');
+          }}
           icon={<CheckCircleIcon />}
         />
         <SelectorLinks
           routeTo="/dashboard/convert"
           text="Convert"
+          dataTestId={'goto-convert-dashboard'}
           isSelected={selectedRoute === '/dashboard/convert'}
-          onClick={() => setSelectedRoute('/dashboard/convert')}
+          onClick={() => {
+            setDrawerOpen(false);
+            setSelectedRoute('/dashboard/convert');
+          }}
           icon={<SwapHorizIcon />}
         />
         <SelectorLinks
           routeTo="/dashboard/settings"
           text="Settings"
+          dataTestId={'goto-settings-dashboard'}
           isSelected={selectedRoute === '/dashboard/settings'}
-          onClick={() => setSelectedRoute('/dashboard/settings')}
+          onClick={() => {
+            setDrawerOpen(false);
+            setSelectedRoute('/dashboard/settings');
+          }}
           additionalStyle={{ marginTop: '50px' }}
           icon={<SettingsIcon />}
         />
@@ -108,16 +124,19 @@ const MainSelectors = ({ handleLogout }) => {
         <SelectorLinks
           routeTo="/dashboard/help"
           text="Help"
+          dataTestId={'goto-help-dashboard'}
           isSelected={selectedRoute === '/dashboard/help'}
-          onClick={() => setSelectedRoute('/dashboard/help')}
+          onClick={() => {
+            setDrawerOpen(false);
+            setSelectedRoute('/dashboard/help');
+          }}
           icon={<HelpIcon />}
         />
         <StyledLogoutButton
           variant="contained"
           startIcon={<LogoutIcon />}
           onClick={handleLogout}
-          data-testid={'logout-button'}
-        >
+          data-testid={'logout-button'}>
           Logout
         </StyledLogoutButton>
       </SelectorContainer2>

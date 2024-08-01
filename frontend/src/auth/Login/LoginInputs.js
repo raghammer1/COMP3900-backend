@@ -61,6 +61,9 @@ const LoginInputs = ({ goToDashboard }) => {
       style={{
         padding: '40px',
         width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
       }}
     >
       <p style={{ margin: '0', fontSize: '12.8px' }}>WELCOME BACK</p>
@@ -75,6 +78,7 @@ const LoginInputs = ({ goToDashboard }) => {
         Log In to your Account
       </h2>
       <CustomInputBox
+        style={{ width: '80%' }}
         placeholder="johnsondoe@nomail.com"
         label="Email"
         type="text"
@@ -84,7 +88,7 @@ const LoginInputs = ({ goToDashboard }) => {
         data-testid={'login-email'}
       />
       <CustomInputBox
-        style={{ marginTop: '30px' }}
+        style={{ marginTop: '30px', width: '80%' }}
         placeholder="########"
         label="Password"
         type="password"
@@ -107,7 +111,7 @@ const LoginInputs = ({ goToDashboard }) => {
       />
 
       <RedirectToRegister />
-      <div style={{ marginTop: '30px' }}>
+      <div style={{ marginTop: '30px', width: '90%' }}>
         <GoogleAuth
           setNewUser={setNewUser}
           newUser={newUser}

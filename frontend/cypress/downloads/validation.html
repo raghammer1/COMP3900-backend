@@ -1,0 +1,107 @@
+
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Invoice Errors</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          h1, h2 {
+            color: #000;
+            text-align: center;
+          }
+          .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 80vw;
+            width: 100%;
+            margin: 0 auto;
+            box-sizing: border-box;
+          }
+          .error-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid red;
+            word-wrap: break-word;
+            max-width: 100%;
+          }
+          .error-card.fatal {
+            border-left-color: red;
+            background-color: #ffe6e6;
+          }
+          .error-card.warning {
+            border-left-color: orange;
+            background-color: #fff4e6;
+          }
+          .error-card h3 {
+            margin-top: 0;
+            color: #651FFF;
+          }
+          .error-card p {
+            margin: 5px 0;
+          }
+          ul {
+            list-style-type: none;
+            padding: 0;
+          }
+          li {
+            background-color: #f9f9f9;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          }
+          .no-errors {
+            text-align: center;
+            color: green;
+            font-weight: bold;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Invoice Errors</h1>
+          <div class="errors">
+            
+          <div class="error-card">
+            <h3>Error ID: PEPPOL-EN16931-R008</h3>
+            <p><strong>Description:</strong> Document MUST not contain empty elements.</p>
+            <p><strong>Location:</strong> /*:schema[namespace-uri()='http://www.w3.org/2001/XMLSchema'][1]/*:import[namespace-uri()='http://www.w3.org/2001/XMLSchema'][1]</p>
+            <p><strong>Test:</strong> false()</p>
+            <p><strong>Flag:</strong> fatal</p>
+          </div>
+        
+          <div class="error-card">
+            <h3>Error ID: PEPPOL-EN16931-R008</h3>
+            <p><strong>Description:</strong> Document MUST not contain empty elements.</p>
+            <p><strong>Location:</strong> /*:schema[namespace-uri()='http://www.w3.org/2001/XMLSchema'][1]/*:import[namespace-uri()='http://www.w3.org/2001/XMLSchema'][2]</p>
+            <p><strong>Test:</strong> false()</p>
+            <p><strong>Flag:</strong> fatal</p>
+          </div>
+        
+          <div class="error-card">
+            <h3>Error ID: PEPPOL-EN16931-R008</h3>
+            <p><strong>Description:</strong> Document MUST not contain empty elements.</p>
+            <p><strong>Location:</strong> /*:schema[namespace-uri()='http://www.w3.org/2001/XMLSchema'][1]/*:import[namespace-uri()='http://www.w3.org/2001/XMLSchema'][3]</p>
+            <p><strong>Test:</strong> false()</p>
+            <p><strong>Flag:</strong> fatal</p>
+          </div>
+        
+          </div>
+          
+        </div>
+      </body>
+      </html>
+    

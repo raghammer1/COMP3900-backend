@@ -1,3 +1,4 @@
+import React from 'react';
 import { styled } from '@mui/system';
 
 // Styling for the input group container
@@ -57,6 +58,7 @@ const VendorInformation = ({
           Name: <span style={{ color: 'red' }}>*</span>
         </Label>
         <Input
+          data-testid={'text-name'}
           type="text"
           name="name"
           value={invoice.vendor.name}
@@ -73,6 +75,7 @@ const VendorInformation = ({
           Address: <span style={{ color: 'red' }}>*</span>
         </Label>
         <Input
+          data-testid={'text-address'}
           type="text"
           name="address"
           value={invoice.vendor.address}
@@ -89,6 +92,7 @@ const VendorInformation = ({
           VAT Number: <span style={{ color: 'red' }}>*</span>
         </Label>
         <Input
+          data-testid={'text-vat_number'}
           type="text"
           name="vat_number"
           value={invoice.vendor.vat_number}

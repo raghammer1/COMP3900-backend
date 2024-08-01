@@ -1,3 +1,4 @@
+import React from 'react';
 import { styled, keyframes } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';

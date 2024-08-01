@@ -42,7 +42,7 @@ const modalStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 500,
+  width: 315,
   bgcolor: '#f9f9f9',
   borderRadius: '10px',
   boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
@@ -67,6 +67,7 @@ const FileInput = styled('input')({
   border: '1px solid #ccc',
   borderRadius: '5px',
   transition: 'border-color 0.3s ease',
+  width: '295px',
   '&:focus': {
     borderColor: '#007BFF',
   },
@@ -110,11 +111,14 @@ const UblUploadBox = ({ handleUpload }) => {
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
+        aria-describedby="modal-description">
         <Box sx={modalStyle}>
           <ModalHeader id="modal-title">Upload XML</ModalHeader>
           <CustomInputBox
+            dataTestId={'validate-upload-name'}
+            style={{
+              width: '270px',
+            }}
             value={name}
             setValue={setName}
             type="text"
@@ -122,6 +126,7 @@ const UblUploadBox = ({ handleUpload }) => {
             placeholder="File A"
           />
           <FileInput
+            data-testid={'validate-upload-file'}
             type="file"
             accept="text/xml"
             onChange={handleFileChange}
@@ -131,7 +136,7 @@ const UblUploadBox = ({ handleUpload }) => {
             label="Upload"
             bgcolour="#651FFF"
             additionalStyle={{
-              width: '92%',
+              width: '315px',
               height: '50px',
               fontSize: '13px',
             }}

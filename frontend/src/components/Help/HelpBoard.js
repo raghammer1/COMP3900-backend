@@ -2,8 +2,8 @@ import React, { useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import ValidateUblHelp from './ValidateUblHelp';
 import ConvertPdfInvoice from './ConvertPdfInvoice';
-import { AppBar, Toolbar, Button } from '@mui/material';
 import ShareFilesHelp from './ShareFilesHelp';
+import { Select, MenuItem, FormControl } from '@mui/material';
 
 // This is a styled container for the main content
 const StyledContainer = styled('div')(({ theme }) => ({
@@ -13,15 +13,6 @@ const StyledContainer = styled('div')(({ theme }) => ({
   padding: theme.spacing(4),
   height: '80vh',
   overflowY: 'auto',
-}));
-
-// This is a styled AppBar for the navigation bar
-const Navbar = styled(AppBar)(({ theme }) => ({
-  position: 'sticky',
-  top: '-30px',
-  backgroundColor: '#fff',
-  color: 'white',
-  zIndex: theme.zIndex.drawer + 1,
 }));
 
 // This is a styled section for individual help components
@@ -38,44 +29,49 @@ const HelpBoard = () => {
     ref.current.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Handler for dropdown menu selection
+  const handleSelectChange = (event) => {
+    const sectionMap = {
+      validateUblHelp: validateUblHelpRef,
+      convertPdfInvoice: convertPdfInvoiceRef,
+      shareFilesHelp: shareFilesHelp,
+    };
+    scrollToSection(sectionMap[event.target.value]);
+  };
+
   return (
     <StyledContainer>
-      <Navbar>
-        <Toolbar style={{ display: 'flex', justifyContent: 'center' }}>
-          {/* Button to scroll to ValidateUblHelp section */}
-          <Button
-            color="inherit"
-            onClick={() => scrollToSection(validateUblHelpRef)}
-            style={{
-              fontWeight: '900',
-              backgroundColor: '#651fff',
-              marginRight: '20px',
-            }}
-          >
-            Validate UBL Help
-          </Button>
-          {/* Button to scroll to ConvertPdfInvoice section */}
-          <Button
-            color="inherit"
-            onClick={() => scrollToSection(convertPdfInvoiceRef)}
-            style={{
-              fontWeight: '900',
-              backgroundColor: '#651fff',
-              marginRight: '20px',
-            }}
-          >
-            Convert PDF Invoice
-          </Button>
-          {/* Button to scroll to ShareFilesHelp section */}
-          <Button
-            color="inherit"
-            onClick={() => scrollToSection(shareFilesHelp)}
-            style={{ fontWeight: '900', backgroundColor: '#651fff' }}
-          >
-            Share File Help
-          </Button>
-        </Toolbar>
-      </Navbar>
+      <FormControl
+        variant="outlined"
+        sx={{
+          position: 'sticky',
+          top: '0px',
+          right: '20px',
+          zIndex: 999,
+          alignSelf: 'flex-end',
+        }}
+      >
+        <Select
+          displayEmpty
+          defaultValue=""
+          onChange={handleSelectChange}
+          sx={{
+            fontWeight: '900',
+            backgroundColor: '#651fff',
+            color: '#fff',
+            '& .MuiSelect-icon': {
+              color: '#fff',
+            },
+          }}
+        >
+          <MenuItem value="" disabled>
+            Go to...
+          </MenuItem>
+          <MenuItem value="validateUblHelp">Validate UBL Help</MenuItem>
+          <MenuItem value="convertPdfInvoice">Convert PDF Invoice</MenuItem>
+          <MenuItem value="shareFilesHelp">Share File Help</MenuItem>
+        </Select>
+      </FormControl>
       {/* Section for ValidateUblHelp */}
       <Section ref={validateUblHelpRef}>
         <ValidateUblHelp />

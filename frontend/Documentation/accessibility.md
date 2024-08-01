@@ -1,4 +1,3 @@
-````markdown
 # Ensuring Accessibility in our Frontend Development
 
 Ensuring accessibility in our frontend applications is a priority to provide an inclusive experience for all users, including those with disabilities. By incorporating accessibility best practices, we make our application more usable and accessible to a broader audience. Here are some ways we achieve this:
@@ -15,7 +14,6 @@ Using semantic HTML elements helps screen readers and other assistive technologi
   Oops! Looks like this page is as lost as an unfiled invoice.
 </Typography>
 ```
-````
 
 ## ARIA Attributes
 

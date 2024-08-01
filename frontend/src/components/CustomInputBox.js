@@ -40,6 +40,7 @@ const CustomInputBox = ({
   placeholder,
   label,
   additionalStyles,
+  dataTestId = null,
   ...props
 }) => {
   // Function to handle the input change
@@ -50,6 +51,7 @@ const CustomInputBox = ({
   return (
     <InputContainer style={{ ...style, ...additionalStyles }}>
       <StyledInput
+        data-testid={dataTestId}
         value={value}
         onChange={handleOnChange}
         placeholder={placeholder}

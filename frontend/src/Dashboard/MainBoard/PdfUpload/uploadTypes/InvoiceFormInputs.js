@@ -1,3 +1,4 @@
+import React from 'react';
 import { styled } from '@mui/system';
 
 // Styling for the input group container
@@ -44,13 +45,20 @@ const InvoiceFormInputs = ({
   value, // Current value of the input field
   name, // Name attribute for the input field
   required, // Boolean to indicate if the field is required
+  dataTestId,
 }) => {
   return (
     <InputGroup>
       <Label>
         {label} {required ? <span style={{ color: 'red' }}>*</span> : null}
       </Label>
-      <Input type={type} name={name} value={value} onChange={handleChange} />
+      <Input
+        data-testid={dataTestId}
+        type={type}
+        name={name}
+        value={value}
+        onChange={handleChange}
+      />
       {required && error && <ErrorMessage>{error}</ErrorMessage>}
     </InputGroup>
   );

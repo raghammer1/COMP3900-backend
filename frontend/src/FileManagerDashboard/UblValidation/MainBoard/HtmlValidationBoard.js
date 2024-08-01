@@ -20,6 +20,7 @@ const HtmlValidationBoard = ({ htmlContent }) => {
     <div style={{ maxHeight: '80vh' }}>
       {/* Download button */}
       <CustomPrimaryButton
+        dataTestid={'download-html'}
         label="Download HTML"
         bgcolour="#651FFF"
         additionalStyle={{ marginBottom: '10px', width: 'fit-content' }}

@@ -208,6 +208,7 @@ const ShareFilesBoard = () => {
       <FormContainer>
         {/* Input field for email address */}
         <CustomInputBox
+          dataTestId={'email-share-board'}
           value={email}
           setValue={setEmail}
           label="Email Address"
@@ -216,6 +217,7 @@ const ShareFilesBoard = () => {
         />
         {/* Input field for email subject */}
         <CustomInputBox
+          dataTestId={'subject-share-board'}
           value={subject}
           setValue={setSubject}
           label="Email Subject"
@@ -224,6 +226,7 @@ const ShareFilesBoard = () => {
         <TextareaContainer>
           {/* Textarea for email body */}
           <StyledTextarea
+            data-testid={'body-share-board'}
             value={body}
             onChange={(e) => setBody(e.target.value)}
             placeholder="Enter email body"
@@ -237,6 +240,7 @@ const ShareFilesBoard = () => {
             <FormControlLabel
               control={
                 <Checkbox
+                  data-testid={'share-validate-xml'}
                   checked={selectedFiles.xml}
                   onChange={handleCheckboxChange}
                   name="xml"
@@ -249,6 +253,7 @@ const ShareFilesBoard = () => {
             <FormControlLabel
               control={
                 <Checkbox
+                  data-testid={'share-validate-validator'}
                   checked={selectedFiles.validatorPdf}
                   onChange={handleCheckboxChange}
                   name="validatorPdf"
@@ -264,6 +269,7 @@ const ShareFilesBoard = () => {
           <LoadingAnimation>SENDING...</LoadingAnimation>
         ) : (
           <CustomPrimaryButton
+            dataTestid={'confirm-send-validate-email'}
             label="Send Email"
             onClick={handleSubmit}
             bgcolour="#007BFF"

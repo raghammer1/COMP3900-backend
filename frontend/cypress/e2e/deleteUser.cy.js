@@ -3,6 +3,7 @@ describe('template spec', () => {
     cy.visit('http://localhost:3000/');
   });
 });
+
 describe('Auth Testing', () => {
   let uniqueEmail;
   let timestamp;
@@ -31,36 +32,14 @@ describe('Auth Testing', () => {
 
     cy.wait(1000);
 
-    cy.get('[data-testid="logout-button"]').click();
-  });
+    // Navigating to the validate page
+    // cy.visit('/dashboard/validate');
+    cy.get('[data-testid="goto-settings-dashboard"]').click();
+    cy.get('[data-testid="delete-profile-button"]').click();
 
-  it('allows a user to login', () => {
-    cy.visit('/login');
-    cy.viewport(1500, 1000);
+    cy.get('[data-testid="delete-user-password-final"]').type('T@123timestamp');
 
-    // Logging in same user and going to the dashboard
-    cy.get('[data-testid="login-email"]').type(uniqueEmail);
-    cy.get('[data-testid="login-password"]').type('T@123timestamp');
-    cy.get('[data-testid="login-submit"]').click();
-
-    cy.url().should('include', '/dashboard');
-
-    cy.visit('/');
-    cy.visit('/dashboard/main');
-
+    cy.get('[data-testid="submit-delete-user-button"]').click();
     cy.wait(1000);
-
-    cy.get('[data-testid="logout-button"]').click();
-  });
-
-  after(() => {
-    // Making a request to delete the user after each test
-    cy.request({
-      method: 'DELETE',
-      url: `http://localhost:5003/auth/delete-user/${uniqueEmail}`,
-      failOnStatusCode: false,
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-    });
   });
 });
