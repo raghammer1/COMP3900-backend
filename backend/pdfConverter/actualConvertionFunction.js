@@ -15,7 +15,7 @@ const client_secret =
 const username = 'unwindingcuriousity';
 const api_key = '44d3a7a654bd418fe07a948d7e54e7b2';
 
-// The endpoint URL for uploading documents
+// The endpoint URL for uploading documentss
 const url = 'https://api.veryfi.com/api/v7/partner/documents/';
 
 // Headers
