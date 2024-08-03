@@ -10,4 +10,6 @@ module.exports = {
     },
   },
   transformIgnorePatterns: ['/node_modules/(?!(bson)/)'],
+
+  transformIgnorePatterns: ['node_modules/(?!(chai|some-other-package)/)'],
 };

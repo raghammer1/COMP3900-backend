@@ -51,7 +51,12 @@ const GoogleAuth = ({ setNewUser, newUser, goToDashboard }) => {
 
         if (response.error) {
           // Show error alert if login fails
-          showAlert(response.data.error, 'tomato');
+          showAlert(
+            response.data.error
+              ? response.data.error
+              : 'Error occurred try again later',
+            'tomato'
+          );
         } else {
           // Show success alert and log user in if everything works successfully
           showAlert(`Welcome ${userInfo.name}`, 'green');
