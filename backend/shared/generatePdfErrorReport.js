@@ -64,13 +64,6 @@ const generateErrorReportPDF = async (errors, selfFilledIssue = null) => {
       errors.length === 0 &&
       (selfFilledIssue === null || selfFilledIssue.length === 0)
     ) {
-      // page.drawText('No Errors were found, your UBL is valid', {
-      //   x: 50,
-      //   y: height / 2 + fontSize,
-      //   size: fontSize,
-      //   font: timesRomanFont,
-      //   color: rgb(0, 0, 0),
-      // });
       let drawResult = drawHeader(
         'No Errors were found, your UBL is valid',
         marginLeft,
@@ -167,8 +160,7 @@ Status: ${error.flag === 'fatal' ? 'Failed' : 'Passed'}
 
     const pdfBytes = await pdfDoc.save();
     return pdfBytes;
-  } catch (err) {
-    console.error('Error generating PDF:', err);
+  } catch {
     return null;
   }
 };

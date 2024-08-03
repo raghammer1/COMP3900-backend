@@ -26,8 +26,6 @@ const apiCallingForValidation = async (
       contentType: mimeType,
     });
 
-    console.log('validationErrors');
-
     const response = await axios.post(validationUrl, form, {
       headers: {
         Authorization: `Bearer ${apiKey}`,
@@ -36,13 +34,10 @@ const apiCallingForValidation = async (
       },
     });
 
-    console.log('validationErrors');
     const validationErrors =
       response.data.report.reports.AUNZ_PEPPOL_1_0_10.firedAssertionErrors;
-    console.log(validationErrors);
     return validationErrors;
-  } catch (err) {
-    console.log(err);
+  } catch {
     throw new Error('API validation failed');
   }
 };

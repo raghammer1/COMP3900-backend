@@ -19,7 +19,6 @@ const validateUblFile = async (req, res) => {
 
     const userId = req.body?.userId;
     const name = req.body?.name;
-    console.log('name', name);
 
     if (!userId || !name) {
       return res.status(404).json({ error: 'Name not provided.' });
@@ -79,8 +78,6 @@ const validateUblFile = async (req, res) => {
         // Step 2: Validate the UBL file and get validatorId
         const validatorId = await validateUBL(validationErrors);
 
-        console.log('HERE');
-
         let html = defaultHtml;
         let json = defaultJson;
         if (
@@ -92,7 +89,6 @@ const validateUblFile = async (req, res) => {
         } else {
           html = generateHtml(validationErrors, []);
           json = { validationErrors: validationErrors };
-          console.log('HERE', validationErrors);
         }
 
         const ublValidationObject = {
@@ -137,7 +133,6 @@ const validateUblFile = async (req, res) => {
           validationJson: json,
         });
       } catch (updateError) {
-        console.log(updateError);
         res
           .status(updateError.response ? updateError.response.status : 500)
           .json({
@@ -149,7 +144,7 @@ const validateUblFile = async (req, res) => {
     });
 
     fileStream.pipe(uploadStream);
-  } catch (err) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

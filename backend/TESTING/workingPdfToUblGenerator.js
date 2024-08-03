@@ -41,11 +41,8 @@ async function uploadInvoice() {
     const response = await axios.post(url, formData, {
       headers: { ...headers, ...formHeaders },
     });
-    console.log('Conversion successful!');
     return response.data; // This will be the JSON representation of your invoice
-  } catch (error) {
-    console.error('Failed to convert PDF to JSON:', error.response.status);
-    console.error(error.response.data);
+  } catch {
     return null;
   }
 }
@@ -53,7 +50,6 @@ async function uploadInvoice() {
 // Function to convert JSON to UBL XML
 function createUblInvoice(json) {
   if (!json) {
-    console.error('No JSON data provided');
     return;
   }
 
@@ -269,7 +265,6 @@ function createUblInvoice(json) {
 (async () => {
   const jsonData = await uploadInvoice();
   const ublInvoice = createUblInvoice(jsonData);
-  console.log(ublInvoice);
 
   // Save the XML to a file
   if (ublInvoice) {

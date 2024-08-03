@@ -1,11 +1,7 @@
 // Function to convert JSON to UBL XML
-const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
 const { create } = require('xmlbuilder2');
 function jsonToUbl(json, vendorGln, customerGln) {
   if (!json) {
-    console.error('No JSON data provided');
     return;
   }
 
@@ -27,10 +23,6 @@ function jsonToUbl(json, vendorGln, customerGln) {
   if (!json.subtotal) missingFields.push('subtotal');
   if (!json.tax) missingFields.push('tax');
   if (!json.total) missingFields.push('total');
-  // if (!json.vendor.gln) missingFields.push('vendor.gln');
-  // if (!json.customer || !json.customer.gln) missingFields.push('customer.gln');
-
-  console.log(json);
 
   const doc = create({ version: '1.0', encoding: 'UTF-8' })
     .ele('Invoice', {

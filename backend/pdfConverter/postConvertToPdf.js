@@ -3,7 +3,6 @@ const path = require('path');
 const user = require('../models/user');
 const { getGridFSBucket } = require('../db');
 const { Readable } = require('stream');
-const mongoose = require('mongoose');
 const uploadInvoice = require('./actualConvertionFunction');
 const jsonToUbl = require('./JsonToUBL');
 const saveXmlToMongo = require('./saveXmlToMongo');
@@ -51,17 +50,7 @@ const postConvertToPdf = async (req, res) => {
     }
 
     // Update user's GLN if saveGln is true
-    console.log(
-      '\n\n\n\n\n\n\n',
-      userId,
-      vendorGln,
-      customerGln,
-      saveGln,
-      name,
-      '\n\n\n\n\n\n\n'
-    );
     if (saveGln !== 'false') {
-      console.log('I STILL FUCKING CAME HERE LOL');
       userData.gln = vendorGln;
       await userData.save();
     }
@@ -102,8 +91,6 @@ const postConvertToPdf = async (req, res) => {
             req.file.originalname
           );
 
-          console.log('THIS IS THE NIVOICE DATA', invoiceData);
-
           if (!invoiceData) {
             return res
               .status(500)
@@ -117,7 +104,6 @@ const postConvertToPdf = async (req, res) => {
           );
           const xmlFile = xml;
 
-          console.log(xmlFile, 'LOLOLOLOLOLOLOLOL');
           let validationReportId = undefined;
           try {
             let validationErrors = [];
@@ -140,12 +126,8 @@ const postConvertToPdf = async (req, res) => {
             } else {
               html = generateHtml(validationErrors, missingFields);
               json = { validationErrors: validationErrors, missingFields };
-              console.log('HERE', validationErrors);
             }
-
-            console.log('Validation report ID:', validationReportId);
           } catch (error) {
-            console.error('Error validating UBL:', error);
             return res.status(500).json({
               error: 'Error validating UBL',
               details: error.message,
@@ -160,30 +142,18 @@ const postConvertToPdf = async (req, res) => {
           let ublId = undefined;
           try {
             ublId = await saveXmlToMongo(xmlFile, ublFilename);
-            console.log(ublId, fileId);
           } catch (error) {
-            console.error('Error saving XML to MongoDB:', error);
             return res.status(500).json({
               error: 'Error saving XML to MongoDB',
               details: error.message,
             });
           }
 
-          console.log('pdfUblValidationObject');
           if (ublId === undefined) {
-            console.log('pdfUblValidationObject');
             return res
               .status(402)
               .json({ error: 'Failed to convert PDF to UBL' });
           }
-
-          // return res.status(200).json({ success: 'success' });
-          // Dummy UBL and Validator IDs for illustration; replace with actual logic to get these IDs
-          // const ublId = new mongoose.Types.ObjectId(
-          //   'aa6d47f29abc3c9a48e887f7dde1213e'
-          // ); // Replace with actual ID
-          // const ublId = undefined;
-          // const validatorId = new mongoose.Types.ObjectId(); // Replace with actual ID
 
           const pdfUblValidationObject = {
             pdfId: fileId,
@@ -194,11 +164,8 @@ const postConvertToPdf = async (req, res) => {
             validationJson: json,
           };
 
-          // console.log(fileId._id, pdfUblValidationObject, 'FIRLDWDWEW', userId);
-
           const updatedUser = await user.findByIdAndUpdate(
             userId,
-            // { $push: { pdfUblValidation: pdfUblValidationObject } },
             {
               $push: {
                 pdfUblValidation: {
@@ -210,12 +177,9 @@ const postConvertToPdf = async (req, res) => {
             { new: true, useFindAndModify: false }
           );
 
-          console.log(updatedUser);
           if (!updatedUser) {
             return res.status(404).json({ error: 'User not found' });
           }
-
-          console.log(fileId);
 
           // Find the newly added ublValidationObject with its _id
           const newlyAddedObject = updatedUser.pdfUblValidation.find(
@@ -257,8 +221,7 @@ const postConvertToPdf = async (req, res) => {
           .json({ error: 'File upload did not finish as expected' });
       }
     }, 30000); // Adjust the timeout value as needed
-  } catch (err) {
-    console.log(err);
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

@@ -3,10 +3,6 @@ const saveXmlToMongo = require('./saveXmlToMongo');
 const user = require('../models/user');
 const crypto = require('crypto');
 const path = require('path');
-const { getGridFSBucket } = require('../db');
-const { Readable } = require('stream');
-const mongoose = require('mongoose');
-const uploadInvoice = require('./actualConvertionFunction');
 const validateUBL = require('../shared/ublValidator');
 const {
   apiCallingForValidation,
@@ -40,7 +36,6 @@ const postConvertGuiForm = async (req, res) => {
     }
 
     if (saveGln !== 'false') {
-      console.log('I STILL FUCKING CAME HERE LOL');
       userData.gln = vendorGln;
       await userData.save();
     }
@@ -53,10 +48,8 @@ const postConvertGuiForm = async (req, res) => {
       path.extname(Date.now() + 'makingstring') +
       '.xml';
 
-    console.log(invoice);
     const { missingFields, xml } = jsonToUbl(invoice, vendorGln, customerGln);
     const xmlFile = xml;
-    console.log(xmlFile, missingFields, 'LOLOLOLOLOLOLOLOL');
 
     let validationReportId = undefined;
     try {
@@ -77,11 +70,8 @@ const postConvertGuiForm = async (req, res) => {
       } else {
         html = generateHtml(validationErrors, missingFields);
         json = { validationErrors: validationErrors };
-        console.log('HERE', validationErrors);
       }
-      console.log('Validation report ID:', validationReportId);
     } catch (error) {
-      console.error('Error validating UBL:', error);
       return res.status(500).json({
         error: 'Error validating UBL',
         details: error.message,
@@ -96,9 +86,7 @@ const postConvertGuiForm = async (req, res) => {
     let ublId = undefined;
     try {
       ublId = await saveXmlToMongo(xmlFile, ublFilename);
-      console.log(ublId);
     } catch (error) {
-      console.error('Error saving XML to MongoDB:', error);
       return res.status(500).json({
         error: 'Error saving XML to MongoDB',
         details: error.message,
@@ -120,7 +108,6 @@ const postConvertGuiForm = async (req, res) => {
 
     const updatedUser = await user.findByIdAndUpdate(
       userId,
-      // { $push: { pdfUblValidation: pdfUblValidationObject } },
       {
         $push: {
           pdfUblValidation: {
@@ -142,7 +129,6 @@ const postConvertGuiForm = async (req, res) => {
         obj.ublId.toString() === ublId.toString() &&
         obj.validatorId.toString() === validationReportId.toString()
     );
-    console.log(newlyAddedObject);
 
     res.status(200).json({
       message: 'File converted and user updated successfully!',
@@ -155,8 +141,7 @@ const postConvertGuiForm = async (req, res) => {
       validationJson: json,
       validationHtml: html,
     });
-  } catch (err) {
-    console.log(err);
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

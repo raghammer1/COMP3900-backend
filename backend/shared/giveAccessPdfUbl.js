@@ -4,12 +4,11 @@ const giveAccessPdfUbl = async (req, res) => {
     const { ublId, validatorId, pdfId, name, validationHtml, validationJson } =
       req.body;
 
-    email = req.body.email.toLowerCase();
+    let email = req.body.email.toLowerCase();
 
     const User = await user.findOne({ email });
 
     if (!User) {
-      console.log('User not found');
       return res.status(404).json({ error: "This user doesn't exist" });
     }
 
@@ -43,10 +42,8 @@ const giveAccessPdfUbl = async (req, res) => {
       return res.status(500).json({ error: 'Error updating user' });
     }
 
-    console.log(req.body);
     return res.status(200).json({ message: 'Access Granted' });
-  } catch (error) {
-    console.error('Error in giveAccessValidationUbl:', error);
+  } catch {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };

@@ -1,11 +1,10 @@
+/* eslint-disable no-unused-vars */
 const request = require('supertest');
 const express = require('express');
-const mongoose = require('mongoose');
 const app = express();
 const forgotPassword = require('../auth/forgotPassword');
 const resetPassword = require('../auth/resetPassword');
 const { connectDB, disconnectDB } = require('../db');
-const bcrypt = require('bcryptjs');
 
 jest.mock('../models/user');
 jest.mock('../models/forgotPasswordModel');
@@ -24,9 +23,7 @@ const formattedDate = `${year}${month}${day}${hours}${minutes}${seconds}`;
 
 const email = `${formattedDate}@example.com`;
 
-const user = require('../models/user');
 const forgotPasswordModel = require('../models/forgotPasswordModel');
-const sendMail = require('../auth/sendPasswordResetMail');
 
 // Set up the app to use the routes
 app.use(express.json());

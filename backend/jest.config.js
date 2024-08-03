@@ -11,5 +11,6 @@ module.exports = {
   },
   transformIgnorePatterns: ['/node_modules/(?!(bson)/)'],
 
+  // eslint-disable-next-line no-dupe-keys
   transformIgnorePatterns: ['node_modules/(?!(chai|some-other-package)/)'],
 };
