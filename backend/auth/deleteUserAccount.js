@@ -5,7 +5,6 @@ const deleteUserAccount = async (req, res) => {
   try {
     // let userToDelete = req.user;
     let { password, googleId, username, userId } = req.body;
-    console.log('CAME HERE TO DELETE USER', userId, password, googleId);
 
     const User = await user.findById(userId);
 
@@ -26,7 +25,7 @@ const deleteUserAccount = async (req, res) => {
         return res.status(400).json({ error: 'Invalid Password' });
       }
     }
-  } catch (err) {
+  } catch {
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

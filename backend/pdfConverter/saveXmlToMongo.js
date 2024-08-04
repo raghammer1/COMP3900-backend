@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const { getGridFSBucket } = require('../db');
 const { Readable } = require('stream');
 
@@ -15,16 +14,13 @@ const saveXmlToMongo = async (xmlData, filename) => {
       fileStream
         .pipe(uploadStream)
         .on('error', (error) => {
-          console.error('Error uploading XML to MongoDB:', error);
           reject(error);
         })
         .on('finish', () => {
-          console.log('XML uploaded successfully to MongoDB');
           resolve(uploadStream.id);
         });
     });
   } catch (error) {
-    console.error('Unexpected error:', error);
     throw new Error(error);
   }
 };

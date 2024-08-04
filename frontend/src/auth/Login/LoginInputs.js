@@ -33,7 +33,10 @@ const LoginInputs = ({ goToDashboard }) => {
 
     if (response.error) {
       // Show error alert
-      showAlert(response.data.error, 'tomato');
+      showAlert(
+        response.data.error ? response.data.error : "Can't Login",
+        'tomato'
+      );
     } else {
       // Show success alert
       showAlert('Welcome back', 'green');

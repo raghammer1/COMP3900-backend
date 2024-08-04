@@ -48,7 +48,10 @@ const RegisterInputs = ({ goToDashboard }) => {
     setLoading(true);
     const response = await register({ username: name, email, password });
     if (response.error) {
-      showAlert(response.data.error, 'tomato');
+      showAlert(
+        response.data.error ? response.data.error : "Can't Register",
+        'tomato'
+      );
     } else {
       showAlert(`Welcome ${name}`, 'green');
       setUser({ user: response.data });
