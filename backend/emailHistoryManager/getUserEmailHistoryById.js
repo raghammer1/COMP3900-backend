@@ -4,6 +4,10 @@ const mongoose = require('mongoose');
 const getUserEmailHistoryById = async (req, res) => {
   const { userId, shareObjId } = req.query;
 
+  if (!userId || !shareObjId) {
+    return res.status(400).json({ error: 'Missing userId or shareObjId.' });
+  }
+
   try {
     const myUser = await user.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(userId) } },
