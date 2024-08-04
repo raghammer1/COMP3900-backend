@@ -9,9 +9,9 @@ const fetchToken = async () => {
     const response = await axios.post(
       'https://dev-eat.auth.eu-central-1.amazoncognito.com/oauth2/token',
       qs.stringify({
-        grant_type: 'client_credentials',
-        client_id: '7d30bi87iptegbrf2bp37p42gg',
-        client_secret: '880tema3rvh3h63j4nquvgoh0lgts11n09bq8597fgrkvvd62su',
+        grant_type: process.env.VALIDATE_TOKEN_GRANT_TYPE,
+        client_id: process.env.VALIDATE_TOKEN_CLIENT_ID,
+        client_secret: process.env.VALIDATE_TOKEN_CLIENT_SECRET,
         scope: 'eat/read',
       }),
       {
