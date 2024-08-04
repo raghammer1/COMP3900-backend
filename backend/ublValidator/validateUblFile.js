@@ -11,26 +11,32 @@ const {
 } = require('../shared/apiCallingForValidation');
 const { defaultJson } = require('../shared/defaultJson');
 
+// Function to validate a UBL file uploaded by the user
 const validateUblFile = async (req, res) => {
   try {
+    // Check if a file is uploaded
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded.' });
     }
 
+    // Extract userId and name from the request body
     const userId = req.body?.userId;
     const name = req.body?.name;
 
+    // Validate that userId and name are provided
     if (!userId || !name) {
       return res.status(404).json({ error: 'Name not provided.' });
     }
 
+    // Find the user in the database
     const User = await user.findOne({ _id: userId });
 
+    // Check if the user exists
     if (!User) {
       return res.status(404).json({ error: 'Invalid/Corrupt User' });
     }
 
-    // Check if the ublValidationObject already exists
+    // Check if a validation object with the same name already exists
     const isExistingValidation = User.ublValidation.some(
       (validation) => validation.name === name
     );
@@ -41,11 +47,13 @@ const validateUblFile = async (req, res) => {
         .json({ error: 'Validation object with name already exists' });
     }
 
+    // Retrieve the existing user data from the database
     const existingUser = await user.findById(userId);
     if (!existingUser) {
       return res.status(404).json({ error: 'User not found' });
     }
 
+    // Generate a unique filename for the uploaded file
     const filename =
       crypto.randomBytes(16).toString('hex') +
       path.extname(req.file.originalname);
@@ -66,8 +74,9 @@ const validateUblFile = async (req, res) => {
 
     uploadStream.on('finish', async () => {
       try {
-        const ublId = uploadStream.id;
+        const ublId = uploadStream.id; // Get the file ID after upload
 
+        // Step 2: Validate the UBL file
         let validationErrors = [];
         validationErrors = await apiCallingForValidation(
           req.file.buffer,
@@ -75,9 +84,10 @@ const validateUblFile = async (req, res) => {
           req.file.mimetype
         );
 
-        // Step 2: Validate the UBL file and get validatorId
+        // Get the validator ID from the validation result
         const validatorId = await validateUBL(validationErrors);
 
+        // Generate HTML and JSON for the validation results
         let html = defaultHtml;
         let json = defaultJson;
         if (
@@ -91,6 +101,7 @@ const validateUblFile = async (req, res) => {
           json = { validationErrors: validationErrors };
         }
 
+        // Create a validation object to store in the user's data
         const ublValidationObject = {
           ublId: ublId,
           validatorId: validatorId,
@@ -99,9 +110,9 @@ const validateUblFile = async (req, res) => {
           validationJson: json,
         };
 
+        // Update the user's data with the new validation object
         const updatedUser = await user.findByIdAndUpdate(
           userId,
-          // { $push: { ublValidation: ublValidationObject } },
           {
             $push: {
               ublValidation: { $each: [ublValidationObject], $position: 0 },
@@ -110,17 +121,19 @@ const validateUblFile = async (req, res) => {
           { new: true, useFindAndModify: false }
         );
 
+        // Handle the case where the user could not be updated
         if (!updatedUser) {
           return res.status(404).json({ error: 'User not found' });
         }
 
-        // Find the newly added ublValidationObject with its _id
+        // Find the newly added validation object
         const newlyAddedObject = updatedUser.ublValidation.find(
           (obj) =>
             obj.ublId.toString() === ublId.toString() &&
             obj.validatorId.toString() === validatorId.toString()
         );
 
+        // Respond with success and relevant details
         res.status(200).json({
           message:
             'UBL file uploaded, validated, and user updated successfully!',
@@ -133,6 +146,7 @@ const validateUblFile = async (req, res) => {
           validationJson: json,
         });
       } catch (updateError) {
+        // Handle errors during user update
         res
           .status(updateError.response ? updateError.response.status : 500)
           .json({
@@ -143,10 +157,13 @@ const validateUblFile = async (req, res) => {
       }
     });
 
+    // Pipe the file stream to the upload stream
     fileStream.pipe(uploadStream);
   } catch {
+    // General server error handling
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };
 
+// Export the function to be used in other modules
 module.exports = validateUblFile;
