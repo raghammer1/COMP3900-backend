@@ -3,26 +3,28 @@ const jwt = require('jsonwebtoken');
 
 const googleLogin = async (req, res) => {
   try {
-    const { googleId, email, username, googlePicture } = req.body;
+    const { googleId, email, username, googlePicture } = req.body; // Extract Google user data from request
 
-    // Check if a user with the Google ID exists in the database
+    // Look for a user in the database with the provided Google ID
     let user = await User.findOne({ googleId });
+
+    // If no user is found by Google ID, check if a user exists with the given email
     if (!user) {
       user = await User.findOne({ email });
     }
 
+    // If the user is not found, let's create a new user with the provided details
     if (!user) {
-      // If the user doesn't exist, create a new user
       user = new User({
         googleId,
-        email: email.toLowerCase(), // Store Google email in lowercase
+        email: email.toLowerCase(), // Save email in lowercase for consistency
         username,
         googlePicture,
       });
-      await user.save();
+      await user.save(); // Save the new user to the database
     }
 
-    // Generate JWT token
+    // Create a JWT token to authenticate the user session
     const token = jwt.sign(
       {
         userId: user._id,
@@ -32,13 +34,13 @@ const googleLogin = async (req, res) => {
       { expiresIn: '24hr' }
     );
 
-    // Set the token in a cookie
+    // Set the JWT token in a cookie for client-side use
     res.cookie('token', token, {
-      secure: false, // Set to true if using HTTPS
-      maxAge: 24 * 60 * 60 * 1000, // Cookie expiration time (24 hours)
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
-    // Return user data in the response
+    // Send back user information in the response
     return res.status(200).json({
       username: user.username,
       email: user.email,
@@ -48,6 +50,7 @@ const googleLogin = async (req, res) => {
       gln: user.gln,
     });
   } catch {
+    // Handle any errors that occur during the process
     return res.status(500).json({ error: 'Server error, try again later' });
   }
 };

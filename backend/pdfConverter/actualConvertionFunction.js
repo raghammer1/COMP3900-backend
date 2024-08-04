@@ -1,24 +1,16 @@
 const axios = require('axios');
 const FormData = require('form-data');
 
-// Veryfi API credentials
-
-const client_id = 'vrfdVb8IO07OG52N78ETJv9ogiAwxWMenyFaboc';
-const client_secret =
-  'Yl5zanndnCdLDwH750i9G0dUDa3WP7BZJgyuDSFfTYXJ5Xf2f5sCURG1kGOyl9sIAsbbtFaPD3AfO7hcpO2J5m9AdPVc8RFcrj38fwsrZwrB2HUfm2fH26T4JnjAAvJS';
-const username = 'unwindingcuriousity';
-const api_key = '44d3a7a654bd418fe07a948d7e54e7b2';
-
 // The endpoint URL for uploading documents
 const url = 'https://api.veryfi.com/api/v7/partner/documents/';
 
 // Headers
 const headers = {
   Accept: 'application/json',
-  'CLIENT-ID': client_id,
-  AUTHORIZATION: `apikey ${username}:${api_key}`,
-  'X-Veryfi-Client-Id': client_id,
-  'X-Veryfi-Client-Secret': client_secret,
+  'CLIENT-ID': process.env.VERYFI_CLIENT_ID,
+  AUTHORIZATION: `apikey ${process.env.VERYFI_USERNAME}:${process.env.VERYFI_API_KEY}`,
+  'X-Veryfi-Client-Id': process.env.VERYFI_CLIENT_ID,
+  'X-Veryfi-Client-Secret': process.env.VERYFI_CLIENT_SECRET,
 };
 
 async function uploadInvoice(fileBuffer, fileName) {
