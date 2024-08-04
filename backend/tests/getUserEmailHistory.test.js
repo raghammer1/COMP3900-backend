@@ -1,9 +1,8 @@
 const request = require('supertest');
 const express = require('express');
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
 const user = require('../models/user');
 const getUserEmailHistory = require('../emailHistoryManager/getUserEmailHistory'); // Update the path
+const { connectDB, disconnectDB } = require('../db');
 
 const app = express();
 app.use(express.json());
@@ -15,20 +14,12 @@ app.use((req, res, next) => {
   next();
 });
 
-let mongoServer;
-
 beforeAll(async () => {
-  mongoServer = await MongoMemoryServer.create();
-  const uri = mongoServer.getUri();
-  await mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  await connectDB();
 }, 10000);
 
 afterAll(async () => {
-  await mongoose.disconnect();
-  await mongoServer.stop();
+  await disconnectDB();
 }, 10000);
 
 describe('GET /user-email-history', () => {

@@ -1,29 +1,21 @@
 const request = require('supertest');
 const express = require('express');
 const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
 const user = require('../models/user');
 const getUserEmailHistoryById = require('../emailHistoryManager/getUserEmailHistoryById'); // Update the path
+const { connectDB, disconnectDB } = require('../db');
 
 const app = express();
 app.use(express.json());
 app.get('/email-history', getUserEmailHistoryById);
 
-let mongoServer;
-
 beforeAll(async () => {
-  mongoServer = await MongoMemoryServer.create();
-  const uri = mongoServer.getUri();
-  await mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-}, 10000); // Increase timeout
+  await connectDB();
+}, 10000);
 
 afterAll(async () => {
-  await mongoose.disconnect();
-  await mongoServer.stop();
-}, 10000); // Increase timeout
+  await disconnectDB();
+}, 10000);
 
 describe('GET /email-history', () => {
   it('should return email history for the given user and shared object ID', async () => {
