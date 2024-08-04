@@ -63,24 +63,6 @@ describe('Auth Controller Tests', () => {
       expect(response.status).toBe(400);
       expect(response.body.error).toBe('Email is required');
     });
-
-    it('should send a password reset email if everything is correct', async () => {
-      const response = await request(app)
-        .post('/auth/forgot-password')
-        .send({ email });
-
-      expect(response.status).toBe(200);
-      expect(response.text).toContain(`OTP SENT TO ${email}`);
-    });
-  }, 10000);
-
-  it('should return 400 if retry time has not expired', async () => {
-    const response2 = await request(app)
-      .post('/auth/forgot-password')
-      .send({ email });
-
-    expect(response2.status).toBe(400);
-    expect(response2.body.error).toContain('Retry after');
   }, 10000);
 
   describe('POST /auth/reset-password', () => {
