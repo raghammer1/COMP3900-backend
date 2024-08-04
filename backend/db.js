@@ -10,7 +10,7 @@ const connectDB = async () => {
 
     console.log('MongoDB connected');
 
-    // Initialize GridFSBucket
+    // Initializing GridFSBucket
     gridFSBucket = new mongoose.mongo.GridFSBucket(conn.connection.db, {
       bucketName: 'uploads',
     });
